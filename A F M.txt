@@ -1,0 +1,69 @@
+INSERT INTO Modulos (NombreModulo) VALUES ('Modulo de Inventario');
+INSERT INTO Modulos (NombreModulo) VALUES ('Modulo de Pedidos');
+INSERT INTO Modulos (NombreModulo) VALUES ('Modulo de Seguridad');
+INSERT INTO Modulos (NombreModulo) VALUES ('Modulo de Transacciones');
+INSERT INTO Modulos (NombreModulo) VALUES ('Modulo Mi Perfil');
+
+-- Módulo de Transacciones (Id 4)
+INSERT INTO Formularios (NombreFormulario, ModuloId) VALUES ('Realizar Pedido', 4);
+INSERT INTO Formularios (NombreFormulario, ModuloId) VALUES ('Gestionar Clientes', 4);
+
+-- Módulo de Inventario (Id 1)
+INSERT INTO Formularios (NombreFormulario, ModuloId) VALUES ('Gestionar Peliculas', 1);
+
+-- Módulo de Seguridad (Id 3)
+INSERT INTO Formularios (NombreFormulario, ModuloId) VALUES ('Gestionar Usuarios', 3);
+INSERT INTO Formularios (NombreFormulario, ModuloId) VALUES ('Gestionar Grupos', 3);
+
+-- Módulo de Pedidos (Id 2)
+INSERT INTO Formularios (NombreFormulario, ModuloId) VALUES ('Gestionar Pedidos', 2);
+
+-- Módulo Mi Perfil (Id 5)
+INSERT INTO Formularios (NombreFormulario, ModuloId) VALUES ('Mis Datos', 5);
+INSERT INTO Formularios (NombreFormulario, ModuloId) VALUES ('Cambiar Clave', 5);
+
+
+
+-- Acción: Realizar Pedido asociada al formulario con Id 1
+INSERT INTO Componente (Nombre, Discriminator, FormularioId) VALUES ('Realizar Pedido', 'Accion', 1);
+
+-- Acción: Gestionar Clientes asociada al formulario con Id 2
+INSERT INTO Componente (Nombre, Discriminator, FormularioId) VALUES ('Gestionar Clientes', 'Accion', 2);
+
+-- Acción: Gestionar Peliculas asociada al formulario con Id 3
+INSERT INTO Componente (Nombre, Discriminator, FormularioId) VALUES ('Gestionar Peliculas', 'Accion', 3);
+
+-- Acción: Gestionar Usuarios asociada al formulario con Id 4
+INSERT INTO Componente (Nombre, Discriminator, FormularioId) VALUES ('Gestionar Usuarios', 'Accion', 4);
+
+-- Acción: Gestionar Grupos asociada al formulario con Id 5
+INSERT INTO Componente (Nombre, Discriminator, FormularioId) VALUES ('Gestionar Grupos', 'Accion', 5);
+
+-- Acción: Gestionar Pedidos asociada al formulario con Id 6
+INSERT INTO Componente (Nombre, Discriminator, FormularioId) VALUES ('Gestionar Pedidos', 'Accion', 6);
+
+-- Acción: Mis Datos asociada al formulario con Id 7
+INSERT INTO Componente (Nombre, Discriminator, FormularioId) VALUES ('Mis Datos', 'Accion', 7);
+
+-- Acción: Cambiar Clave asociada al formulario con Id 8
+INSERT INTO Componente (Nombre, Discriminator, FormularioId) VALUES ('Cambiar Clave', 'Accion', 8);
+
+
+
+
+
+SET IDENTITY_INSERT EstadosGrupo ON
+
+
+INSERT INTO EstadosGrupo(EstadoGrupoId,EstadoGrupoNombre) VALUES (1, 'Activo');
+INSERT INTO EstadosGrupo(EstadoGrupoId,EstadoGrupoNombre) VALUES (2, 'Inactivo');
+
+SET IDENTITY_INSERT EstadosGrupo OFF
+
+
+SET IDENTITY_INSERT EstadosUsuario ON
+
+INSERT INTO EstadosUsuario(EstadoUsuarioId,EstadoUsuarioNombre) VALUES (1, 'Activo');
+INSERT INTO EstadosUsuario(EstadoUsuarioId,EstadoUsuarioNombre) VALUES (2, 'Inactivo');
+
+SET IDENTITY_INSERT EstadosUsuario ON
