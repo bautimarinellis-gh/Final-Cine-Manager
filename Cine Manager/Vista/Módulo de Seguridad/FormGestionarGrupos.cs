@@ -16,10 +16,13 @@ namespace Vista.Módulo_de_Seguridad
 {
     public partial class FormGestionarGrupos : Form
     {
-        public FormGestionarGrupos()
+        private Sesion _sesion;
+
+        public FormGestionarGrupos(Sesion sesion)
         {
             InitializeComponent();
             dgvGrupos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            _sesion = sesion;
 
             ActualizarGrilla();
         }
@@ -90,8 +93,6 @@ namespace Vista.Módulo_de_Seguridad
         private void btnSalir_Click(object sender, EventArgs e)
         {
             this.Close();
-            var formCineManager = new FormCineManager();
-            formCineManager.Show();
         }
 
         

@@ -1,5 +1,6 @@
 ﻿using Controladora;
 using Modelo.Entidades;
+using Modelo.Módulo_de_Seguridad;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,11 +16,14 @@ namespace Vista
 {
     public partial class FormGestorPeliculas : Form
     {
-        public FormGestorPeliculas()
+        private Sesion _sesion;
+
+
+        public FormGestorPeliculas(Sesion sesion)
         {
             InitializeComponent();
             dgvPeliculas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-
+            _sesion = sesion;
             ActualizarGrilla();
         }
 
@@ -58,16 +62,6 @@ namespace Vista
             var formActores = new FormActores();
             formActores.ShowDialog();
         }
-
-
-
-
-        private void proveedoresToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var formProveedores = new FormProveedores();
-            formProveedores.ShowDialog();
-        }
-
 
 
 
@@ -137,8 +131,6 @@ namespace Vista
         private void btnVolver_Click(object sender, EventArgs e)
         {
             this.Close();
-            var formAdmin = new FormModuloAdmin();
-            formAdmin.Show();
         }
     }
 }

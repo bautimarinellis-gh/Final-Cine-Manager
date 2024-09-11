@@ -18,11 +18,13 @@ namespace Vista.Módulo_de_Seguridad
 {
     public partial class FormGestionarUsuarios : Form
     {
-        public FormGestionarUsuarios()
+        private Sesion _sesion;
+
+        public FormGestionarUsuarios(/*Sesion sesion*/)
         {
             InitializeComponent();
             dgvUsuarios.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-
+            /*_sesion = sesion;*/
             ActualizarGrilla();
         }
 
@@ -227,8 +229,6 @@ namespace Vista.Módulo_de_Seguridad
         private void btnSalir_Click(object sender, EventArgs e)
         {
             this.Close();
-            var formCineManager = new FormCineManager();
-            formCineManager.Show();
         }
 
         

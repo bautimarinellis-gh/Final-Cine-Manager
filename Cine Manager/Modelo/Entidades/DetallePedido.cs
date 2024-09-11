@@ -41,7 +41,7 @@ namespace Modelo.Entidades
         public decimal Subtotal
         {
             get { return cantidad * pelicula.Precio; }
-            set { }
+            set { subtotal = value; }
         }
 
 

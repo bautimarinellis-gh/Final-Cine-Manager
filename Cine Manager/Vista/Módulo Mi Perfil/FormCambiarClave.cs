@@ -16,9 +16,12 @@ namespace Vista.Módulo_de_Seguridad
 {
     public partial class FormCambiarClave : Form
     {
-        public FormCambiarClave()
+        private Sesion _sesion;
+
+        public FormCambiarClave(Sesion sesion)
         {
             InitializeComponent();
+            _sesion = sesion;
         }
 
 
@@ -31,7 +34,7 @@ namespace Vista.Módulo_de_Seguridad
                 return;
             }
 
-            var usuarioActual = Sesion.Instancia.UsuarioSesion;
+            var usuarioActual = _sesion.UsuarioSesion;
 
             // Encriptar la nueva clave
             var nuevaClaveEncriptada = EncriptarClave(txtClaveNueva.Text);
@@ -44,12 +47,15 @@ namespace Vista.Módulo_de_Seguridad
             // Si la clave fue cambiada exitosamente, cerrar el formulario
             if (mensaje == "La clave ha sido cambiada exitosamente.")
             {
-                this.Close();
-                var formCineManager = new FormCineManager();
-                formCineManager.Show();
+                // Recargar al usuario en la sesión con la nueva clave
+                _sesion.UsuarioSesion = ControladoraCambiarClave.Instancia.Buscar(usuarioActual.NombreUsuario);
+
+                // Asegúrate de que la sesión actualizada esté siendo utilizada correctamente
+                // Puedes imprimir los datos actualizados de la sesión para verificar
+                MessageBox.Show($"Usuario actualizado: {_sesion.UsuarioSesion.NombreUsuario}");
+
+                this.Close(); // Cierra el formulario de cambio de clave
             }
-
-
         }
 
 
@@ -89,7 +95,7 @@ namespace Vista.Módulo_de_Seguridad
             }
 
             // Validar la clave actual
-            var usuarioActual = Sesion.Instancia.UsuarioSesion;
+            var usuarioActual = _sesion.UsuarioSesion;
             var claveIngresadaEncriptada = EncriptarClave(txtClaveActual.Text);
 
             if (usuarioActual.Clave != claveIngresadaEncriptada)
@@ -163,8 +169,6 @@ namespace Vista.Módulo_de_Seguridad
         private void btnCancelar_Click(object sender, EventArgs e)
         {
             this.Close();
-            var formCineManager = new FormCineManager();
-            formCineManager.Show();
         }
 
     }

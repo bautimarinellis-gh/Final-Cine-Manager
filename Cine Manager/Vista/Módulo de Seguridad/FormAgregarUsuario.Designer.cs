@@ -28,9 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            TreeNode treeNode1 = new TreeNode("Gestionar Peliculas");
-            TreeNode treeNode2 = new TreeNode("Gestionar Pedidos");
-            TreeNode treeNode3 = new TreeNode("Empleados", new TreeNode[] { treeNode1, treeNode2 });
+            TreeNode treeNode1 = new TreeNode("Gestionar Inventario");
             tabUsuario = new TabControl();
             tabDatos = new TabPage();
             btnCancelar = new Button();
@@ -272,16 +270,10 @@
             treeAcciones.CheckBoxes = true;
             treeAcciones.Location = new Point(19, 23);
             treeAcciones.Name = "treeAcciones";
-            treeNode1.Name = "nGestionarPeliculas";
-            treeNode1.Tag = "Gestionar Peliculas";
-            treeNode1.Text = "Gestionar Peliculas";
-            treeNode2.Name = "nGestionarPedidos";
-            treeNode2.Tag = "Gestionar Pedidos";
-            treeNode2.Text = "Gestionar Pedidos";
-            treeNode3.Name = "nEmpleado";
-            treeNode3.Tag = "Empleados";
-            treeNode3.Text = "Empleados";
-            treeAcciones.Nodes.AddRange(new TreeNode[] { treeNode3 });
+            treeNode1.Name = "nInventario";
+            treeNode1.Tag = "Gestionar Inventario";
+            treeNode1.Text = "Gestionar Inventario";
+            treeAcciones.Nodes.AddRange(new TreeNode[] { treeNode1 });
             treeAcciones.Size = new Size(450, 182);
             treeAcciones.TabIndex = 1;
             // 

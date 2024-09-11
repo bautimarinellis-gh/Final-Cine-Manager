@@ -15,11 +15,12 @@ namespace Vista.Módulo_de_Seguridad
 {
     public partial class FormDatosUsuario : Form
     {
+        private Sesion _sesion;
 
-
-        public FormDatosUsuario()
+        public FormDatosUsuario(Sesion sesion)
         {
             InitializeComponent();
+            _sesion = sesion;
             CargarDatosUsuario();
         }
 
@@ -28,7 +29,7 @@ namespace Vista.Módulo_de_Seguridad
 
         private void CargarDatosUsuario()
         {
-            var usuarioActual = Sesion.Instancia.UsuarioSesion;
+            var usuarioActual = _sesion.UsuarioSesion;
 
             txtUsuario.Text = usuarioActual.NombreUsuario;
             txtNombre.Text = usuarioActual.Nombre;
@@ -52,7 +53,7 @@ namespace Vista.Módulo_de_Seguridad
             var todosLosGrupos = ControladoraGestionarGrupos.Instancia.RecuperarGrupos();
 
             // Obtener los IDs de los grupos asignados al usuario desde la base de datos
-            var gruposAsignados = ControladoraGestionarGrupos.Instancia.ObtenerGruposUsuario(Sesion.Instancia.UsuarioSesion.UsuarioId)
+            var gruposAsignados = ControladoraGestionarGrupos.Instancia.ObtenerGruposUsuario(_sesion.UsuarioSesion.UsuarioId)
                                    .Select(g => g.Id)
                                    .ToList();
 
@@ -79,7 +80,7 @@ namespace Vista.Módulo_de_Seguridad
         private void CargarAccionesUsuario()
         {
             // Obtener los nombres de las acciones asignadas al usuario desde la base de datos
-            var accionesAsignadas = ControladoraAcciones.Instancia.ObtenerAccionesUsuario(Sesion.Instancia.UsuarioSesion).Select(a => a.Nombre).ToList();
+            var accionesAsignadas = ControladoraAcciones.Instancia.ObtenerAccionesUsuario(_sesion.UsuarioSesion).Select(a => a.Nombre).ToList();
 
             // Recorrer cada nodo en el TreeView 
             foreach (TreeNode nodoCategoria in treeView1.Nodes)
@@ -106,8 +107,6 @@ namespace Vista.Módulo_de_Seguridad
         private void btnCancelar_Click(object sender, EventArgs e)
         {
             this.Close();
-            var formCineManager = new FormCineManager();
-            formCineManager.Show();
         }
 
 
@@ -115,8 +114,6 @@ namespace Vista.Módulo_de_Seguridad
         private void button1_Click(object sender, EventArgs e)
         {
             this.Close();
-            var formCineManager = new FormCineManager();
-            formCineManager.Show();
         }
 
 
@@ -124,8 +121,6 @@ namespace Vista.Módulo_de_Seguridad
         private void button3_Click(object sender, EventArgs e)
         {
             this.Close();
-            var formCineManager = new FormCineManager();
-            formCineManager.Show();
         }
     }
 }

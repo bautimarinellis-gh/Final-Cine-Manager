@@ -14,7 +14,7 @@ namespace Modelo.Entidades
         private string nombre;
         private string apellido;
         private List<Pelicula> listaPeliculas;
-
+        
 
         public int ActorId
         {

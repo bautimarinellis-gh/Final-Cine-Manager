@@ -106,7 +106,7 @@ namespace Controladora
             catch (Exception ex)
             {
                 // Para mayor detalle, puedes registrar el mensaje de la excepción en un log o devolverlo para depuración.
-                return "Error desconocido: " + ex.Message;
+                return "Error desconocido: " + ex.InnerException.Message;
             }
         }
 

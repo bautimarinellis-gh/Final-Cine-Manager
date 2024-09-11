@@ -31,7 +31,6 @@ namespace Modelo.Módulo_de_Seguridad
             set { sesionPerfil = value; }
         }
 
-        public static Sesion Instancia { get; set; }
 
         public Sesion()
         {

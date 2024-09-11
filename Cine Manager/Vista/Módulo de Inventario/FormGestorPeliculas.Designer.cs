@@ -50,7 +50,6 @@
             directoresToolStripMenuItem = new ToolStripMenuItem();
             generosCinematograficosToolStripMenuItem = new ToolStripMenuItem();
             actoresToolStripMenuItem = new ToolStripMenuItem();
-            proveedoresToolStripMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)dgvPeliculas).BeginInit();
             ((System.ComponentModel.ISupportInitialize)peliculaBindingSource).BeginInit();
             groupBox1.SuspendLayout();
@@ -202,7 +201,7 @@
             // toolStripInformacion
             // 
             toolStripInformacion.DisplayStyle = ToolStripItemDisplayStyle.Text;
-            toolStripInformacion.DropDownItems.AddRange(new ToolStripItem[] { directoresToolStripMenuItem, generosCinematograficosToolStripMenuItem, actoresToolStripMenuItem, proveedoresToolStripMenuItem });
+            toolStripInformacion.DropDownItems.AddRange(new ToolStripItem[] { directoresToolStripMenuItem, generosCinematograficosToolStripMenuItem, actoresToolStripMenuItem });
             toolStripInformacion.Image = (Image)resources.GetObject("toolStripInformacion.Image");
             toolStripInformacion.ImageTransparentColor = Color.Magenta;
             toolStripInformacion.Name = "toolStripInformacion";
@@ -229,13 +228,6 @@
             actoresToolStripMenuItem.Size = new Size(214, 22);
             actoresToolStripMenuItem.Text = "Actores";
             actoresToolStripMenuItem.Click += actoresToolStripMenuItem_Click;
-            // 
-            // proveedoresToolStripMenuItem
-            // 
-            proveedoresToolStripMenuItem.Name = "proveedoresToolStripMenuItem";
-            proveedoresToolStripMenuItem.Size = new Size(214, 22);
-            proveedoresToolStripMenuItem.Text = "Proveedores";
-            proveedoresToolStripMenuItem.Click += proveedoresToolStripMenuItem_Click;
             // 
             // FormGestorPeliculas
             // 
@@ -267,7 +259,6 @@
         private ToolStripMenuItem directoresToolStripMenuItem;
         private ToolStripMenuItem generosCinematograficosToolStripMenuItem;
         private ToolStripMenuItem actoresToolStripMenuItem;
-        private ToolStripMenuItem proveedoresToolStripMenuItem;
         private DataGridViewTextBoxColumn codigoDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn nombreDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn cantidadDataGridViewTextBoxColumn;

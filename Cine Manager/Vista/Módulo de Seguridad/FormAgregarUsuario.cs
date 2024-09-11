@@ -96,21 +96,23 @@ namespace Vista.Módulo_de_Seguridad
             // Asignar directamente los componentes seleccionados
             usuario.Componentes = componentesAsignados;
 
-            string mensaje = modificar
-                ? ControladoraGestionarUsuarios.Instancia.ModificarUsuario(usuario)
-                : ControladoraGestionarUsuarios.Instancia.AgregarUsuario(usuario);
-
-            // Si es un nuevo usuario, generar y enviar la clave
+            // Si es un nuevo usuario, generar y asignar la clave ANTES de guardar
             if (!modificar)
             {
                 var claveGenerada = GenerarClaveAleatoria();
                 usuario.Clave = EncriptarClave(claveGenerada);
 
+                // Intentar enviar la clave por correo
                 if (!EnviarClavePorEmail(txtEmail.Text, claveGenerada))
                 {
                     MessageBox.Show("No se pudo enviar la clave al email proporcionado.");
                 }
             }
+
+            // Guardar el usuario en la base de datos
+            string mensaje = modificar
+                ? ControladoraGestionarUsuarios.Instancia.ModificarUsuario(usuario)
+                : ControladoraGestionarUsuarios.Instancia.AgregarUsuario(usuario);
 
             // Mostrar mensaje al usuario
             MessageBox.Show(mensaje, "Información Usuario", MessageBoxButtons.OK, MessageBoxIcon.Information);
