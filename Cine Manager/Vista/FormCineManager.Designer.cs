@@ -41,6 +41,7 @@
             gestionarPedidosToolStripMenuItem = new ToolStripMenuItem();
             toolStripCompras = new ToolStripDropDownButton();
             gestionarProveedoresToolStripMenuItem = new ToolStripMenuItem();
+            órdenesDeCompraToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeguridad = new ToolStripDropDownButton();
             gestionarUsuariosToolStripMenuItem = new ToolStripMenuItem();
             gestionarGruposToolStripMenuItem = new ToolStripMenuItem();
@@ -111,7 +112,7 @@
             // realizarPedidoToolStripMenuItem
             // 
             realizarPedidoToolStripMenuItem.Name = "realizarPedidoToolStripMenuItem";
-            realizarPedidoToolStripMenuItem.Size = new Size(180, 22);
+            realizarPedidoToolStripMenuItem.Size = new Size(169, 22);
             realizarPedidoToolStripMenuItem.Tag = "Realizar Pedido";
             realizarPedidoToolStripMenuItem.Text = "Realizar Pedido";
             realizarPedidoToolStripMenuItem.Click += realizarPedidoToolStripMenuItem_Click;
@@ -119,7 +120,7 @@
             // gestionarClientesToolStripMenuItem1
             // 
             gestionarClientesToolStripMenuItem1.Name = "gestionarClientesToolStripMenuItem1";
-            gestionarClientesToolStripMenuItem1.Size = new Size(180, 22);
+            gestionarClientesToolStripMenuItem1.Size = new Size(169, 22);
             gestionarClientesToolStripMenuItem1.Tag = "Gestionar Clientes";
             gestionarClientesToolStripMenuItem1.Text = "Gestionar Clientes";
             gestionarClientesToolStripMenuItem1.Click += gestionarClientesToolStripMenuItem1_Click;
@@ -127,7 +128,7 @@
             // gestionarPedidosToolStripMenuItem
             // 
             gestionarPedidosToolStripMenuItem.Name = "gestionarPedidosToolStripMenuItem";
-            gestionarPedidosToolStripMenuItem.Size = new Size(180, 22);
+            gestionarPedidosToolStripMenuItem.Size = new Size(169, 22);
             gestionarPedidosToolStripMenuItem.Tag = "Gestionar Pedidos";
             gestionarPedidosToolStripMenuItem.Text = "Gestionar Pedidos";
             gestionarPedidosToolStripMenuItem.Click += gestionarPedidosToolStripMenuItem_Click;
@@ -135,7 +136,7 @@
             // toolStripCompras
             // 
             toolStripCompras.DisplayStyle = ToolStripItemDisplayStyle.Text;
-            toolStripCompras.DropDownItems.AddRange(new ToolStripItem[] { gestionarProveedoresToolStripMenuItem });
+            toolStripCompras.DropDownItems.AddRange(new ToolStripItem[] { gestionarProveedoresToolStripMenuItem, órdenesDeCompraToolStripMenuItem });
             toolStripCompras.Image = (Image)resources.GetObject("toolStripCompras.Image");
             toolStripCompras.ImageTransparentColor = Color.Magenta;
             toolStripCompras.Name = "toolStripCompras";
@@ -151,6 +152,14 @@
             gestionarProveedoresToolStripMenuItem.Text = "Gestionar Proveedores";
             gestionarProveedoresToolStripMenuItem.Click += gestionarProveedoresToolStripMenuItem_Click;
             // 
+            // órdenesDeCompraToolStripMenuItem
+            // 
+            órdenesDeCompraToolStripMenuItem.Name = "órdenesDeCompraToolStripMenuItem";
+            órdenesDeCompraToolStripMenuItem.Size = new Size(192, 22);
+            órdenesDeCompraToolStripMenuItem.Tag = "Gestionar Ordenes de Compra";
+            órdenesDeCompraToolStripMenuItem.Text = "Órdenes de Compra";
+            órdenesDeCompraToolStripMenuItem.Click += órdenesDeCompraToolStripMenuItem_Click;
+            // 
             // toolStripSeguridad
             // 
             toolStripSeguridad.DropDownItems.AddRange(new ToolStripItem[] { gestionarUsuariosToolStripMenuItem, gestionarGruposToolStripMenuItem });
@@ -161,7 +170,7 @@
             // gestionarUsuariosToolStripMenuItem
             // 
             gestionarUsuariosToolStripMenuItem.Name = "gestionarUsuariosToolStripMenuItem";
-            gestionarUsuariosToolStripMenuItem.Size = new Size(180, 22);
+            gestionarUsuariosToolStripMenuItem.Size = new Size(172, 22);
             gestionarUsuariosToolStripMenuItem.Tag = "Gestionar Usuarios";
             gestionarUsuariosToolStripMenuItem.Text = "Gestionar Usuarios";
             gestionarUsuariosToolStripMenuItem.Click += gestionarUsuariosToolStripMenuItem_Click;
@@ -169,7 +178,7 @@
             // gestionarGruposToolStripMenuItem
             // 
             gestionarGruposToolStripMenuItem.Name = "gestionarGruposToolStripMenuItem";
-            gestionarGruposToolStripMenuItem.Size = new Size(180, 22);
+            gestionarGruposToolStripMenuItem.Size = new Size(172, 22);
             gestionarGruposToolStripMenuItem.Tag = "Gestionar Grupos";
             gestionarGruposToolStripMenuItem.Text = "Gestionar Grupos";
             gestionarGruposToolStripMenuItem.Click += gestionarGruposToolStripMenuItem_Click;
@@ -184,7 +193,7 @@
             // gestionarPeliculasToolStripMenuItem
             // 
             gestionarPeliculasToolStripMenuItem.Name = "gestionarPeliculasToolStripMenuItem";
-            gestionarPeliculasToolStripMenuItem.Size = new Size(180, 22);
+            gestionarPeliculasToolStripMenuItem.Size = new Size(173, 22);
             gestionarPeliculasToolStripMenuItem.Tag = "Gestionar Peliculas";
             gestionarPeliculasToolStripMenuItem.Text = "Gestionar Peliculas";
             gestionarPeliculasToolStripMenuItem.Click += gestionarPeliculasToolStripMenuItem_Click;
@@ -223,5 +232,6 @@
         private ToolStripDropDownButton toolStripCompras;
         private ToolStripMenuItem gestionarPedidosToolStripMenuItem;
         private ToolStripMenuItem gestionarProveedoresToolStripMenuItem;
+        private ToolStripMenuItem órdenesDeCompraToolStripMenuItem;
     }
 }

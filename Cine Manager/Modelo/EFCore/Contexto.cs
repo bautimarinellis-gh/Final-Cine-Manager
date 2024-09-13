@@ -23,6 +23,8 @@ namespace Modelo.EFCore
         public DbSet<DetalleAlquiler> DetallesAlquileres { get; set; }
         public DbSet<DetalleVenta> DetallesVentas { get; set; }
         public DbSet<PagoPedido> PagosPedidos { get; set; }
+        public DbSet<DetalleOrdenCompra> DetallesOrdenesCompra { get; set; }
+        public DbSet<OrdenCompra> OrdenesCompra { get; set; }
 
 
 
@@ -50,11 +52,8 @@ namespace Modelo.EFCore
         {
 
 
-            modelBuilder.Entity<Grupo>()
-     .HasMany(g => g.Componentes)
-     .WithMany(c => c.Grupos)
-     .UsingEntity<Dictionary<string, object>>(
-         "ComponenteGrupo",
+            modelBuilder.Entity<Grupo>().HasMany(g => g.Componentes).WithMany(c => c.Grupos).UsingEntity<Dictionary<string, object>>(
+   "ComponenteGrupo",
          j => j
              .HasOne<Componente>()
              .WithMany()
@@ -69,7 +68,7 @@ namespace Modelo.EFCore
             // Otras configuraciones para las tablas que mencionaste
             modelBuilder.Entity<Pelicula>()
                 .HasMany(p => p.Proveedores)
-                .WithMany(p => p.ListaPeliculas)
+                .WithMany(p => p.Peliculas)
                 .UsingEntity(j => j.ToTable("Proveedores_Peliculas"));
 
             modelBuilder.Entity<Pelicula>()

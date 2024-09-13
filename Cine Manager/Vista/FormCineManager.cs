@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Vista.Módulo_de_Administración;
+using Vista.Módulo_de_Compras;
 using Vista.Módulo_de_Transacciones;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
@@ -157,14 +158,14 @@ namespace Vista.Módulo_de_Seguridad
 
         private void gestionarClientesToolStripMenuItem1_Click(object sender, EventArgs e) //Toolstrip Gestionar Usuarios
         {
-            var formGestionarClientes = new FormClientes(_sesion); 
+            var formGestionarClientes = new FormClientes(_sesion);
             formGestionarClientes.ShowDialog();
         }
 
 
         private void gestionarPedidosToolStripMenuItem_Click(object sender, EventArgs e) //Toolstrip Gestionar Pedidos
         {
-            var formGestionarPedidos = new FormGestorPedidos(_sesion); 
+            var formGestionarPedidos = new FormGestorPedidos(_sesion);
             formGestionarPedidos.ShowDialog();
         }
 
@@ -177,6 +178,14 @@ namespace Vista.Módulo_de_Seguridad
 
 
 
+        private void órdenesDeCompraToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var formOrdenesCompra = new FormOrdenesCompra(_sesion);
+            formOrdenesCompra.ShowDialog();
+        }
+
+
+
         private void cerrarSesiónToolStripMenuItem_Click(object sender, EventArgs e) //Toolstrip Cerrar Sesión
         {
             _sesion = null;
@@ -185,7 +194,7 @@ namespace Vista.Módulo_de_Seguridad
             formLogin.Show();
 
             this.Close();
-        }   
+        }
     }
 }
 

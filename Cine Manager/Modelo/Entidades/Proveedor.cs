@@ -12,7 +12,8 @@ namespace Modelo.Entidades
         private string codigo;
         private long cuit;
         private string razonSocial;
-        private List<Pelicula> listaPeliculas;
+        private List<Pelicula> peliculas;
+        private List<OrdenCompra> ordenesCompra;
         
 
         public int ProveedorId
@@ -43,22 +44,35 @@ namespace Modelo.Entidades
         }
 
 
-        public List<Pelicula> ListaPeliculas 
+        public List<Pelicula> Peliculas
         {
-            get { return listaPeliculas;}
-            set {  listaPeliculas = value; }
+            get { return peliculas; }
+            set { peliculas= value; }
         }
 
+
+        public List<OrdenCompra> OrdenesCompra
+        {
+            get { return ordenesCompra;}
+            set {  ordenesCompra = value; }
+        }
+
+
+        
 
         public Proveedor()
         {
-            listaPeliculas = new List<Pelicula>();
+            peliculas= new List<Pelicula>();
+            ordenesCompra = new List<OrdenCompra>();
         }
+
 
 
         public override string ToString()
         {
             return $"{Codigo}";
         }
+
+
     }
 }

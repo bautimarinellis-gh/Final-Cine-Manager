@@ -34,15 +34,9 @@ namespace Vista.Módulo_de_Transacciones
 
         private void ActualizarGrilla()
         {
-            /*var peliculas = ControladoraRealizarPedido.Instancia.RecuperarPeliculas().Where(pelicula => pelicula.Cantidad > 0).ToList();*/
 
             dgvPeliculasDisponibles.DataSource = null;
             dgvPeliculasDisponibles.DataSource = ControladoraGestionarPeliculas.Instancia.RecuperarPeliculas();
-
-
-
-            /*dgvPeliculasDisponibles.DataSource = null;
-            dgvPeliculasDisponibles.DataSource = peliculas;*/
 
             dgvDetallesPedido.DataSource = null;
             dgvDetallesPedido.DataSource = pedidoActual.RecuperarDetalles();
@@ -226,11 +220,6 @@ namespace Vista.Módulo_de_Transacciones
             {
                 return false;
             }
-
-            /*if (cantidad > peliculaSeleccionada.Cantidad)
-            {
-                return false;
-            }*/
 
             return true;
         }

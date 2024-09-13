@@ -30,6 +30,7 @@
         {
             components = new System.ComponentModel.Container();
             groupBox1 = new GroupBox();
+            btnOrdenCompra = new Button();
             btnBuscar = new Button();
             numCUIT = new TextBox();
             txtBuscar = new TextBox();
@@ -49,7 +50,6 @@
             RazonSocial = new DataGridViewTextBoxColumn();
             proveedorBindingSource1 = new BindingSource(components);
             proveedorBindingSource = new BindingSource(components);
-            btnOrdenCompra = new Button();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvProveedores).BeginInit();
             ((System.ComponentModel.ISupportInitialize)proveedorBindingSource1).BeginInit();
@@ -76,15 +76,24 @@
             groupBox1.Location = new Point(12, 12);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(805, 426);
-            groupBox1.TabIndex = 2;
+            groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
+            // 
+            // btnOrdenCompra
+            // 
+            btnOrdenCompra.Location = new Point(565, 383);
+            btnOrdenCompra.Name = "btnOrdenCompra";
+            btnOrdenCompra.Size = new Size(119, 23);
+            btnOrdenCompra.TabIndex = 8;
+            btnOrdenCompra.Text = "Órdenes de compra";
+            btnOrdenCompra.UseVisualStyleBackColor = true;
             // 
             // btnBuscar
             // 
             btnBuscar.Location = new Point(244, 78);
             btnBuscar.Name = "btnBuscar";
             btnBuscar.Size = new Size(93, 23);
-            btnBuscar.TabIndex = 15;
+            btnBuscar.TabIndex = 10;
             btnBuscar.Text = "Buscar";
             btnBuscar.UseVisualStyleBackColor = true;
             btnBuscar.Click += btnBuscar_Click;
@@ -94,7 +103,7 @@
             numCUIT.Location = new Point(107, 203);
             numCUIT.Name = "numCUIT";
             numCUIT.Size = new Size(129, 23);
-            numCUIT.TabIndex = 12;
+            numCUIT.TabIndex = 3;
             // 
             // txtBuscar
             // 
@@ -109,7 +118,7 @@
             btnEliminar.Location = new Point(234, 383);
             btnEliminar.Name = "btnEliminar";
             btnEliminar.Size = new Size(71, 23);
-            btnEliminar.TabIndex = 6;
+            btnEliminar.TabIndex = 7;
             btnEliminar.Text = "Eliminar";
             btnEliminar.UseVisualStyleBackColor = true;
             btnEliminar.Click += btnEliminar_Click;
@@ -128,7 +137,7 @@
             btnVolver.Location = new Point(713, 383);
             btnVolver.Name = "btnVolver";
             btnVolver.Size = new Size(75, 23);
-            btnVolver.TabIndex = 7;
+            btnVolver.TabIndex = 9;
             btnVolver.Text = "Volver";
             btnVolver.UseVisualStyleBackColor = true;
             btnVolver.Click += btnVolver_Click;
@@ -138,7 +147,7 @@
             btnModificar.Location = new Point(121, 383);
             btnModificar.Name = "btnModificar";
             btnModificar.Size = new Size(71, 23);
-            btnModificar.TabIndex = 5;
+            btnModificar.TabIndex = 6;
             btnModificar.Text = "Modificar";
             btnModificar.UseVisualStyleBackColor = true;
             btnModificar.Click += btnModificar_Click;
@@ -148,7 +157,7 @@
             btnAgregar.Location = new Point(16, 383);
             btnAgregar.Name = "btnAgregar";
             btnAgregar.Size = new Size(71, 23);
-            btnAgregar.TabIndex = 4;
+            btnAgregar.TabIndex = 5;
             btnAgregar.Text = "Agregar";
             btnAgregar.UseVisualStyleBackColor = true;
             btnAgregar.Click += btnAgregar_Click;
@@ -158,14 +167,14 @@
             txtRazonSocial.Location = new Point(107, 256);
             txtRazonSocial.Name = "txtRazonSocial";
             txtRazonSocial.Size = new Size(129, 23);
-            txtRazonSocial.TabIndex = 3;
+            txtRazonSocial.TabIndex = 4;
             // 
             // txtCodigo
             // 
             txtCodigo.Location = new Point(107, 143);
             txtCodigo.Name = "txtCodigo";
             txtCodigo.Size = new Size(129, 23);
-            txtCodigo.TabIndex = 1;
+            txtCodigo.TabIndex = 2;
             // 
             // label3
             // 
@@ -235,15 +244,6 @@
             // proveedorBindingSource
             // 
             proveedorBindingSource.DataSource = typeof(Modelo.Entidades.Proveedor);
-            // 
-            // btnOrdenCompra
-            // 
-            btnOrdenCompra.Location = new Point(565, 383);
-            btnOrdenCompra.Name = "btnOrdenCompra";
-            btnOrdenCompra.Size = new Size(119, 23);
-            btnOrdenCompra.TabIndex = 16;
-            btnOrdenCompra.Text = "Órdenes de compra";
-            btnOrdenCompra.UseVisualStyleBackColor = true;
             // 
             // FormProveedores
             // 

@@ -19,6 +19,7 @@ namespace Modelo.Entidades
         private List<Proveedor> proveedores;
 
 
+
         public int PeliculaId
         {
             get { return peliculaID; }
@@ -88,6 +89,8 @@ namespace Modelo.Entidades
             reparto = new List<Actor>();
             proveedores = new List<Proveedor>();
         }
+
+
 
         public override string ToString()
         {
