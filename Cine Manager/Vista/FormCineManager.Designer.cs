@@ -80,7 +80,7 @@
             // misDatosToolStripMenuItem
             // 
             misDatosToolStripMenuItem.Name = "misDatosToolStripMenuItem";
-            misDatosToolStripMenuItem.Size = new Size(151, 22);
+            misDatosToolStripMenuItem.Size = new Size(180, 22);
             misDatosToolStripMenuItem.Tag = "Mis Datos";
             misDatosToolStripMenuItem.Text = "Mis Datos";
             misDatosToolStripMenuItem.Click += misDatosToolStripMenuItem_Click;
@@ -88,7 +88,7 @@
             // cambiarClaveToolStripMenuItem
             // 
             cambiarClaveToolStripMenuItem.Name = "cambiarClaveToolStripMenuItem";
-            cambiarClaveToolStripMenuItem.Size = new Size(151, 22);
+            cambiarClaveToolStripMenuItem.Size = new Size(180, 22);
             cambiarClaveToolStripMenuItem.Tag = "Cambiar Clave";
             cambiarClaveToolStripMenuItem.Text = "Cambiar Clave";
             cambiarClaveToolStripMenuItem.Click += cambiarClaveToolStripMenuItem_Click;
@@ -96,7 +96,7 @@
             // cerrarSesiónToolStripMenuItem
             // 
             cerrarSesiónToolStripMenuItem.Name = "cerrarSesiónToolStripMenuItem";
-            cerrarSesiónToolStripMenuItem.Size = new Size(151, 22);
+            cerrarSesiónToolStripMenuItem.Size = new Size(180, 22);
             cerrarSesiónToolStripMenuItem.Tag = "Cerrar Sesion";
             cerrarSesiónToolStripMenuItem.Text = "Cerrar Sesión";
             cerrarSesiónToolStripMenuItem.Click += cerrarSesiónToolStripMenuItem_Click;
@@ -193,9 +193,9 @@
             // gestionarPeliculasToolStripMenuItem
             // 
             gestionarPeliculasToolStripMenuItem.Name = "gestionarPeliculasToolStripMenuItem";
-            gestionarPeliculasToolStripMenuItem.Size = new Size(173, 22);
-            gestionarPeliculasToolStripMenuItem.Tag = "Gestionar Peliculas";
-            gestionarPeliculasToolStripMenuItem.Text = "Gestionar Peliculas";
+            gestionarPeliculasToolStripMenuItem.Size = new Size(180, 22);
+            gestionarPeliculasToolStripMenuItem.Tag = "Gestionar Inventario";
+            gestionarPeliculasToolStripMenuItem.Text = "Gestionar Inventario";
             gestionarPeliculasToolStripMenuItem.Click += gestionarPeliculasToolStripMenuItem_Click;
             // 
             // FormCineManager

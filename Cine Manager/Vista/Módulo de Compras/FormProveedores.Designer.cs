@@ -30,7 +30,6 @@
         {
             components = new System.ComponentModel.Container();
             groupBox1 = new GroupBox();
-            btnOrdenCompra = new Button();
             btnBuscar = new Button();
             numCUIT = new TextBox();
             txtBuscar = new TextBox();
@@ -58,7 +57,6 @@
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(btnOrdenCompra);
             groupBox1.Controls.Add(btnBuscar);
             groupBox1.Controls.Add(numCUIT);
             groupBox1.Controls.Add(txtBuscar);
@@ -78,15 +76,6 @@
             groupBox1.Size = new Size(805, 426);
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
-            // 
-            // btnOrdenCompra
-            // 
-            btnOrdenCompra.Location = new Point(565, 383);
-            btnOrdenCompra.Name = "btnOrdenCompra";
-            btnOrdenCompra.Size = new Size(119, 23);
-            btnOrdenCompra.TabIndex = 8;
-            btnOrdenCompra.Text = "Órdenes de compra";
-            btnOrdenCompra.UseVisualStyleBackColor = true;
             // 
             // btnBuscar
             // 

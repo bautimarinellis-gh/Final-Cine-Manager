@@ -95,15 +95,12 @@ namespace Controladora
                     var director = context.Directores.FirstOrDefault(d => d.DirectorId == pelicula.Director.DirectorId);
                     var generoCinematografico = context.GenerosCinematograficos.FirstOrDefault(g => g.GeneroCinematograficoId == pelicula.GeneroCinematografico.GeneroCinematograficoId);
 
-                    // Obtener los IDs de los proveedores asociados a la película
-                    var proveedoresIds = pelicula.Proveedores.Select(p => p.ProveedorId).ToList();
 
                     var actoresIds = pelicula.Reparto.Select(a => a.ActorId).ToList();
 
                     // Asignar las entidades cargadas a la película
                     pelicula.Director = director;
                     pelicula.GeneroCinematografico = generoCinematografico;
-                    pelicula.Proveedores = context.Proveedores.Where(p => proveedoresIds.Contains(p.ProveedorId)).ToList();
                     pelicula.Reparto = context.Actores.Where(p => actoresIds.Contains(p.ActorId)).ToList();
 
                     
@@ -171,8 +168,7 @@ namespace Controladora
                     var director = context.Directores.FirstOrDefault(d => d.DirectorId == pelicula.Director.DirectorId);
                     var generoCinematografico = context.GenerosCinematograficos.FirstOrDefault(g => g.GeneroCinematograficoId == pelicula.GeneroCinematografico.GeneroCinematograficoId);
 
-                    // Obtener los IDs de los proveedores asociados a la película
-                    var proveedoresIds = pelicula.Proveedores.Select(p => p.ProveedorId).ToList();
+                   
 
                     var actoresIds = pelicula.Reparto.Select(a => a.ActorId).ToList();
 
@@ -182,7 +178,6 @@ namespace Controladora
                     peliculaExistente.Precio = pelicula.Precio;
                     peliculaExistente.Director = director;
                     peliculaExistente.GeneroCinematografico = generoCinematografico;
-                    peliculaExistente.Proveedores = context.Proveedores.Where(p => proveedoresIds.Contains(p.ProveedorId)).ToList();
                     peliculaExistente.Reparto = context.Actores.Where(p => actoresIds.Contains(p.ActorId)).ToList();
 
 
@@ -213,7 +208,7 @@ namespace Controladora
 
                 if (peliculaExistente != null)
                 {
-                    peliculaExistente.Cantidad = pelicula.Cantidad;
+                    peliculaExistente.Cantidad = pelicula.Cantidad;  
 
                     context.Peliculas.Update(peliculaExistente);
                     context.SaveChanges();
@@ -236,10 +231,10 @@ namespace Controladora
         // Método para cargar la película con sus relaciones desde la base de datos
         public Pelicula CargarPeliculaConRelaciones(string codigo)
         {
-            return context.Peliculas
-                             .Include(p => p.Proveedores)
-                             .Include(p => p.Reparto)
-                             .FirstOrDefault(p => p.Codigo == codigo);
+            // Obtener la película con sus relaciones, como Reparto
+            var pelicula = context.Peliculas.Include(p => p.Reparto).FirstOrDefault(p => p.Codigo == codigo);
+
+            return pelicula;
         }
 
 

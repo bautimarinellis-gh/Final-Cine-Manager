@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             groupBox1 = new GroupBox();
             groupBox3 = new GroupBox();
             label9 = new Label();
@@ -36,13 +37,6 @@
             btnEliminarActor = new Button();
             btnAsignarActor = new Button();
             dgvActoresDisponibles = new DataGridView();
-            groupBox2 = new GroupBox();
-            label8 = new Label();
-            label7 = new Label();
-            dgvProvAsignados = new DataGridView();
-            btnEliminarProv = new Button();
-            btnAsignarProv = new Button();
-            dgvProvDisponibles = new DataGridView();
             btnCancelar = new Button();
             btnAceptar = new Button();
             cmbGenero = new ComboBox();
@@ -57,21 +51,25 @@
             label3 = new Label();
             label2 = new Label();
             label1 = new Label();
+            actorBindingSource = new BindingSource(components);
+            nombreDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            apellidoDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            clienteBindingSource = new BindingSource(components);
+            nombreDataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
+            apellidoDataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
             groupBox1.SuspendLayout();
             groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvActoresAsignados).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvActoresDisponibles).BeginInit();
-            groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvProvAsignados).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)dgvProvDisponibles).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numCantidad).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numPrecio).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)actorBindingSource).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)clienteBindingSource).BeginInit();
             SuspendLayout();
             // 
             // groupBox1
             // 
             groupBox1.Controls.Add(groupBox3);
-            groupBox1.Controls.Add(groupBox2);
             groupBox1.Controls.Add(btnCancelar);
             groupBox1.Controls.Add(btnAceptar);
             groupBox1.Controls.Add(cmbGenero);
@@ -88,7 +86,7 @@
             groupBox1.Controls.Add(label1);
             groupBox1.Location = new Point(12, 12);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(987, 542);
+            groupBox1.Size = new Size(669, 542);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             // 
@@ -100,9 +98,9 @@
             groupBox3.Controls.Add(btnEliminarActor);
             groupBox3.Controls.Add(btnAsignarActor);
             groupBox3.Controls.Add(dgvActoresDisponibles);
-            groupBox3.Location = new Point(646, 12);
+            groupBox3.Location = new Point(310, 18);
             groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(324, 510);
+            groupBox3.Size = new Size(333, 510);
             groupBox3.TabIndex = 15;
             groupBox3.TabStop = false;
             // 
@@ -126,12 +124,15 @@
             // 
             // dgvActoresAsignados
             // 
+            dgvActoresAsignados.AutoGenerateColumns = false;
             dgvActoresAsignados.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvActoresAsignados.Columns.AddRange(new DataGridViewColumn[] { nombreDataGridViewTextBoxColumn1, apellidoDataGridViewTextBoxColumn1 });
+            dgvActoresAsignados.DataSource = actorBindingSource;
             dgvActoresAsignados.Location = new Point(17, 296);
             dgvActoresAsignados.Name = "dgvActoresAsignados";
             dgvActoresAsignados.ReadOnly = true;
             dgvActoresAsignados.RowTemplate.Height = 25;
-            dgvActoresAsignados.Size = new Size(284, 175);
+            dgvActoresAsignados.Size = new Size(301, 175);
             dgvActoresAsignados.TabIndex = 15;
             // 
             // btnEliminarActor
@@ -156,85 +157,16 @@
             // 
             // dgvActoresDisponibles
             // 
+            dgvActoresDisponibles.AutoGenerateColumns = false;
             dgvActoresDisponibles.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvActoresDisponibles.Columns.AddRange(new DataGridViewColumn[] { nombreDataGridViewTextBoxColumn, apellidoDataGridViewTextBoxColumn });
+            dgvActoresDisponibles.DataSource = actorBindingSource;
             dgvActoresDisponibles.Location = new Point(17, 54);
             dgvActoresDisponibles.Name = "dgvActoresDisponibles";
             dgvActoresDisponibles.ReadOnly = true;
             dgvActoresDisponibles.RowTemplate.Height = 25;
-            dgvActoresDisponibles.Size = new Size(284, 175);
+            dgvActoresDisponibles.Size = new Size(301, 175);
             dgvActoresDisponibles.TabIndex = 13;
-            // 
-            // groupBox2
-            // 
-            groupBox2.Controls.Add(label8);
-            groupBox2.Controls.Add(label7);
-            groupBox2.Controls.Add(dgvProvAsignados);
-            groupBox2.Controls.Add(btnEliminarProv);
-            groupBox2.Controls.Add(btnAsignarProv);
-            groupBox2.Controls.Add(dgvProvDisponibles);
-            groupBox2.Location = new Point(296, 12);
-            groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(324, 510);
-            groupBox2.TabIndex = 14;
-            groupBox2.TabStop = false;
-            // 
-            // label8
-            // 
-            label8.AutoSize = true;
-            label8.Location = new Point(98, 266);
-            label8.Name = "label8";
-            label8.Size = new Size(130, 15);
-            label8.TabIndex = 5;
-            label8.Text = "Proveedores Asignados";
-            // 
-            // label7
-            // 
-            label7.AutoSize = true;
-            label7.Location = new Point(92, 27);
-            label7.Name = "label7";
-            label7.Size = new Size(136, 15);
-            label7.TabIndex = 4;
-            label7.Text = "Proveedores Disponibles";
-            // 
-            // dgvProvAsignados
-            // 
-            dgvProvAsignados.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvProvAsignados.Location = new Point(17, 296);
-            dgvProvAsignados.Name = "dgvProvAsignados";
-            dgvProvAsignados.ReadOnly = true;
-            dgvProvAsignados.RowTemplate.Height = 25;
-            dgvProvAsignados.Size = new Size(284, 175);
-            dgvProvAsignados.TabIndex = 11;
-            // 
-            // btnEliminarProv
-            // 
-            btnEliminarProv.Location = new Point(17, 481);
-            btnEliminarProv.Name = "btnEliminarProv";
-            btnEliminarProv.Size = new Size(67, 23);
-            btnEliminarProv.TabIndex = 12;
-            btnEliminarProv.Text = "Eliminar";
-            btnEliminarProv.UseVisualStyleBackColor = true;
-            btnEliminarProv.Click += btnEliminarProv_Click;
-            // 
-            // btnAsignarProv
-            // 
-            btnAsignarProv.Location = new Point(17, 235);
-            btnAsignarProv.Name = "btnAsignarProv";
-            btnAsignarProv.Size = new Size(67, 23);
-            btnAsignarProv.TabIndex = 10;
-            btnAsignarProv.Text = "Asignar";
-            btnAsignarProv.UseVisualStyleBackColor = true;
-            btnAsignarProv.Click += btnAsignarProv_Click;
-            // 
-            // dgvProvDisponibles
-            // 
-            dgvProvDisponibles.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvProvDisponibles.Location = new Point(17, 54);
-            dgvProvDisponibles.Name = "dgvProvDisponibles";
-            dgvProvDisponibles.ReadOnly = true;
-            dgvProvDisponibles.RowTemplate.Height = 25;
-            dgvProvDisponibles.Size = new Size(284, 175);
-            dgvProvDisponibles.TabIndex = 9;
             // 
             // btnCancelar
             // 
@@ -356,11 +288,47 @@
             label1.TabIndex = 0;
             label1.Text = "Codigo:";
             // 
+            // actorBindingSource
+            // 
+            actorBindingSource.DataSource = typeof(Modelo.Entidades.Actor);
+            // 
+            // nombreDataGridViewTextBoxColumn
+            // 
+            nombreDataGridViewTextBoxColumn.DataPropertyName = "Nombre";
+            nombreDataGridViewTextBoxColumn.HeaderText = "Nombre";
+            nombreDataGridViewTextBoxColumn.Name = "nombreDataGridViewTextBoxColumn";
+            nombreDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // apellidoDataGridViewTextBoxColumn
+            // 
+            apellidoDataGridViewTextBoxColumn.DataPropertyName = "Apellido";
+            apellidoDataGridViewTextBoxColumn.HeaderText = "Apellido";
+            apellidoDataGridViewTextBoxColumn.Name = "apellidoDataGridViewTextBoxColumn";
+            apellidoDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // clienteBindingSource
+            // 
+            clienteBindingSource.DataSource = typeof(Modelo.Entidades.Cliente);
+            // 
+            // nombreDataGridViewTextBoxColumn1
+            // 
+            nombreDataGridViewTextBoxColumn1.DataPropertyName = "Nombre";
+            nombreDataGridViewTextBoxColumn1.HeaderText = "Nombre";
+            nombreDataGridViewTextBoxColumn1.Name = "nombreDataGridViewTextBoxColumn1";
+            nombreDataGridViewTextBoxColumn1.ReadOnly = true;
+            // 
+            // apellidoDataGridViewTextBoxColumn1
+            // 
+            apellidoDataGridViewTextBoxColumn1.DataPropertyName = "Apellido";
+            apellidoDataGridViewTextBoxColumn1.HeaderText = "Apellido";
+            apellidoDataGridViewTextBoxColumn1.Name = "apellidoDataGridViewTextBoxColumn1";
+            apellidoDataGridViewTextBoxColumn1.ReadOnly = true;
+            // 
             // FormPelicula
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1000, 552);
+            ClientSize = new Size(699, 552);
             Controls.Add(groupBox1);
             Name = "FormPelicula";
             Text = "FormPelicula";
@@ -370,12 +338,10 @@
             groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvActoresAsignados).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvActoresDisponibles).EndInit();
-            groupBox2.ResumeLayout(false);
-            groupBox2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvProvAsignados).EndInit();
-            ((System.ComponentModel.ISupportInitialize)dgvProvDisponibles).EndInit();
             ((System.ComponentModel.ISupportInitialize)numCantidad).EndInit();
             ((System.ComponentModel.ISupportInitialize)numPrecio).EndInit();
+            ((System.ComponentModel.ISupportInitialize)actorBindingSource).EndInit();
+            ((System.ComponentModel.ISupportInitialize)clienteBindingSource).EndInit();
             ResumeLayout(false);
         }
 
@@ -410,5 +376,11 @@
         private Button btnEliminarActor;
         private Button btnAsignarActor;
         private DataGridView dgvActoresDisponibles;
+        private DataGridViewTextBoxColumn nombreDataGridViewTextBoxColumn1;
+        private DataGridViewTextBoxColumn apellidoDataGridViewTextBoxColumn1;
+        private BindingSource actorBindingSource;
+        private DataGridViewTextBoxColumn nombreDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn apellidoDataGridViewTextBoxColumn;
+        private BindingSource clienteBindingSource;
     }
 }

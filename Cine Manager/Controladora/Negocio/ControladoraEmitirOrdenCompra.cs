@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using Modelo.EFCore;
 using Modelo.Entidades;
 using System;
@@ -90,6 +91,60 @@ namespace Controladora.Nueva_Iteración
                 if (ordenExistente == null)
                 {
                     // Asignar el proveedor existente a la orden
+                    var proveedor = context.Proveedores
+                                           .Include(p => p.Peliculas) // Incluir las películas asociadas
+                                           .FirstOrDefault(p => p.ProveedorId == orden.Proveedor.ProveedorId);
+                    if (proveedor == null)
+                    {
+                        return "Proveedor no encontrado.";
+                    }
+                    orden.Proveedor = proveedor;
+
+                    // Adjuntar detalles de la orden de compra
+                    foreach (var detalle in orden.DetallesOrdenesCompra)
+                    {
+                        // Adjuntar la película existente al detalle de la orden de compra
+                        var pelicula = context.Peliculas
+                                             .Include(p => p.Proveedores) // Incluir los proveedores asociados
+                                             .FirstOrDefault(p => p.PeliculaId == detalle.Pelicula.PeliculaId);
+                        if (pelicula != null)
+                        {
+                            detalle.Pelicula = pelicula;
+
+                            // Verificar y agregar la relación película-proveedor si no existe
+                            if (!pelicula.Proveedores.Contains(proveedor))
+                            {
+                                pelicula.Proveedores.Add(proveedor);
+                            }
+                        }
+                    }
+
+                    // Agregar la nueva orden de compra a la base de datos
+                    context.OrdenesCompra.Add(orden);
+                    context.SaveChanges();
+
+                    return "Orden de compra emitida correctamente";
+                }
+                else
+                {
+                    return "Ya existe una orden con este código";
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.InnerException?.Message ?? ex.Message;
+            }
+
+
+
+
+            /*try
+            {
+                var ordenExistente = Buscar(orden.Codigo);
+
+                if (ordenExistente == null)
+                {
+                    // Asignar el proveedor existente a la orden
                     var proveedor = context.Proveedores.FirstOrDefault(p => p.ProveedorId == orden.Proveedor.ProveedorId);
                     orden.Proveedor = proveedor;
 
@@ -117,7 +172,7 @@ namespace Controladora.Nueva_Iteración
             catch (Exception ex)
             {
                 return ex.InnerException?.Message ?? ex.Message;
-            }
+            }*/
         }
     }
 }

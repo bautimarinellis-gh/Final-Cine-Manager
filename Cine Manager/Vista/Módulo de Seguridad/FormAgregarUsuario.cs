@@ -173,22 +173,7 @@ namespace Vista.Módulo_de_Seguridad
                         }
                     }
                 }
-                else
-                {
-                    // Si el nodo principal no está marcado, verifica individualmente los subnodos
-                    foreach (TreeNode subNodo in nodo.Nodes)
-                    {
-                        if (subNodo.Checked)
-                        {
-                            var nombreAccion = subNodo.Text;
-                            var accion = ControladoraAcciones.Instancia.ObtenerAccionPorNombre(nombreAccion);
-                            if (accion != null)
-                            {
-                                accionesSeleccionadas.Add(accion);
-                            }
-                        }
-                    }
-                }
+
             }
 
             return accionesSeleccionadas;

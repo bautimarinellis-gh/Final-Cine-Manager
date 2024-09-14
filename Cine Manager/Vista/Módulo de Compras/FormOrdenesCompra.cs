@@ -1,5 +1,6 @@
 ﻿using Controladora;
 using Controladora.Negocio;
+using Modelo.Entidades;
 using Modelo.Módulo_de_Seguridad;
 using System;
 using System.Collections.Generic;
@@ -21,9 +22,18 @@ namespace Vista.Módulo_de_Compras
         {
             InitializeComponent();
             _sesion = sesion;
-
             dgvOrdenesCompra.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            cmbEstado.SelectedIndex = 0;
+            cmbEstado.SelectedIndexChanged += cmbEstado_SelectedIndexChanged;
+
             ActualizarGrilla();
+        }
+
+
+        private void ActualizarGrilla()
+        {
+            dgvOrdenesCompra.DataSource = null;
+            dgvOrdenesCompra.DataSource = ControladoraGestionarOrdenesCompra.Instancia.RecuperarOrdenesCompra();
         }
 
 
@@ -37,13 +47,66 @@ namespace Vista.Módulo_de_Compras
         }
 
 
-        private void ActualizarGrilla()
+
+        private void btnPagar_Click(object sender, EventArgs e)
         {
-            dgvOrdenesCompra.DataSource = null;
-            dgvOrdenesCompra.DataSource = ControladoraGestionarOrdenesCompra.Instancia.RecuperarOrdenesCompra();
+            if (dgvOrdenesCompra.SelectedRows.Count > 0)
+            {
+                var ordenSeleccionada = (OrdenCompra)dgvOrdenesCompra.SelectedRows[0].DataBoundItem;
+
+                if (ordenSeleccionada.Estado)
+                {
+                    MessageBox.Show("Esta orden de compra ya ha sido pagada.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                var mensaje = ControladoraGestionarOrdenesCompra.Instancia.PagarOrdenCompra(ordenSeleccionada);
+
+                MessageBox.Show(mensaje);
+                ActualizarGrilla();
+            }
+            else
+            {
+                MessageBox.Show("Seleccione una orden de compra para pagar .", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            }
         }
 
 
+
+        private void btnBuscar_Click(object sender, EventArgs e)
+        {
+            string textoBusqueda = txtBuscar.Text.Trim();
+            dgvOrdenesCompra.DataSource = ControladoraGestionarOrdenesCompra.Instancia.FiltrarOrdenesCompra(textoBusqueda);
+
+        }
+
+
+
+        private void cmbEstado_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var estadoSeleccionado = cmbEstado.SelectedItem.ToString();
+
+            if (estadoSeleccionado == "Todas")
+            {
+                dgvOrdenesCompra.DataSource = null;
+                dgvOrdenesCompra.DataSource = ControladoraGestionarOrdenesCompra.Instancia.RecuperarOrdenesCompra();
+            }
+            else if (estadoSeleccionado == "Pendientes")
+            {
+                dgvOrdenesCompra.DataSource = null;
+                dgvOrdenesCompra.DataSource = ControladoraGestionarOrdenesCompra.Instancia.RecuperarOrdenesCompra()
+                    .Where(o => !o.Estado)
+                    .ToList();
+            }
+            else if (estadoSeleccionado == "Completadas")
+            {
+                dgvOrdenesCompra.DataSource = null;
+                dgvOrdenesCompra.DataSource = ControladoraGestionarOrdenesCompra.Instancia.RecuperarOrdenesCompra()
+                    .Where(o => o.Estado)
+                    .ToList();
+            }
+        }
 
 
         private void btnVolver_Click(object sender, EventArgs e)

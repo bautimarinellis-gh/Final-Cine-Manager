@@ -26,6 +26,8 @@ namespace Vista
         {
             InitializeComponent();
 
+            dgvActoresDisponibles.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvActoresAsignados.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             this.pelicula = new Pelicula();
             LlenarComboBox();
             ActualizarGrilla();
@@ -55,11 +57,6 @@ namespace Vista
 
         private void ActualizarGrilla()
         {
-            dgvProvDisponibles.DataSource = null;
-            dgvProvDisponibles.DataSource = ControladoraGestionarProveedores.Instancia.RecuperarProveedores();
-
-            dgvProvAsignados.DataSource = null;
-            dgvProvAsignados.DataSource = pelicula.Proveedores.ToList();
 
             dgvActoresDisponibles.DataSource = null;
             dgvActoresDisponibles.DataSource = ControladoraGestionarActores.Instancia.RecuperarActores();
@@ -98,61 +95,6 @@ namespace Vista
                 this.Close();
             }
 
-        }
-
-
-
-
-        private void btnAsignarProv_Click(object sender, EventArgs e)
-        {
-            if (dgvProvDisponibles.CurrentRow != null)
-            {
-                var proveedorAsignado = (Proveedor)dgvProvDisponibles.CurrentRow.DataBoundItem;
-
-                bool proveedorYaExiste = pelicula.Proveedores.Any(p => p.Codigo == proveedorAsignado.Codigo);
-
-                if (!proveedorYaExiste)
-                {
-                    pelicula.Proveedores.Add(proveedorAsignado);
-                    ActualizarGrilla();
-                    MessageBox.Show("Proveedor asignado correctamente.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    MessageBox.Show("El proveedor ya se encuentra asignado a la película.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-            }
-            else
-            {
-                MessageBox.Show("Seleccione un proveedor disponible para asignar.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
-
-
-
-        private void btnEliminarProv_Click(object sender, EventArgs e)
-        {
-            if (dgvProvAsignados.Rows.Count > 0)
-            {
-                var proveedorEliminado = (Proveedor)dgvProvAsignados.CurrentRow.DataBoundItem;
-
-                // Verificar si el proveedor a eliminar está en la lista de proveedores de la película
-                if (pelicula.Proveedores.Contains(proveedorEliminado))
-                {
-                    pelicula.Proveedores.Remove(proveedorEliminado);
-                    ActualizarGrilla();
-                    MessageBox.Show("Proveedor elimnado correctamente.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                }
-                else
-                {
-                    MessageBox.Show("El proveedor seleccionado no está asociado a la película.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-            }
-            else
-            {
-                MessageBox.Show("Por favor, seleccione un proveedor.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
         }
 
 
@@ -247,12 +189,7 @@ namespace Vista
                 MessageBox.Show("Debe seleccionar un género", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
-            // Validar que la película tenga al menos un proveedor
-            if (this.dgvProvAsignados == null || this.dgvProvAsignados.Rows.Count == 0)
-            {
-                MessageBox.Show("Debe asignar al menos un proveedor a la película", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
+
 
             // Validar que la película tenga al menos un proveedor
             if (this.dgvActoresAsignados == null || this.dgvActoresAsignados.Rows.Count == 0)
@@ -274,9 +211,6 @@ namespace Vista
             numCantidad.Value = pelicula.Cantidad;
             cmbDirector.SelectedItem = pelicula.Director;
             cmbGenero.SelectedItem = pelicula.GeneroCinematografico;
-
-            // Cargar los proveedores asignados a la película
-            dgvProvAsignados.DataSource = pelicula.Proveedores.ToList();
 
             // Cargar los actores asignados a la película
             dgvActoresAsignados.DataSource = pelicula.Reparto.ToList();
