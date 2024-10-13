@@ -41,7 +41,7 @@ namespace Controladora
         {
             try
             {
-                return context.Peliculas.ToList().AsReadOnly();
+                return context.Peliculas.Include(d => d.Director).Include(g => g.GeneroCinematografico).ToList().AsReadOnly();
             }
             catch (Exception ex)
             {
@@ -174,7 +174,7 @@ namespace Controladora
 
                     // Asignar las entidades cargadas a la película
                     peliculaExistente.Nombre = pelicula.Nombre;
-                    peliculaExistente.Cantidad = pelicula.Cantidad;
+                    /*peliculaExistente.Cantidad = pelicula.Cantidad;*/
                     peliculaExistente.Precio = pelicula.Precio;
                     peliculaExistente.Director = director;
                     peliculaExistente.GeneroCinematografico = generoCinematografico;

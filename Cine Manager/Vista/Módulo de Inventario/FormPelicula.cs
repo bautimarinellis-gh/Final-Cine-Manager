@@ -78,7 +78,7 @@ namespace Vista
                 pelicula.GeneroCinematografico = generoSeleccionado;
                 pelicula.Codigo = txtCodigo.Text;
                 pelicula.Nombre = txtNombre.Text;
-                pelicula.Cantidad = (int)numCantidad.Value;
+                /*pelicula.Cantidad = (int)numCantidad.Value;*/
                 pelicula.Precio = (int)numPrecio.Value;
 
                 string mensaje;
@@ -174,11 +174,6 @@ namespace Vista
                 MessageBox.Show("El precio debe ser mayor que cero", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
-            if (this.numCantidad.Value <= 0)
-            {
-                MessageBox.Show("La cantidad debe ser mayor que cero", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
             if (this.cmbDirector.SelectedItem == null)
             {
                 MessageBox.Show("Debe seleccionar un director", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -208,7 +203,6 @@ namespace Vista
             txtCodigo.Text = pelicula.Codigo;
             txtNombre.Text = pelicula.Nombre;
             numPrecio.Value = pelicula.Precio;
-            numCantidad.Value = pelicula.Cantidad;
             cmbDirector.SelectedItem = pelicula.Director;
             cmbGenero.SelectedItem = pelicula.GeneroCinematografico;
 

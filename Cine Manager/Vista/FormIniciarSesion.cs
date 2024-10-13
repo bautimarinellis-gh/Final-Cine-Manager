@@ -32,46 +32,23 @@ namespace Vista.Módulo_de_Seguridad
 
             Usuario usuario = ControladoraIniciarSesion.Instancia.Buscar(txtUsuario.Text);
 
-            // Verificar si el usuario está inactivo
-            if (usuario.EstadoUsuario.EstadoUsuarioId != 1) 
+            if (UsuarioInactivo(usuario))
             {
                 MessageBox.Show("No puede ingresar porque su cuenta está inactiva.");
                 LimpiarCampos();
                 return;
             }
 
-            // Crear la sesión y asignar las acciones del usuario
-            Sesion sesion = new Sesion
+            Sesion sesion = CrearSesion(usuario);
+
+            if (!VerificarPermisos(sesion))
             {
-                UsuarioSesion = usuario,
-                SesionPerfil = usuario.Componentes.OfType<Accion>().ToList() // Asignar las acciones del usuario
-            };
-
-            // Verificar si el usuario tiene un grupo inactivo
-            bool usuarioEnGrupoInactivo = usuario.Componentes.OfType<Grupo>()
-                .Any(grupo => grupo.EstadoGrupo.EstadoGrupoId == 2);
-
-            if (usuarioEnGrupoInactivo)
-            {
-                // Limitar los formularios a las acciones personalizadas del usuario
-                var accionesPersonalizadas = sesion.SesionPerfil
-                    .Where(a => a.Id == 3 || a.Id == 6)
-                    .ToList();
-
-                sesion.SesionPerfil = accionesPersonalizadas;
-
-                if (!accionesPersonalizadas.Any())
-                {
-                    MessageBox.Show("No tiene permisos para acceder al sistema.");
-                    LimpiarCampos();
-                    return;
-                }
+                MessageBox.Show("No tiene permisos para acceder al sistema.");
+                LimpiarCampos();
+                return;
             }
 
-            // Configurar y mostrar el formulario principal pasando la sesión
-            var formCineManager = new FormCineManager(sesion);
-            formCineManager.Show();
-            this.Hide();
+            MostrarFormularioPrincipal(sesion);
 
         }
 
@@ -90,44 +67,98 @@ namespace Vista.Módulo_de_Seguridad
         {
             if (string.IsNullOrWhiteSpace(txtUsuario.Text) || string.IsNullOrWhiteSpace(txtClave.Text))
             {
-                MessageBox.Show("Campos obligatorios incompletos");
+                MessageBox.Show("Campos obligatorios incompletos.");
                 return false;
             }
 
             Usuario usuario = ControladoraIniciarSesion.Instancia.Buscar(txtUsuario.Text);
-
             if (usuario == null)
             {
-                MessageBox.Show("Usuario inexistente");
+                MessageBox.Show("Usuario inexistente.");
                 return false;
             }
 
-            string claveEncriptadaIngresada = EncriptarClave(txtClave.Text);
-            if (usuario.Clave != claveEncriptadaIngresada)
+            if (!ClaveCorrecta(usuario))
             {
-                MessageBox.Show("Clave incorrecta");
+                MessageBox.Show("Clave incorrecta.");
                 return false;
             }
 
-            // Verificar si el usuario pertenece a un grupo inactivo
-            bool usuarioEnGrupoInactivo = usuario.Componentes.OfType<Grupo>()
-                .Any(grupo => grupo.EstadoGrupo.EstadoGrupoId == 2);
-
-            // Verificar si el usuario tiene acciones personalizadas que no forman parte de un grupo
-            bool tieneAccionesPersonalizadas = usuario.Componentes.OfType<Accion>()
-                .Any(acc => acc.Id == 3 || acc.Id == 6);
-
-            // Validar acceso basado en las condiciones
-            if (usuarioEnGrupoInactivo && !tieneAccionesPersonalizadas)
+            if (PerteneceAGrupoInactivoSinPermisos(usuario))
             {
                 MessageBox.Show("El usuario pertenece a un grupo inactivo y no tiene acciones personalizadas.");
-                LimpiarCampos();
                 return false;
             }
 
             return true;
+        }
 
 
+
+        private bool ClaveCorrecta(Usuario usuario)
+        {
+            string claveEncriptadaIngresada = EncriptarClave(txtClave.Text);
+            return usuario.Clave == claveEncriptadaIngresada;
+        }
+
+
+
+        private bool UsuarioInactivo(Usuario usuario)
+        {
+            return usuario.EstadoUsuario.EstadoUsuarioId != 1;
+        }
+
+
+
+        private bool PerteneceAGrupoInactivoSinPermisos(Usuario usuario)
+        {
+            bool usuarioEnGrupoInactivo = usuario.Componentes.OfType<Grupo>()
+                .Any(grupo => grupo.EstadoGrupo.EstadoGrupoId == 2);
+
+            bool tieneAccionesPersonalizadas = usuario.Componentes.OfType<Accion>()
+                .Any(acc => acc.Id == 34);
+
+            return usuarioEnGrupoInactivo && !tieneAccionesPersonalizadas;
+        }
+
+
+
+        private Sesion CrearSesion(Usuario usuario)
+        {
+            return new Sesion
+            {
+                UsuarioSesion = usuario,
+                SesionPerfil = usuario.Componentes.OfType<Accion>().ToList()
+            };
+        }
+
+
+
+        private bool VerificarPermisos(Sesion sesion)
+        {
+            bool usuarioEnGrupoInactivo = sesion.UsuarioSesion.Componentes.OfType<Grupo>()
+                .Any(grupo => grupo.EstadoGrupo.EstadoGrupoId == 2);
+
+            if (usuarioEnGrupoInactivo)
+            {
+                var accionesPersonalizadas = sesion.SesionPerfil
+                    .Where(a => a.Id == 34)
+                    .ToList();
+
+                sesion.SesionPerfil = accionesPersonalizadas;
+                return accionesPersonalizadas.Any();
+            }
+
+            return true;
+        }
+
+
+
+        private void MostrarFormularioPrincipal(Sesion sesion)
+        {
+            var formCineManager = new FormCineManager(sesion);
+            formCineManager.Show();
+            this.Hide();
         }
 
 
@@ -154,6 +185,7 @@ namespace Vista.Módulo_de_Seguridad
             txtUsuario.Text = "";
             txtClave.Text = "";
         }
+
 
 
         private void btnCancelar_Click(object sender, EventArgs e)

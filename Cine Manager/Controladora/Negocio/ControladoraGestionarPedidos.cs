@@ -1,4 +1,5 @@
-﻿using Modelo.EFCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Modelo.EFCore;
 using Modelo.Entidades;
 using System;
 using System.Collections.Generic;
@@ -40,7 +41,7 @@ namespace Controladora
         {
             try
             {
-                return context.Pedidos.ToList().AsReadOnly();
+                return context.Pedidos.Include(c => c.Cliente).ToList().AsReadOnly();
             }
             catch(Exception ex)
             {

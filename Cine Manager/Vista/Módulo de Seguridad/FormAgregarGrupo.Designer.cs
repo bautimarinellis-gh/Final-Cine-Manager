@@ -38,7 +38,6 @@
             TreeNode treeNode8 = new TreeNode("Gestionar Grupos");
             TreeNode treeNode9 = new TreeNode("Gestionar Usuarios");
             TreeNode treeNode10 = new TreeNode("Seguridad", new TreeNode[] { treeNode8, treeNode9 });
-            TreeNode treeNode11 = new TreeNode("Gestionar Inventario");
             tabUsuario = new TabControl();
             tabDatos = new TabPage();
             btnCancelar = new Button();
@@ -255,10 +254,7 @@
             treeNode10.Name = "nSeguridad";
             treeNode10.Tag = "Seguridad";
             treeNode10.Text = "Seguridad";
-            treeNode11.Name = "nInventario";
-            treeNode11.Tag = "Gestionar Inventario";
-            treeNode11.Text = "Gestionar Inventario";
-            treeViewAcciones.Nodes.AddRange(new TreeNode[] { treeNode4, treeNode7, treeNode10, treeNode11 });
+            treeViewAcciones.Nodes.AddRange(new TreeNode[] { treeNode4, treeNode7, treeNode10 });
             treeViewAcciones.Size = new Size(450, 182);
             treeViewAcciones.TabIndex = 1;
             // 

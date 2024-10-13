@@ -69,6 +69,11 @@ namespace Modelo.Módulo_de_Seguridad
             return componentes.ToList();
         }
 
-        
+
+        public override string ToString()
+        {
+            return $"{Nombre}";
+        }
+
     }
 }

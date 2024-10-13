@@ -189,10 +189,10 @@ namespace Modelo.Entidades
                 }
             });
         }
+            
 
-
-
-
+                      
+                       
 
 
         public void LimpiarDetalles()

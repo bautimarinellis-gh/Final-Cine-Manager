@@ -1,6 +1,7 @@
 ﻿using Controladora;
 using Controladora.Nueva_Iteración;
 using Modelo.Entidades;
+using Modelo.Entidades.EstadosOrdenesCompra;
 using Modelo.Módulo_de_Seguridad;
 using System;
 using System.Collections.Generic;
@@ -128,7 +129,7 @@ namespace Vista.Módulo_de_Compras
                     Proveedor = proveedorSeleccionado,
                     FechaOrden = DateTime.Now,
                     Total = ordenActual.Total,
-                    Estado = false,
+                    EstadoActual = new EstadoPendiente(),
                     DetallesOrdenesCompra = ordenActual.DetallesOrdenesCompra.ToList(),
                 };
 

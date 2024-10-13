@@ -34,7 +34,7 @@
             groupBox2 = new GroupBox();
             btnBuscar = new Button();
             cmbEstado = new ComboBox();
-            textBox1 = new TextBox();
+            txtNombre = new TextBox();
             label3 = new Label();
             label1 = new Label();
             btnModificar = new Button();
@@ -79,7 +79,7 @@
             // 
             groupBox2.Controls.Add(btnBuscar);
             groupBox2.Controls.Add(cmbEstado);
-            groupBox2.Controls.Add(textBox1);
+            groupBox2.Controls.Add(txtNombre);
             groupBox2.Controls.Add(label3);
             groupBox2.Controls.Add(label1);
             groupBox2.Location = new Point(20, 22);
@@ -97,22 +97,24 @@
             btnBuscar.TabIndex = 16;
             btnBuscar.Text = "Buscar";
             btnBuscar.UseVisualStyleBackColor = true;
+            btnBuscar.Click += btnBuscar_Click;
             // 
             // cmbEstado
             // 
+            cmbEstado.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbEstado.FormattingEnabled = true;
-            cmbEstado.Items.AddRange(new object[] { "Activo", "Inactivo" });
+            cmbEstado.Items.AddRange(new object[] { "Todos", "Activo", "Inactivo" });
             cmbEstado.Location = new Point(374, 24);
             cmbEstado.Name = "cmbEstado";
             cmbEstado.Size = new Size(121, 23);
             cmbEstado.TabIndex = 5;
             // 
-            // textBox1
+            // txtNombre
             // 
-            textBox1.Location = new Point(103, 30);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(123, 23);
-            textBox1.TabIndex = 3;
+            txtNombre.Location = new Point(103, 30);
+            txtNombre.Name = "txtNombre";
+            txtNombre.Size = new Size(123, 23);
+            txtNombre.TabIndex = 3;
             // 
             // label3
             // 
@@ -170,6 +172,7 @@
             dgvGrupos.DataSource = grupoBindingSource;
             dgvGrupos.Location = new Point(20, 92);
             dgvGrupos.Name = "dgvGrupos";
+            dgvGrupos.ReadOnly = true;
             dgvGrupos.RowTemplate.Height = 25;
             dgvGrupos.Size = new Size(739, 232);
             dgvGrupos.TabIndex = 0;
@@ -179,18 +182,21 @@
             codigoDataGridViewTextBoxColumn.DataPropertyName = "Codigo";
             codigoDataGridViewTextBoxColumn.HeaderText = "Codigo";
             codigoDataGridViewTextBoxColumn.Name = "codigoDataGridViewTextBoxColumn";
+            codigoDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // NombreGrupo
             // 
-            NombreGrupo.DataPropertyName = "NombreGrupo";
+            NombreGrupo.DataPropertyName = "Nombre";
             NombreGrupo.HeaderText = "Nombre";
             NombreGrupo.Name = "NombreGrupo";
+            NombreGrupo.ReadOnly = true;
             // 
             // EstadoGrupo
             // 
             EstadoGrupo.DataPropertyName = "EstadoGrupo";
             EstadoGrupo.HeaderText = "Estado";
             EstadoGrupo.Name = "EstadoGrupo";
+            EstadoGrupo.ReadOnly = true;
             // 
             // grupoBindingSource
             // 
@@ -232,5 +238,6 @@
         private DataGridViewTextBoxColumn codigoDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn NombreGrupo;
         private DataGridViewTextBoxColumn EstadoGrupo;
+        private TextBox txtNombre;
     }
 }

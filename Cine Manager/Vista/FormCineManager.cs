@@ -110,7 +110,7 @@ namespace Vista.Módulo_de_Seguridad
 
         private void gestionarUsuariosToolStripMenuItem_Click(object sender, EventArgs e) //Toolstrip Gestionar Usuarios
         {
-            var formGestorUsuarios = new FormGestionarUsuarios(/*_sesion*/);
+            var formGestorUsuarios = new FormGestionarUsuarios(_sesion);
             formGestorUsuarios.ShowDialog();
         }
 
@@ -188,12 +188,23 @@ namespace Vista.Módulo_de_Seguridad
 
         private void cerrarSesiónToolStripMenuItem_Click(object sender, EventArgs e) //Toolstrip Cerrar Sesión
         {
-            _sesion = null;
+            // Confirmar si el usuario desea cerrar la sesión
+            var confirmResult = MessageBox.Show("¿Está seguro de que desea cerrar sesión?", "Confirmar Cierre de Sesión", MessageBoxButtons.YesNo);
 
-            var formLogin = new FormIniciarSesion();
-            formLogin.Show();
+            if (confirmResult == DialogResult.Yes)
+            {
+                /*RegistrarCierreSesion();*/  
 
-            this.Close();
+                // Limpiar la sesión actual
+                _sesion = null;
+
+                // Mostrar el formulario de inicio de sesión nuevamente
+                var formLogin = new FormIniciarSesion();
+                formLogin.Show();
+
+                // Cerrar el formulario actual (principal)
+                this.Close();
+            }
         }
     }
 }

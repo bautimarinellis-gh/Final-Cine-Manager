@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Modelo.EFCore;
 using Modelo.Entidades;
+using Modelo.Entidades.EstadosOrdenesCompra;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -40,8 +41,7 @@ namespace Controladora.Negocio
         {
             try
             {
-                return context.OrdenesCompra.ToList().AsReadOnly();
-
+                return context.OrdenesCompra.Include(o => o.Proveedor).ToList().AsReadOnly();
             }
             catch (Exception ex)
             {
@@ -76,10 +76,17 @@ namespace Controladora.Negocio
         {
             try
             {
-                return context.OrdenesCompra
-                              .Include(o => o.DetallesOrdenesCompra)
-                              .ThenInclude(d => d.Pelicula)
-                              .FirstOrDefault(o => o.Codigo == codigoOrden);
+                var orden = context.OrdenesCompra
+                                   .Include(o => o.DetallesOrdenesCompra)
+                                   .ThenInclude(d => d.Pelicula)
+                                   .FirstOrDefault(o => o.Codigo == codigoOrden);
+
+                if (orden != null)
+                {
+                    orden.EstadoActual = orden.AsignarEstado(orden.Estado); // Mapea el string al estado correspondiente
+                }
+
+                return orden;
             }
             catch (Exception ex)
             {
@@ -89,7 +96,7 @@ namespace Controladora.Negocio
 
 
 
-        public string PagarOrdenCompra(OrdenCompra ordenCompra)
+        public string CancelarOrdenCompra(OrdenCompra ordenCompra)
         {
             try
             {
@@ -100,56 +107,21 @@ namespace Controladora.Negocio
                     return "Orden de compra inexistente";
                 }
 
-                return ProcesarOrdenCompra(ordenExistente);
+                // Delegar la operación al estado actual
+                ordenExistente.Cancelar();
+
+                // Cambiar el estado a Cancelada
+                ordenExistente.CambiarEstado(new EstadoCancelada());
+
+                context.OrdenesCompra.Update(ordenExistente);
+                context.SaveChanges();
+
+                return "La orden de compra ha sido cancelada.";
             }
             catch (Exception ex)
             {
                 return $"Error desconocido: {ex.Message}";
             }
-        }
-
-
-
-        private string ProcesarOrdenCompra(OrdenCompra ordenExistente)
-        {
-            ordenExistente.Estado = true;
-
-            foreach (var detalle in ordenExistente.DetallesOrdenesCompra)
-            {
-                try
-                {
-                    var peliculaExistente = ControladoraGestionarPeliculas.Instancia.Buscar(detalle.Pelicula.Codigo);
-
-                    if (peliculaExistente == null)
-                    {
-                        ordenExistente.Estado = false;
-                        return $"Error: no se encontró la película con el código {detalle.Pelicula.Codigo}";
-                    }
-
-                    // Actualizar el stock sumando la cantidad
-                    peliculaExistente.Cantidad += detalle.Cantidad;
-
-                    // Llamar al método de la controladora para actualizar la película en la base de datos
-                    var stockActualizado = ControladoraGestionarPeliculas.Instancia.ActualizarStockPeliculas(peliculaExistente);
-
-                    if (!stockActualizado)
-                    {
-                        ordenExistente.Estado = false;
-                        return "Error al intentar actualizar el stock";
-                    }
-                }
-                catch (Exception ex)
-                {
-                    ordenExistente.Estado = false;
-                    return ex.Message; // Retornar el mensaje de error correspondiente
-                }
-            }
-
-            // Guardar los cambios en la orden de compra y en la base de datos
-            context.OrdenesCompra.Update(ordenExistente);
-            context.SaveChanges();
-
-            return "La orden de compra ha sido pagada y el stock actualizado";
         }
     }
 }

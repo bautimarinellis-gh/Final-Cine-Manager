@@ -34,36 +34,33 @@
             label9 = new Label();
             label10 = new Label();
             dgvActoresAsignados = new DataGridView();
+            nombreDataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
+            apellidoDataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
+            actorBindingSource = new BindingSource(components);
             btnEliminarActor = new Button();
             btnAsignarActor = new Button();
             dgvActoresDisponibles = new DataGridView();
+            nombreDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            apellidoDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             btnCancelar = new Button();
             btnAceptar = new Button();
             cmbGenero = new ComboBox();
             cmbDirector = new ComboBox();
-            numCantidad = new NumericUpDown();
             numPrecio = new NumericUpDown();
             txtNombre = new TextBox();
             txtCodigo = new TextBox();
             label6 = new Label();
             label5 = new Label();
             label4 = new Label();
-            label3 = new Label();
             label2 = new Label();
             label1 = new Label();
-            actorBindingSource = new BindingSource(components);
-            nombreDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-            apellidoDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             clienteBindingSource = new BindingSource(components);
-            nombreDataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
-            apellidoDataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
             groupBox1.SuspendLayout();
             groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvActoresAsignados).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)dgvActoresDisponibles).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numCantidad).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numPrecio).BeginInit();
             ((System.ComponentModel.ISupportInitialize)actorBindingSource).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvActoresDisponibles).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numPrecio).BeginInit();
             ((System.ComponentModel.ISupportInitialize)clienteBindingSource).BeginInit();
             SuspendLayout();
             // 
@@ -74,14 +71,12 @@
             groupBox1.Controls.Add(btnAceptar);
             groupBox1.Controls.Add(cmbGenero);
             groupBox1.Controls.Add(cmbDirector);
-            groupBox1.Controls.Add(numCantidad);
             groupBox1.Controls.Add(numPrecio);
             groupBox1.Controls.Add(txtNombre);
             groupBox1.Controls.Add(txtCodigo);
             groupBox1.Controls.Add(label6);
             groupBox1.Controls.Add(label5);
             groupBox1.Controls.Add(label4);
-            groupBox1.Controls.Add(label3);
             groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(label1);
             groupBox1.Location = new Point(12, 12);
@@ -135,6 +130,24 @@
             dgvActoresAsignados.Size = new Size(301, 175);
             dgvActoresAsignados.TabIndex = 15;
             // 
+            // nombreDataGridViewTextBoxColumn1
+            // 
+            nombreDataGridViewTextBoxColumn1.DataPropertyName = "Nombre";
+            nombreDataGridViewTextBoxColumn1.HeaderText = "Nombre";
+            nombreDataGridViewTextBoxColumn1.Name = "nombreDataGridViewTextBoxColumn1";
+            nombreDataGridViewTextBoxColumn1.ReadOnly = true;
+            // 
+            // apellidoDataGridViewTextBoxColumn1
+            // 
+            apellidoDataGridViewTextBoxColumn1.DataPropertyName = "Apellido";
+            apellidoDataGridViewTextBoxColumn1.HeaderText = "Apellido";
+            apellidoDataGridViewTextBoxColumn1.Name = "apellidoDataGridViewTextBoxColumn1";
+            apellidoDataGridViewTextBoxColumn1.ReadOnly = true;
+            // 
+            // actorBindingSource
+            // 
+            actorBindingSource.DataSource = typeof(Modelo.Entidades.Actor);
+            // 
             // btnEliminarActor
             // 
             btnEliminarActor.Location = new Point(17, 481);
@@ -168,9 +181,23 @@
             dgvActoresDisponibles.Size = new Size(301, 175);
             dgvActoresDisponibles.TabIndex = 13;
             // 
+            // nombreDataGridViewTextBoxColumn
+            // 
+            nombreDataGridViewTextBoxColumn.DataPropertyName = "Nombre";
+            nombreDataGridViewTextBoxColumn.HeaderText = "Nombre";
+            nombreDataGridViewTextBoxColumn.Name = "nombreDataGridViewTextBoxColumn";
+            nombreDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // apellidoDataGridViewTextBoxColumn
+            // 
+            apellidoDataGridViewTextBoxColumn.DataPropertyName = "Apellido";
+            apellidoDataGridViewTextBoxColumn.HeaderText = "Apellido";
+            apellidoDataGridViewTextBoxColumn.Name = "apellidoDataGridViewTextBoxColumn";
+            apellidoDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
             // btnCancelar
             // 
-            btnCancelar.Location = new Point(182, 413);
+            btnCancelar.Location = new Point(166, 358);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(75, 23);
             btnCancelar.TabIndex = 8;
@@ -180,7 +207,7 @@
             // 
             // btnAceptar
             // 
-            btnAceptar.Location = new Point(56, 413);
+            btnAceptar.Location = new Point(40, 358);
             btnAceptar.Name = "btnAceptar";
             btnAceptar.Size = new Size(75, 23);
             btnAceptar.TabIndex = 7;
@@ -191,7 +218,7 @@
             // cmbGenero
             // 
             cmbGenero.FormattingEnabled = true;
-            cmbGenero.Location = new Point(121, 330);
+            cmbGenero.Location = new Point(121, 253);
             cmbGenero.Name = "cmbGenero";
             cmbGenero.Size = new Size(150, 23);
             cmbGenero.TabIndex = 6;
@@ -199,22 +226,14 @@
             // cmbDirector
             // 
             cmbDirector.FormattingEnabled = true;
-            cmbDirector.Location = new Point(121, 270);
+            cmbDirector.Location = new Point(121, 193);
             cmbDirector.Name = "cmbDirector";
             cmbDirector.Size = new Size(150, 23);
             cmbDirector.TabIndex = 5;
             // 
-            // numCantidad
-            // 
-            numCantidad.Location = new Point(121, 204);
-            numCantidad.Maximum = new decimal(new int[] { 1410065407, 2, 0, 0 });
-            numCantidad.Name = "numCantidad";
-            numCantidad.Size = new Size(150, 23);
-            numCantidad.TabIndex = 4;
-            // 
             // numPrecio
             // 
-            numPrecio.Location = new Point(121, 141);
+            numPrecio.Location = new Point(121, 137);
             numPrecio.Maximum = new decimal(new int[] { 1410065407, 2, 0, 0 });
             numPrecio.Name = "numPrecio";
             numPrecio.Size = new Size(150, 23);
@@ -237,7 +256,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(19, 333);
+            label6.Location = new Point(19, 256);
             label6.Name = "label6";
             label6.Size = new Size(48, 15);
             label6.TabIndex = 5;
@@ -246,7 +265,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(18, 149);
+            label5.Location = new Point(18, 145);
             label5.Name = "label5";
             label5.Size = new Size(43, 15);
             label5.TabIndex = 4;
@@ -255,20 +274,11 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(18, 268);
+            label4.Location = new Point(18, 191);
             label4.Name = "label4";
             label4.Size = new Size(52, 15);
             label4.TabIndex = 3;
             label4.Text = "Director:";
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Location = new Point(18, 204);
-            label3.Name = "label3";
-            label3.Size = new Size(58, 15);
-            label3.TabIndex = 2;
-            label3.Text = "Cantidad:";
             // 
             // label2
             // 
@@ -288,41 +298,9 @@
             label1.TabIndex = 0;
             label1.Text = "Codigo:";
             // 
-            // actorBindingSource
-            // 
-            actorBindingSource.DataSource = typeof(Modelo.Entidades.Actor);
-            // 
-            // nombreDataGridViewTextBoxColumn
-            // 
-            nombreDataGridViewTextBoxColumn.DataPropertyName = "Nombre";
-            nombreDataGridViewTextBoxColumn.HeaderText = "Nombre";
-            nombreDataGridViewTextBoxColumn.Name = "nombreDataGridViewTextBoxColumn";
-            nombreDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // apellidoDataGridViewTextBoxColumn
-            // 
-            apellidoDataGridViewTextBoxColumn.DataPropertyName = "Apellido";
-            apellidoDataGridViewTextBoxColumn.HeaderText = "Apellido";
-            apellidoDataGridViewTextBoxColumn.Name = "apellidoDataGridViewTextBoxColumn";
-            apellidoDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
             // clienteBindingSource
             // 
             clienteBindingSource.DataSource = typeof(Modelo.Entidades.Cliente);
-            // 
-            // nombreDataGridViewTextBoxColumn1
-            // 
-            nombreDataGridViewTextBoxColumn1.DataPropertyName = "Nombre";
-            nombreDataGridViewTextBoxColumn1.HeaderText = "Nombre";
-            nombreDataGridViewTextBoxColumn1.Name = "nombreDataGridViewTextBoxColumn1";
-            nombreDataGridViewTextBoxColumn1.ReadOnly = true;
-            // 
-            // apellidoDataGridViewTextBoxColumn1
-            // 
-            apellidoDataGridViewTextBoxColumn1.DataPropertyName = "Apellido";
-            apellidoDataGridViewTextBoxColumn1.HeaderText = "Apellido";
-            apellidoDataGridViewTextBoxColumn1.Name = "apellidoDataGridViewTextBoxColumn1";
-            apellidoDataGridViewTextBoxColumn1.ReadOnly = true;
             // 
             // FormPelicula
             // 
@@ -337,10 +315,9 @@
             groupBox3.ResumeLayout(false);
             groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvActoresAsignados).EndInit();
-            ((System.ComponentModel.ISupportInitialize)dgvActoresDisponibles).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numCantidad).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numPrecio).EndInit();
             ((System.ComponentModel.ISupportInitialize)actorBindingSource).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvActoresDisponibles).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numPrecio).EndInit();
             ((System.ComponentModel.ISupportInitialize)clienteBindingSource).EndInit();
             ResumeLayout(false);
         }
@@ -351,14 +328,12 @@
         private Label label1;
         private ComboBox cmbGenero;
         private ComboBox cmbDirector;
-        private NumericUpDown numCantidad;
         private NumericUpDown numPrecio;
         private TextBox txtNombre;
         private TextBox txtCodigo;
         private Label label6;
         private Label label5;
         private Label label4;
-        private Label label3;
         private Label label2;
         private Button btnCancelar;
         private Button btnAceptar;

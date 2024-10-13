@@ -47,9 +47,14 @@ namespace Controladora
         {
             try
             {
-                return context.GetAllUsuarios().ToList().AsReadOnly();
+                // Incluimos el Estado si es una entidad relacionada.
+                return context.Usuarios
+                              .Include(u => u.Componentes) // Aseguramos que los componentes se carguen
+                              .Include(u => u.EstadoUsuario) // Incluimos la relación con Estado
+                              .ToList()
+                              .AsReadOnly();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw;
             }

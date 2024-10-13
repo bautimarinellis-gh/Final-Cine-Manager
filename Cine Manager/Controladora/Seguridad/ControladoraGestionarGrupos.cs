@@ -41,7 +41,11 @@ namespace Controladora.Seguridad
         {
             try
             {
-                return context.GetAllGrupos().ToList().AsReadOnly();
+                // No es necesario hacer Include para 'Nombre' ya que es heredado de Componente.
+                return context.Grupos
+                              .Include(g => g.EstadoGrupo) // Incluimos la relación con Estado
+                              .ToList()
+                              .AsReadOnly();
             }
             catch (Exception ex)
             {

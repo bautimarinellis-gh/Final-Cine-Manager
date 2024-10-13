@@ -20,12 +20,15 @@ namespace Vista.Módulo_de_Seguridad
     {
         private Sesion _sesion;
 
-        public FormGestionarUsuarios(/*Sesion sesion*/)
+        public FormGestionarUsuarios(Sesion sesion)
         {
             InitializeComponent();
             dgvUsuarios.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            /*_sesion = sesion;*/
+            _sesion = sesion;
             ActualizarGrilla();
+            cmbEstado.SelectedIndex = 0;
+
+            LlenarComboBox();
         }
 
 
@@ -93,7 +96,7 @@ namespace Vista.Módulo_de_Seguridad
 
         private void btnResetear_Click(object sender, EventArgs e)
         {
-            if(dgvUsuarios.CurrentRow != null)
+            if (dgvUsuarios.CurrentRow != null)
             {
                 // Obtener el usuario seleccionado
                 var usuarioSeleccionado = dgvUsuarios.SelectedRows[0].DataBoundItem as Usuario;
@@ -116,6 +119,61 @@ namespace Vista.Módulo_de_Seguridad
 
             }
         }
+
+
+
+        private void btnBuscar_Click(object sender, EventArgs e)
+        {
+            string filtroNombreUsuario = txtNombre.Text.Trim();
+
+            // Obtener el filtro de grupo
+            Grupo filtroGrupo = cmbGrupo.SelectedItem as Grupo;
+
+            // Obtener el filtro de estado
+            bool? filtroEstado = null;
+
+            if (cmbEstado.SelectedItem != null)
+            {
+                string estadoSeleccionado = cmbEstado.SelectedItem.ToString();
+
+                if (estadoSeleccionado == "Activo")
+                {
+                    filtroEstado = true;
+                }
+                else if (estadoSeleccionado == "Inactivo")
+                {
+                    filtroEstado = false;
+                }
+            }
+
+            // Obtener todos los usuarios
+            var listaUsuarios = new List<Usuario>(ControladoraGestionarUsuarios.Instancia.RecuperarUsuarios());
+
+            // Filtrar por nombre de usuario si no está vacío
+            if (!string.IsNullOrEmpty(filtroNombreUsuario))
+            {
+                listaUsuarios = listaUsuarios.Where(u => u.Nombre.Contains(filtroNombreUsuario, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            // Filtrar por grupo si se seleccionó un grupo
+            if (filtroGrupo != null)
+            {
+                // Asegurarse de que los componentes incluyan grupos, luego filtrar por el grupo seleccionado
+                listaUsuarios = listaUsuarios.Where(u => u.Componentes != null
+                                            && u.Componentes.OfType<Grupo>().Any(g => g.Codigo == filtroGrupo.Codigo)).ToList();
+            }
+
+            // Filtrar por estado si se seleccionó "Activo" o "Inactivo"
+            if (filtroEstado.HasValue)
+            {
+                listaUsuarios = listaUsuarios.Where(u => u.EstadoUsuario.EstadoUsuarioNombre == "Activo" == filtroEstado.Value).ToList();
+            }
+
+            // Actualizar el DataGridView con los usuarios filtrados
+            dgvUsuarios.DataSource = null;
+            dgvUsuarios.DataSource = listaUsuarios;
+        }
+
 
 
         private void ResetearClaveUsuario(Usuario usuario)
@@ -226,11 +284,17 @@ namespace Vista.Módulo_de_Seguridad
 
 
 
+        private void LlenarComboBox()
+        {
+            cmbGrupo.DataSource = ControladoraGestionarGrupos.Instancia.RecuperarGrupos();
+            cmbGrupo.DisplayMember = "Nombre";
+        }
+
+
+
         private void btnSalir_Click(object sender, EventArgs e)
         {
             this.Close();
         }
-
-        
     }
 }

@@ -45,8 +45,12 @@ namespace Controladora
         {
             try
             {
-                // Recuperar detalles de venta directamente desde la base de datos
-                return context.DetallesVentas.Where(dv => dv.PedidoId == pedido.PedidoId).ToList().AsReadOnly();
+                // Recuperar detalles de venta con inclusión de la entidad Pelicula
+                return context.DetallesVentas
+                              .Where(dv => dv.PedidoId == pedido.PedidoId)
+                              .Include(dv => dv.Pelicula) // Incluimos Pelicula
+                              .ToList()
+                              .AsReadOnly();
             }
             catch (Exception ex)
             {
@@ -54,18 +58,20 @@ namespace Controladora
             }
         }
 
-
-
         public ReadOnlyCollection<DetalleAlquiler> RecuperarDetallesAlquiler(Pedido pedido)
         {
             try
             {
-                // Recuperar detalles de alquiler directamente desde la base de datos
-                return context.DetallesAlquileres.Where(da => da.PedidoId == pedido.PedidoId).ToList().AsReadOnly();
+                // Recuperar detalles de alquiler con inclusión de la entidad Pelicula
+                return context.DetallesAlquileres
+                              .Where(da => da.PedidoId == pedido.PedidoId)
+                              .Include(da => da.Pelicula) // Incluimos Pelicula
+                              .ToList()
+                              .AsReadOnly();
             }
             catch (Exception ex)
             {
-                throw; ;
+                throw;
             }
         }
 

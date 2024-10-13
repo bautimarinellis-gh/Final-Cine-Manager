@@ -24,6 +24,8 @@ namespace Vista.Módulo_de_Seguridad
             dgvGrupos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             _sesion = sesion;
 
+            cmbEstado.SelectedIndex = 0;
+
             ActualizarGrilla();
         }
 
@@ -89,12 +91,48 @@ namespace Vista.Módulo_de_Seguridad
         }
 
 
+        private void btnBuscar_Click(object sender, EventArgs e)
+        {
+            string filtroNombre = txtNombre.Text.Trim();
+
+            bool? filtroEstado = null;
+            if (cmbEstado.SelectedItem != null)
+            {
+                string estadoSeleccionado = cmbEstado.SelectedItem.ToString();
+
+                if (estadoSeleccionado == "Activo")
+                {
+                    filtroEstado = true;
+                }
+                else if (estadoSeleccionado == "Inactivo")
+                {
+                    filtroEstado = false;
+                }
+            }
+
+            var listaGrupos = new List<Grupo>(ControladoraGestionarGrupos.Instancia.RecuperarGrupos());
+
+            if (!string.IsNullOrEmpty(filtroNombre))
+            {
+                listaGrupos = listaGrupos.Where(g => g.Nombre.Contains(filtroNombre, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            if (filtroEstado.HasValue)
+            {
+                listaGrupos = listaGrupos.Where(g => g.EstadoGrupo.EstadoGrupoNombre == "Activo" == filtroEstado.Value).ToList();
+            }
+
+            dgvGrupos.DataSource = null;
+            dgvGrupos.DataSource = listaGrupos;
+        }
+
+
 
         private void btnSalir_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        
+
     }
 }

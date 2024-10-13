@@ -297,15 +297,6 @@ namespace Vista.Módulo_de_Seguridad
         }
 
 
-        private void LimpiarCampos()
-        {
-            txtUsuario.Clear();
-            txtNombre.Clear();
-            txtEmail.Clear();
-            cmbEstado.SelectedIndex = 1;
-        }
-
-
 
         private void CargarGruposEnCheckedListBox()
         {
@@ -379,6 +370,8 @@ namespace Vista.Módulo_de_Seguridad
             }
         }
 
+
+
         private void CargarDatosUsuario()
         {
 
@@ -393,6 +386,18 @@ namespace Vista.Módulo_de_Seguridad
 
             CargarAccionesUsuario();
         }
+
+
+
+        private void LimpiarCampos()
+        {
+            txtUsuario.Clear();
+            txtNombre.Clear();
+            txtEmail.Clear();
+            cmbEstado.SelectedIndex = 1;
+        }
+
+
 
 
         private void btnCancelar_Click(object sender, EventArgs e)

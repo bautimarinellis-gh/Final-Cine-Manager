@@ -13,8 +13,10 @@ namespace Modelo.Entidades
         private Pelicula pelicula;
         private int cantidad;
         private decimal subtotal;
+        private bool estado;
+        private OrdenCompra ordenCompra;
+        private int ordenCompraId;
 
-        
 
         public int DetalleOrdenCompraId
         {
@@ -41,6 +43,27 @@ namespace Modelo.Entidades
         {
             get { return subtotal * pelicula.Precio; }
             set { subtotal = value; }
+        }
+
+
+        public bool Estado
+        {
+            get { return estado; }
+            set { estado = value; }
+        }
+
+
+        public OrdenCompra OrdenCompra
+        {
+            get { return ordenCompra; }
+            set { ordenCompra = value; }
+        }
+
+
+        public int OrdenCompraId
+        {
+            get { return ordenCompraId; }
+            set { ordenCompraId = value; }
         }
     } 
 }

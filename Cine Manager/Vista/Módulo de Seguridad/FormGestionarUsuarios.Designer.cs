@@ -105,11 +105,13 @@
             btnBuscar.TabIndex = 6;
             btnBuscar.Text = "Buscar";
             btnBuscar.UseVisualStyleBackColor = true;
+            btnBuscar.Click += btnBuscar_Click;
             // 
             // cmbEstado
             // 
+            cmbEstado.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbEstado.FormattingEnabled = true;
-            cmbEstado.Items.AddRange(new object[] { "Activo", "Inactivo" });
+            cmbEstado.Items.AddRange(new object[] { "Todos", "Activo", "Inactivo" });
             cmbEstado.Location = new Point(483, 30);
             cmbEstado.Name = "cmbEstado";
             cmbEstado.Size = new Size(121, 23);
@@ -117,8 +119,9 @@
             // 
             // cmbGrupo
             // 
+            cmbGrupo.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbGrupo.FormattingEnabled = true;
-            cmbGrupo.Items.AddRange(new object[] { "Todos", "Administradores", "Empleados" });
+            cmbGrupo.Items.AddRange(new object[] { "TODOS" });
             cmbGrupo.Location = new Point(275, 30);
             cmbGrupo.Name = "cmbGrupo";
             cmbGrupo.Size = new Size(121, 23);

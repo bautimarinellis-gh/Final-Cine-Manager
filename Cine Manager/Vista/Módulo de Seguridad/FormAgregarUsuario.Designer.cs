@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             TreeNode treeNode1 = new TreeNode("Gestionar Inventario");
+            TreeNode treeNode2 = new TreeNode("Gestionar Inventario", new TreeNode[] { treeNode1 });
             tabUsuario = new TabControl();
             tabDatos = new TabPage();
             btnCancelar = new Button();
@@ -273,7 +274,10 @@
             treeNode1.Name = "nInventario";
             treeNode1.Tag = "Gestionar Inventario";
             treeNode1.Text = "Gestionar Inventario";
-            treeAcciones.Nodes.AddRange(new TreeNode[] { treeNode1 });
+            treeNode2.Name = "nInventario";
+            treeNode2.Tag = "Gestionar Inventario";
+            treeNode2.Text = "Gestionar Inventario";
+            treeAcciones.Nodes.AddRange(new TreeNode[] { treeNode2 });
             treeAcciones.Size = new Size(450, 182);
             treeAcciones.TabIndex = 1;
             // 

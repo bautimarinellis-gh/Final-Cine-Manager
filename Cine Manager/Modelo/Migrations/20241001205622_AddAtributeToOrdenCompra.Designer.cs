@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Modelo.EFCore;
 
@@ -11,9 +12,10 @@ using Modelo.EFCore;
 namespace Modelo.Migrations
 {
     [DbContext(typeof(Contexto))]
-    partial class ContextoModelSnapshot : ModelSnapshot
+    [Migration("20241001205622_AddAtributeToOrdenCompra")]
+    partial class AddAtributeToOrdenCompra
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -127,10 +129,7 @@ namespace Modelo.Migrations
                     b.Property<int>("Cantidad")
                         .HasColumnType("int");
 
-                    b.Property<bool>("Estado")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("OrdenCompraId")
+                    b.Property<int?>("OrdenCompraId")
                         .HasColumnType("int");
 
                     b.Property<int>("PeliculaId")
@@ -634,19 +633,15 @@ namespace Modelo.Migrations
 
             modelBuilder.Entity("Modelo.Entidades.DetalleOrdenCompra", b =>
                 {
-                    b.HasOne("Modelo.Entidades.OrdenCompra", "OrdenCompra")
+                    b.HasOne("Modelo.Entidades.OrdenCompra", null)
                         .WithMany("DetallesOrdenesCompra")
-                        .HasForeignKey("OrdenCompraId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OrdenCompraId");
 
                     b.HasOne("Modelo.Entidades.Pelicula", "Pelicula")
                         .WithMany()
                         .HasForeignKey("PeliculaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("OrdenCompra");
 
                     b.Navigation("Pelicula");
                 });
