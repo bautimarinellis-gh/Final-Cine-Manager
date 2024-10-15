@@ -42,6 +42,7 @@
             dgvGenerosCinematograficos = new DataGridView();
             nombreDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             generoCinematograficoBindingSource = new BindingSource(components);
+            label1 = new Label();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvGenerosCinematograficos).BeginInit();
             ((System.ComponentModel.ISupportInitialize)generoCinematograficoBindingSource).BeginInit();
@@ -49,6 +50,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(label1);
             groupBox1.Controls.Add(btnBuscar);
             groupBox1.Controls.Add(txtBuscar);
             groupBox1.Controls.Add(btnModificar);
@@ -154,7 +156,7 @@
             dgvGenerosCinematograficos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvGenerosCinematograficos.Columns.AddRange(new DataGridViewColumn[] { nombreDataGridViewTextBoxColumn });
             dgvGenerosCinematograficos.DataSource = generoCinematograficoBindingSource;
-            dgvGenerosCinematograficos.Location = new Point(386, 22);
+            dgvGenerosCinematograficos.Location = new Point(388, 58);
             dgvGenerosCinematograficos.Name = "dgvGenerosCinematograficos";
             dgvGenerosCinematograficos.ReadOnly = true;
             dgvGenerosCinematograficos.RowTemplate.Height = 25;
@@ -171,6 +173,15 @@
             // generoCinematograficoBindingSource
             // 
             generoCinematograficoBindingSource.DataSource = typeof(Modelo.Entidades.GeneroCinematografico);
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(493, 32);
+            label1.Name = "label1";
+            label1.Size = new Size(193, 15);
+            label1.TabIndex = 19;
+            label1.Text = "Grilla de Generos Cinematograficos";
             // 
             // FormGenerosCinematograficos
             // 
@@ -202,5 +213,6 @@
         private Button btnModificar;
         private Button btnBuscar;
         private TextBox txtBuscar;
+        private Label label1;
     }
 }

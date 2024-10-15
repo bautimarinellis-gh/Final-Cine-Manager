@@ -48,6 +48,7 @@
             nombreDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             apellidoDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             actorBindingSource = new BindingSource(components);
+            label5 = new Label();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvActores).BeginInit();
             ((System.ComponentModel.ISupportInitialize)actorBindingSource).BeginInit();
@@ -55,6 +56,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(label5);
             groupBox1.Controls.Add(btnBuscar);
             groupBox1.Controls.Add(txtBuscar);
             groupBox1.Controls.Add(txtNombre);
@@ -196,7 +198,7 @@
             dgvActores.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvActores.Columns.AddRange(new DataGridViewColumn[] { codigoDataGridViewTextBoxColumn, nombreDataGridViewTextBoxColumn, apellidoDataGridViewTextBoxColumn });
             dgvActores.DataSource = actorBindingSource;
-            dgvActores.Location = new Point(386, 31);
+            dgvActores.Location = new Point(386, 69);
             dgvActores.Name = "dgvActores";
             dgvActores.ReadOnly = true;
             dgvActores.RowTemplate.Height = 25;
@@ -227,6 +229,15 @@
             // actorBindingSource
             // 
             actorBindingSource.DataSource = typeof(Modelo.Entidades.Actor);
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(518, 31);
+            label5.Name = "label5";
+            label5.Size = new Size(93, 15);
+            label5.TabIndex = 19;
+            label5.Text = "Grilla de Actores";
             // 
             // FormActores
             // 
@@ -264,5 +275,6 @@
         private BindingSource actorBindingSource;
         private Button btnBuscar;
         private TextBox txtBuscar;
+        private Label label5;
     }
 }

@@ -40,6 +40,11 @@ namespace Modelo.EFCore
 
 
 
+        //Auditoria
+
+        public DbSet<Auditoria> Auditorias { get; set; }
+
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=DBCineManager;
@@ -52,20 +57,31 @@ namespace Modelo.EFCore
         {
 
 
-            modelBuilder.Entity<Grupo>().HasMany(g => g.Componentes).WithMany(c => c.Grupos).UsingEntity<Dictionary<string, object>>(
-   "ComponenteGrupo",
-         j => j
-             .HasOne<Componente>()
-             .WithMany()
-             .HasForeignKey("ComponentesId")
-             .OnDelete(DeleteBehavior.Restrict), // No eliminamos en cascada cuando se elimina un Componente
-         j => j
-             .HasOne<Grupo>()
-             .WithMany()
-             .HasForeignKey("GruposId")
-             .OnDelete(DeleteBehavior.Cascade)); // Eliminación en cascada cuando se elimina un Grupo
+            /*modelBuilder.Entity<Auditoria>()
+                .HasOne(a => a.Director)
+                .WithMany() 
+                .HasForeignKey(a => a.DirectorId)
+                .OnDelete(DeleteBehavior.Restrict); 
 
-            // Otras configuraciones para las tablas que mencionaste
+            modelBuilder.Entity<Auditoria>()
+                .HasOne(a => a.Usuario)
+                .WithMany() 
+                .HasForeignKey(a => a.Usuario_AudId)
+                .OnDelete(DeleteBehavior.Restrict); */
+
+            modelBuilder.Entity<Grupo>().HasMany(g => g.Componentes).WithMany(c => c.Grupos).UsingEntity<Dictionary<string, object>>(
+                "ComponenteGrupo",
+                j => j
+                    .HasOne<Componente>()
+                    .WithMany()
+                    .HasForeignKey("ComponentesId")
+                    .OnDelete(DeleteBehavior.Restrict), 
+                j => j
+                    .HasOne<Grupo>()
+                    .WithMany()
+                    .HasForeignKey("GruposId")
+                    .OnDelete(DeleteBehavior.Cascade)); 
+
             modelBuilder.Entity<Pelicula>()
                 .HasMany(p => p.Proveedores)
                 .WithMany(p => p.Peliculas)
@@ -75,6 +91,7 @@ namespace Modelo.EFCore
                 .HasMany(p => p.Reparto)
                 .WithMany(a => a.ListaPeliculas)
                 .UsingEntity(j => j.ToTable("Actores_Peliculas"));
+
         }
         
 

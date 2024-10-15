@@ -86,6 +86,6 @@ namespace Vista.Módulo_de_Administración
             this.Close();
         }
 
-        
+
     }
 }

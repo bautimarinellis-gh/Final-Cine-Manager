@@ -50,6 +50,7 @@
             emailDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             estadoUsuarioDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             usuarioBindingSource = new BindingSource(components);
+            label4 = new Label();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvUsuarios).BeginInit();
@@ -58,6 +59,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(label4);
             groupBox1.Controls.Add(btnSalir);
             groupBox1.Controls.Add(groupBox2);
             groupBox1.Controls.Add(btnResetear);
@@ -67,13 +69,13 @@
             groupBox1.Controls.Add(dgvUsuarios);
             groupBox1.Location = new Point(12, 12);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(776, 398);
+            groupBox1.Size = new Size(776, 429);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             // 
             // btnSalir
             // 
-            btnSalir.Location = new Point(684, 347);
+            btnSalir.Location = new Point(684, 390);
             btnSalir.Name = "btnSalir";
             btnSalir.Size = new Size(75, 23);
             btnSalir.TabIndex = 7;
@@ -163,7 +165,7 @@
             // 
             // btnResetear
             // 
-            btnResetear.Location = new Point(319, 347);
+            btnResetear.Location = new Point(319, 390);
             btnResetear.Name = "btnResetear";
             btnResetear.Size = new Size(86, 23);
             btnResetear.TabIndex = 4;
@@ -173,7 +175,7 @@
             // 
             // btnModificar
             // 
-            btnModificar.Location = new Point(223, 347);
+            btnModificar.Location = new Point(223, 390);
             btnModificar.Name = "btnModificar";
             btnModificar.Size = new Size(75, 23);
             btnModificar.TabIndex = 3;
@@ -183,7 +185,7 @@
             // 
             // btnEliminar
             // 
-            btnEliminar.Location = new Point(123, 347);
+            btnEliminar.Location = new Point(123, 390);
             btnEliminar.Name = "btnEliminar";
             btnEliminar.Size = new Size(75, 23);
             btnEliminar.TabIndex = 2;
@@ -193,7 +195,7 @@
             // 
             // btnAgregar
             // 
-            btnAgregar.Location = new Point(20, 347);
+            btnAgregar.Location = new Point(20, 390);
             btnAgregar.Name = "btnAgregar";
             btnAgregar.Size = new Size(75, 23);
             btnAgregar.TabIndex = 1;
@@ -207,7 +209,7 @@
             dgvUsuarios.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvUsuarios.Columns.AddRange(new DataGridViewColumn[] { nombreUsuarioDataGridViewTextBoxColumn, nombreDataGridViewTextBoxColumn, apellidoDataGridViewTextBoxColumn, emailDataGridViewTextBoxColumn, estadoUsuarioDataGridViewTextBoxColumn });
             dgvUsuarios.DataSource = usuarioBindingSource;
-            dgvUsuarios.Location = new Point(20, 92);
+            dgvUsuarios.Location = new Point(20, 152);
             dgvUsuarios.Name = "dgvUsuarios";
             dgvUsuarios.RowTemplate.Height = 25;
             dgvUsuarios.Size = new Size(739, 232);
@@ -247,15 +249,25 @@
             // 
             usuarioBindingSource.DataSource = typeof(Modelo.Módulo_de_Seguridad.Usuario);
             // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(319, 114);
+            label4.Name = "label4";
+            label4.Size = new Size(98, 15);
+            label4.TabIndex = 19;
+            label4.Text = "Grilla de Usuarios";
+            // 
             // FormGestionarUsuarios
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 425);
+            ClientSize = new Size(800, 453);
             Controls.Add(groupBox1);
             Name = "FormGestionarUsuarios";
             Text = "FormGestionarUsuarios";
             groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
             groupBox2.ResumeLayout(false);
             groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvUsuarios).EndInit();
@@ -286,5 +298,6 @@
         private DataGridViewTextBoxColumn emailDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn estadoUsuarioDataGridViewTextBoxColumn;
         private BindingSource usuarioBindingSource;
+        private Label label4;
     }
 }

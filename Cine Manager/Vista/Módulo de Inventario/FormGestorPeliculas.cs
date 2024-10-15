@@ -41,7 +41,7 @@ namespace Vista
 
         private void directoresToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var formDirectores = new FormDirectores();
+            var formDirectores = new FormDirectores(_sesion);
             formDirectores.ShowDialog();
         }
 

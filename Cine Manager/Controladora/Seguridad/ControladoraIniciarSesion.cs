@@ -39,10 +39,9 @@ namespace Controladora.Seguridad
 
         public Usuario Buscar(string nombreUsuario)
         {
-            var usuario = context.Usuarios.Include(u => u.EstadoUsuario)
-                .Include(u => u.Componentes)
-                .ThenInclude(c => (c as Accion).Formulario)
-                .ThenInclude(f => f.Modulo).FirstOrDefault(u => u.NombreUsuario == nombreUsuario);
+            var usuario = context.Usuarios.Include(u => u.EstadoUsuario).Include(u => u.Componentes).ThenInclude(c => (c as Accion).Formulario)
+        .ThenInclude(f => f.Modulo)
+        .FirstOrDefault(u => u.NombreUsuario == nombreUsuario);
 
             if (usuario != null)
             {
@@ -51,6 +50,13 @@ namespace Controladora.Seguridad
                 {
                     // Cargar el estado del grupo
                     context.Entry(grupo).Reference(g => g.EstadoGrupo).Load();
+
+                    // Cargar todos los componentes del grupo (sin filtrar por Accion aún)
+                    context.Entry(grupo).Collection(g => g.Componentes).Load();
+
+                    // Filtrar los componentes que sean de tipo Accion
+                    var accionesDelGrupo = grupo.Componentes.OfType<Accion>().ToList();
+
                 }
             }
 

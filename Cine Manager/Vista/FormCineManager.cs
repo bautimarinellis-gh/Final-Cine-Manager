@@ -1,17 +1,11 @@
 ﻿using Modelo.Módulo_de_Seguridad;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Vista.Módulo_de_Administración;
 using Vista.Módulo_de_Compras;
 using Vista.Módulo_de_Transacciones;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Vista.Módulo_de_Seguridad
 {
@@ -25,8 +19,6 @@ namespace Vista.Módulo_de_Seguridad
             _sesion = sesion;
             ConfigurarModulosDisponibles();
         }
-
-
 
         private void ConfigurarModulosDisponibles()
         {
@@ -46,7 +38,6 @@ namespace Vista.Módulo_de_Seguridad
             toolStripInventario.Visible = modulosDisponibles.Contains("Modulo de Inventario");
             toolstripPerfil.Visible = true; // Asegurarse de que el "Modulo Mi Perfil" esté siempre visible
 
-
             // Configurar la visibilidad de los formularios dentro de cada ToolStrip
             ConfigurarElementosToolStrip(toolStripVentas, accionesUsuario);
             ConfigurarElementosToolStrip(toolStripCompras, accionesUsuario);
@@ -54,8 +45,6 @@ namespace Vista.Módulo_de_Seguridad
             ConfigurarElementosToolStrip(toolStripSeguridad, accionesUsuario);
             ConfigurarElementosToolStrip(toolstripPerfil, accionesUsuario);
         }
-
-
 
         private void ConfigurarElementosToolStrip(ToolStripDropDownButton toolStripDropDownButton, List<Accion> accionesUsuario)
         {
@@ -80,7 +69,6 @@ namespace Vista.Módulo_de_Seguridad
             }
         }
 
-
         private List<string> ObtenerModulosDisponiblesDesdeSesion()
         {
             var modulos = new List<string>();
@@ -97,7 +85,7 @@ namespace Vista.Módulo_de_Seguridad
                 }
             }
 
-            // Asegurarte de que el "Modulo Mi Perfil" siempre esté disponible
+            // Asegurarse de que el "Modulo Mi Perfil" siempre esté disponible
             if (!modulos.Contains("Modulo Mi Perfil"))
             {
                 modulos.Add("Modulo Mi Perfil");
@@ -106,77 +94,61 @@ namespace Vista.Módulo_de_Seguridad
             return modulos;
         }
 
+        // Toolstrip event handlers
 
-
-        private void gestionarUsuariosToolStripMenuItem_Click(object sender, EventArgs e) //Toolstrip Gestionar Usuarios
+        private void gestionarUsuariosToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var formGestorUsuarios = new FormGestionarUsuarios(_sesion);
             formGestorUsuarios.ShowDialog();
         }
 
-
-
-        private void gestionarGruposToolStripMenuItem_Click(object sender, EventArgs e) //Toolstrip Gestionar Grupos
+        private void gestionarGruposToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var formGestorGrupos = new FormGestionarGrupos(_sesion);
             formGestorGrupos.ShowDialog();
         }
 
-
-
-        private void misDatosToolStripMenuItem_Click(object sender, EventArgs e) //Toolstrip Mis Datos
+        private void misDatosToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var formDatosUsuario = new FormDatosUsuario(_sesion);
             formDatosUsuario.ShowDialog();
         }
 
-
-
-        private void cambiarClaveToolStripMenuItem_Click(object sender, EventArgs e) //Toolstrip Cambiar Clave
+        private void cambiarClaveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var formCambiarClave = new FormCambiarClave(_sesion);
             formCambiarClave.ShowDialog();
         }
 
-
-
-
-        private void realizarPedidoToolStripMenuItem_Click(object sender, EventArgs e) //Toolstrip Realizar Pedido
+        private void realizarPedidoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var formRealizarPedido = new FormRealizarPedido();
             formRealizarPedido.ShowDialog();
         }
 
-
-
-        private void gestionarProveedoresToolStripMenuItem_Click(object sender, EventArgs e) //Toolstrip Gestionar Proveedores
+        private void gestionarProveedoresToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var formProveeores = new FormProveedores(_sesion);
             formProveeores.ShowDialog();
         }
 
-
-        private void gestionarClientesToolStripMenuItem1_Click(object sender, EventArgs e) //Toolstrip Gestionar Usuarios
+        private void gestionarClientesToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             var formGestionarClientes = new FormClientes(_sesion);
             formGestionarClientes.ShowDialog();
         }
 
-
-        private void gestionarPedidosToolStripMenuItem_Click(object sender, EventArgs e) //Toolstrip Gestionar Pedidos
+        private void gestionarPedidosToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var formGestionarPedidos = new FormGestorPedidos(_sesion);
             formGestionarPedidos.ShowDialog();
         }
 
-
-        private void gestionarPeliculasToolStripMenuItem_Click(object sender, EventArgs e) //Toolstrip Gestionar Peliculas
+        private void gestionarPeliculasToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var formGestionarPeliculas = new FormGestorPeliculas(_sesion);
             formGestionarPeliculas.ShowDialog();
         }
-
-
 
         private void órdenesDeCompraToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -184,29 +156,17 @@ namespace Vista.Módulo_de_Seguridad
             formOrdenesCompra.ShowDialog();
         }
 
-
-
-        private void cerrarSesiónToolStripMenuItem_Click(object sender, EventArgs e) //Toolstrip Cerrar Sesión
+        private void cerrarSesiónToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // Confirmar si el usuario desea cerrar la sesión
             var confirmResult = MessageBox.Show("¿Está seguro de que desea cerrar sesión?", "Confirmar Cierre de Sesión", MessageBoxButtons.YesNo);
 
             if (confirmResult == DialogResult.Yes)
             {
-                /*RegistrarCierreSesion();*/  
-
-                // Limpiar la sesión actual
                 _sesion = null;
-
-                // Mostrar el formulario de inicio de sesión nuevamente
                 var formLogin = new FormIniciarSesion();
                 formLogin.Show();
-
-                // Cerrar el formulario actual (principal)
                 this.Close();
             }
         }
     }
 }
-
-

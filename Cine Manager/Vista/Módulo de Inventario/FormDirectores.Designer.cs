@@ -30,6 +30,8 @@
         {
             components = new System.ComponentModel.Container();
             groupBox1 = new GroupBox();
+            btnBuscar = new Button();
+            txtBuscar = new TextBox();
             btnEliminar = new Button();
             label4 = new Label();
             btnVolver = new Button();
@@ -46,8 +48,7 @@
             nombreDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             apellidoDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             directorBindingSource = new BindingSource(components);
-            btnBuscar = new Button();
-            txtBuscar = new TextBox();
+            label5 = new Label();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvDirectores).BeginInit();
             ((System.ComponentModel.ISupportInitialize)directorBindingSource).BeginInit();
@@ -55,6 +56,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(label5);
             groupBox1.Controls.Add(btnBuscar);
             groupBox1.Controls.Add(txtBuscar);
             groupBox1.Controls.Add(btnEliminar);
@@ -74,6 +76,24 @@
             groupBox1.Size = new Size(776, 426);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
+            // 
+            // btnBuscar
+            // 
+            btnBuscar.Location = new Point(234, 82);
+            btnBuscar.Name = "btnBuscar";
+            btnBuscar.Size = new Size(93, 23);
+            btnBuscar.TabIndex = 15;
+            btnBuscar.Text = "Buscar";
+            btnBuscar.UseVisualStyleBackColor = true;
+            btnBuscar.Click += btnBuscar_Click;
+            // 
+            // txtBuscar
+            // 
+            txtBuscar.Location = new Point(15, 83);
+            txtBuscar.Name = "txtBuscar";
+            txtBuscar.PlaceholderText = "Ingrese nombe, apellido o ambos..";
+            txtBuscar.Size = new Size(188, 23);
+            txtBuscar.TabIndex = 14;
             // 
             // btnEliminar
             // 
@@ -178,7 +198,7 @@
             dgvDirectores.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvDirectores.Columns.AddRange(new DataGridViewColumn[] { codigoDataGridViewTextBoxColumn, nombreDataGridViewTextBoxColumn, apellidoDataGridViewTextBoxColumn });
             dgvDirectores.DataSource = directorBindingSource;
-            dgvDirectores.Location = new Point(386, 22);
+            dgvDirectores.Location = new Point(397, 69);
             dgvDirectores.Name = "dgvDirectores";
             dgvDirectores.ReadOnly = true;
             dgvDirectores.RowTemplate.Height = 25;
@@ -210,23 +230,14 @@
             // 
             directorBindingSource.DataSource = typeof(Modelo.Entidades.Director);
             // 
-            // btnBuscar
+            // label5
             // 
-            btnBuscar.Location = new Point(234, 82);
-            btnBuscar.Name = "btnBuscar";
-            btnBuscar.Size = new Size(93, 23);
-            btnBuscar.TabIndex = 15;
-            btnBuscar.Text = "Buscar";
-            btnBuscar.UseVisualStyleBackColor = true;
-            btnBuscar.Click += btnBuscar_Click;
-            // 
-            // txtBuscar
-            // 
-            txtBuscar.Location = new Point(15, 83);
-            txtBuscar.Name = "txtBuscar";
-            txtBuscar.PlaceholderText = "Ingrese nombe, apellido o ambos..";
-            txtBuscar.Size = new Size(188, 23);
-            txtBuscar.TabIndex = 14;
+            label5.AutoSize = true;
+            label5.Location = new Point(531, 31);
+            label5.Name = "label5";
+            label5.Size = new Size(106, 15);
+            label5.TabIndex = 19;
+            label5.Text = "Grilla de Directores";
             // 
             // FormDirectores
             // 
@@ -264,5 +275,6 @@
         private BindingSource directorBindingSource;
         private Button btnBuscar;
         private TextBox txtBuscar;
+        private Label label5;
     }
 }

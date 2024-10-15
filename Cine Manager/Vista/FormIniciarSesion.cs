@@ -41,6 +41,7 @@ namespace Vista.Módulo_de_Seguridad
 
             Sesion sesion = CrearSesion(usuario);
 
+            // Verificar permisos directamente y actuar según el resultado
             if (!VerificarPermisos(sesion))
             {
                 MessageBox.Show("No tiene permisos para acceder al sistema.");
@@ -60,6 +61,83 @@ namespace Vista.Módulo_de_Seguridad
             var formRecuperarClave = new FormRecuperarClave();
             formRecuperarClave.ShowDialog();
         }
+
+
+
+
+        private bool ClaveCorrecta(Usuario usuario)
+        {
+            string claveEncriptadaIngresada = EncriptarClave(txtClave.Text);
+            return usuario.Clave == claveEncriptadaIngresada;
+        }
+
+
+
+
+        private bool UsuarioInactivo(Usuario usuario)
+        {
+            return usuario.EstadoUsuario.EstadoUsuarioId != 1;
+        }
+
+
+
+
+
+        private Sesion CrearSesion(Usuario usuario)
+        {
+            return new Sesion
+            {
+                UsuarioSesion = usuario,
+                SesionPerfil = usuario.Componentes.OfType<Accion>().ToList()
+            };
+        }
+
+
+
+
+        private bool VerificarPermisos(Sesion sesion)
+        {
+            var accionesPersonalizadas = sesion.SesionPerfil
+                .Where(a => a.Id == 34)
+                .ToList();
+
+            var accionesGruposActivos = sesion.UsuarioSesion.Componentes.OfType<Grupo>()
+                .Where(grupo => grupo.EstadoGrupo.EstadoGrupoId == 1) // Solo grupos activos
+                .SelectMany(grupo => grupo.Componentes.OfType<Accion>()) // Acciones asociadas
+                .ToList();
+
+            // Verificar si el usuario pertenece a algún grupo inactivo
+            bool usuarioEnGrupoInactivo = sesion.UsuarioSesion.Componentes.OfType<Grupo>()
+                .Any(grupo => grupo.EstadoGrupo.EstadoGrupoId == 2);
+
+            // Si el usuario pertenece a un grupo inactivo
+            if (usuarioEnGrupoInactivo)
+            {
+                // Si hay acciones de grupos activos, combinarlas con las personalizadas
+                if (accionesGruposActivos.Any())
+                {
+                    sesion.SesionPerfil = accionesGruposActivos.Concat(accionesPersonalizadas).ToList();
+                }
+                // Si solo hay acciones personalizadas, usarlas
+                else if (accionesPersonalizadas.Any())
+                {
+                    sesion.SesionPerfil = accionesPersonalizadas;
+                }
+                else
+                {
+                    return false; // No tiene acciones ni personalizadas ni de grupos activos
+                }
+            }
+            // Si no pertenece a un grupo inactivo
+            else
+            {
+                sesion.SesionPerfil = accionesGruposActivos.Concat(accionesPersonalizadas).ToList();
+            }
+
+            // Retornar si tiene acciones en su perfil
+            return sesion.SesionPerfil.Any();
+        }
+
 
 
 
@@ -84,73 +162,9 @@ namespace Vista.Módulo_de_Seguridad
                 return false;
             }
 
-            if (PerteneceAGrupoInactivoSinPermisos(usuario))
-            {
-                MessageBox.Show("El usuario pertenece a un grupo inactivo y no tiene acciones personalizadas.");
-                return false;
-            }
-
             return true;
         }
 
-
-
-        private bool ClaveCorrecta(Usuario usuario)
-        {
-            string claveEncriptadaIngresada = EncriptarClave(txtClave.Text);
-            return usuario.Clave == claveEncriptadaIngresada;
-        }
-
-
-
-        private bool UsuarioInactivo(Usuario usuario)
-        {
-            return usuario.EstadoUsuario.EstadoUsuarioId != 1;
-        }
-
-
-
-        private bool PerteneceAGrupoInactivoSinPermisos(Usuario usuario)
-        {
-            bool usuarioEnGrupoInactivo = usuario.Componentes.OfType<Grupo>()
-                .Any(grupo => grupo.EstadoGrupo.EstadoGrupoId == 2);
-
-            bool tieneAccionesPersonalizadas = usuario.Componentes.OfType<Accion>()
-                .Any(acc => acc.Id == 34);
-
-            return usuarioEnGrupoInactivo && !tieneAccionesPersonalizadas;
-        }
-
-
-
-        private Sesion CrearSesion(Usuario usuario)
-        {
-            return new Sesion
-            {
-                UsuarioSesion = usuario,
-                SesionPerfil = usuario.Componentes.OfType<Accion>().ToList()
-            };
-        }
-
-
-
-        private bool VerificarPermisos(Sesion sesion)
-        {
-            bool usuarioEnGrupoInactivo = sesion.UsuarioSesion.Componentes.OfType<Grupo>()
-                .Any(grupo => grupo.EstadoGrupo.EstadoGrupoId == 2);
-
-            if (usuarioEnGrupoInactivo)
-            {
-                var accionesPersonalizadas = sesion.SesionPerfil
-                    .Where(a => a.Id == 34)
-                    .ToList();
-
-                sesion.SesionPerfil = accionesPersonalizadas;
-                return accionesPersonalizadas.Any();
-            }
-
-            return true;
-        }
 
 
 
@@ -160,6 +174,7 @@ namespace Vista.Módulo_de_Seguridad
             formCineManager.Show();
             this.Hide();
         }
+
 
 
 
@@ -180,6 +195,7 @@ namespace Vista.Módulo_de_Seguridad
         }
 
 
+
         private void LimpiarCampos()
         {
             txtUsuario.Text = "";
@@ -193,6 +209,6 @@ namespace Vista.Módulo_de_Seguridad
             Close();
         }
 
-        
+
     }
 }

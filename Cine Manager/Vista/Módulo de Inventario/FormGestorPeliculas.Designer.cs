@@ -50,6 +50,7 @@
             directoresToolStripMenuItem = new ToolStripMenuItem();
             generosCinematograficosToolStripMenuItem = new ToolStripMenuItem();
             actoresToolStripMenuItem = new ToolStripMenuItem();
+            label1 = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvPeliculas).BeginInit();
             ((System.ComponentModel.ISupportInitialize)peliculaBindingSource).BeginInit();
             groupBox1.SuspendLayout();
@@ -62,7 +63,7 @@
             dgvPeliculas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvPeliculas.Columns.AddRange(new DataGridViewColumn[] { codigoDataGridViewTextBoxColumn, nombreDataGridViewTextBoxColumn, cantidadDataGridViewTextBoxColumn, precioDataGridViewTextBoxColumn, directorDataGridViewTextBoxColumn, generoCinematograficoDataGridViewTextBoxColumn });
             dgvPeliculas.DataSource = peliculaBindingSource;
-            dgvPeliculas.Location = new Point(16, 96);
+            dgvPeliculas.Location = new Point(16, 135);
             dgvPeliculas.Name = "dgvPeliculas";
             dgvPeliculas.ReadOnly = true;
             dgvPeliculas.RowTemplate.Height = 25;
@@ -117,6 +118,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(label1);
             groupBox1.Controls.Add(btnBuscar);
             groupBox1.Controls.Add(txtBuscar);
             groupBox1.Controls.Add(btnVolver);
@@ -127,13 +129,13 @@
             groupBox1.Controls.Add(dgvPeliculas);
             groupBox1.Location = new Point(12, 12);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(731, 424);
+            groupBox1.Size = new Size(731, 454);
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             // 
             // btnBuscar
             // 
-            btnBuscar.Location = new Point(235, 56);
+            btnBuscar.Location = new Point(242, 47);
             btnBuscar.Name = "btnBuscar";
             btnBuscar.Size = new Size(93, 23);
             btnBuscar.TabIndex = 15;
@@ -143,7 +145,7 @@
             // 
             // txtBuscar
             // 
-            txtBuscar.Location = new Point(16, 57);
+            txtBuscar.Location = new Point(16, 48);
             txtBuscar.Name = "txtBuscar";
             txtBuscar.PlaceholderText = "Ingrese el nombre de la película";
             txtBuscar.Size = new Size(188, 23);
@@ -151,7 +153,7 @@
             // 
             // btnVolver
             // 
-            btnVolver.Location = new Point(640, 385);
+            btnVolver.Location = new Point(640, 420);
             btnVolver.Name = "btnVolver";
             btnVolver.Size = new Size(75, 23);
             btnVolver.TabIndex = 5;
@@ -161,7 +163,7 @@
             // 
             // btnEliminar
             // 
-            btnEliminar.Location = new Point(242, 385);
+            btnEliminar.Location = new Point(242, 420);
             btnEliminar.Name = "btnEliminar";
             btnEliminar.Size = new Size(75, 23);
             btnEliminar.TabIndex = 4;
@@ -171,7 +173,7 @@
             // 
             // btnModificar
             // 
-            btnModificar.Location = new Point(124, 385);
+            btnModificar.Location = new Point(124, 420);
             btnModificar.Name = "btnModificar";
             btnModificar.Size = new Size(75, 23);
             btnModificar.TabIndex = 3;
@@ -181,7 +183,7 @@
             // 
             // btnAgregar
             // 
-            btnAgregar.Location = new Point(16, 385);
+            btnAgregar.Location = new Point(16, 420);
             btnAgregar.Name = "btnAgregar";
             btnAgregar.Size = new Size(75, 23);
             btnAgregar.TabIndex = 2;
@@ -229,11 +231,20 @@
             actoresToolStripMenuItem.Text = "Actores";
             actoresToolStripMenuItem.Click += actoresToolStripMenuItem_Click;
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(302, 104);
+            label1.Name = "label1";
+            label1.Size = new Size(99, 15);
+            label1.TabIndex = 19;
+            label1.Text = "Grilla de Peliculas";
+            // 
             // FormGestorPeliculas
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(755, 448);
+            ClientSize = new Size(755, 478);
             Controls.Add(groupBox1);
             Name = "FormGestorPeliculas";
             Text = "FormGestorPeliculas";
@@ -268,5 +279,6 @@
         private BindingSource peliculaBindingSource;
         private Button btnBuscar;
         private TextBox txtBuscar;
+        private Label label1;
     }
 }

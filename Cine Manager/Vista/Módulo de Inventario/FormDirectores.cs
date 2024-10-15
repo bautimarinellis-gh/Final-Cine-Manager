@@ -1,5 +1,6 @@
 ﻿using Controladora;
 using Modelo.Entidades;
+using Modelo.Módulo_de_Seguridad;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,10 +15,12 @@ namespace Vista
 {
     public partial class FormDirectores : Form
     {
-        public FormDirectores()
+        private Sesion _sesion;
+
+        public FormDirectores(Sesion sesion)
         {
             InitializeComponent();
-
+            _sesion = sesion;
             dgvDirectores.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             ActualizarGrilla();
         }
@@ -36,20 +39,33 @@ namespace Vista
 
         private void btnAgregar_Click(object sender, EventArgs e)
         {
-            if (ValidarDatos())
+            // Validar que los campos no estén vacíos
+            if (string.IsNullOrWhiteSpace(txtCodigo.Text) ||
+                string.IsNullOrWhiteSpace(txtNombre.Text) ||
+                string.IsNullOrWhiteSpace(txtApellido.Text))
             {
-                var director = new Director
-                {
-                    Codigo = txtCodigo.Text,
-                    Nombre = txtNombre.Text,
-                    Apellido = txtApellido.Text,
-                };
-
-                var mensaje = ControladoraGestionarDirectores.Instancia.AgregarDirector(director);
-                ActualizarGrilla();
-                LimpiarDetalles();
-                MessageBox.Show(mensaje, "Información Directores", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                // Mostrar mensaje de advertencia
+                MessageBox.Show("Por favor, complete todos los campos: Código, Nombre y Apellido.", "Campos incompletos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return; // Salir de la función si hay campos vacíos
             }
+
+            // Crear objeto Director con los valores ingresados
+            var director = new Director
+            {
+                Codigo = txtCodigo.Text,
+                Nombre = txtNombre.Text,
+                Apellido = txtApellido.Text,
+            };
+
+            // Agregar el director usando la lógica de negocio
+            var mensaje = ControladoraGestionarDirectores.Instancia.AgregarDirector(director, _sesion.UsuarioSesion);
+
+            // Actualizar la grilla y limpiar los campos
+            ActualizarGrilla();
+            LimpiarDetalles();
+
+            // Mostrar mensaje de confirmación
+            MessageBox.Show(mensaje, "Información Directores", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
 
@@ -65,7 +81,7 @@ namespace Vista
 
                 if (respuesta == DialogResult.Yes)
                 {
-                    var mensaje = ControladoraGestionarDirectores.Instancia.EliminarDirector(directorSeleccionado);
+                    var mensaje = ControladoraGestionarDirectores.Instancia.EliminarDirector(directorSeleccionado, _sesion.UsuarioSesion);
                     MessageBox.Show(mensaje, "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     ActualizarGrilla();
                 }
@@ -99,7 +115,7 @@ namespace Vista
                     directorSeleccionado.Nombre = txtNombre.Text;
                     directorSeleccionado.Apellido = txtApellido.Text;
 
-                    var mensaje = ControladoraGestionarDirectores.Instancia.ModificarDirector(directorSeleccionado);
+                    var mensaje = ControladoraGestionarDirectores.Instancia.ModificarDirector(directorSeleccionado, _sesion.UsuarioSesion);
 
                     ActualizarGrilla(); // Método para actualizar la grilla de actores.
                     LimpiarDetalles();
@@ -221,6 +237,6 @@ namespace Vista
             this.Close();
         }
 
-        
+
     }
 }

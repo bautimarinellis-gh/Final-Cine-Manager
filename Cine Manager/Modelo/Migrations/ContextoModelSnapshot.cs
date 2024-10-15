@@ -92,6 +92,44 @@ namespace Modelo.Migrations
                     b.ToTable("Actores");
                 });
 
+            modelBuilder.Entity("Modelo.Entidades.Auditoria", b =>
+                {
+                    b.Property<int>("AuditoriaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AuditoriaId"), 1L, 1);
+
+                    b.Property<string>("Apellido_Director")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Codigo_Director")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DirectorId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Fecha_Aud")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Nombre_Director")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TipoMovimiento_Aud")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Usuario_AudId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AuditoriaId");
+
+                    b.ToTable("Auditorias");
+                });
+
             modelBuilder.Entity("Modelo.Entidades.Cliente", b =>
                 {
                     b.Property<int>("ClienteId")
@@ -198,6 +236,9 @@ namespace Modelo.Migrations
                     b.Property<string>("Codigo")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Estado")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Nombre")
                         .IsRequired()

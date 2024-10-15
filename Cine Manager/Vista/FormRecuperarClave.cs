@@ -3,19 +3,15 @@ using Controladora.Seguridad;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Data;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Linq;
-using System.Net.Mail;
 using System.Net;
-using System.Reflection.Metadata.Ecma335;
+using System.Net.Mail;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Security.Cryptography;
-using System.DirectoryServices.ActiveDirectory;
 
 namespace Vista.Módulo_de_Seguridad
 {
@@ -36,7 +32,6 @@ namespace Vista.Módulo_de_Seguridad
                 return;
             }
 
-
             var usuarioValido = ControladoraIniciarSesion.Instancia.Buscar(txtUsuario.Text);
 
             // Generar una nueva clave aleatoria
@@ -56,9 +51,8 @@ namespace Vista.Módulo_de_Seguridad
             else
             {
                 MessageBox.Show("La nueva clave ha sido enviada a su email registrado.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.Close(); 
+                this.Close();
             }
-
         }
 
 
@@ -66,15 +60,19 @@ namespace Vista.Módulo_de_Seguridad
         private string GenerarClaveAleatoria(int longitud = 8)
         {
             const string caracteres = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            var rng = new Random();
-            var clave = new char[longitud];
-
-            for (int i = 0; i < longitud; i++)
+            using (var rng = new RNGCryptoServiceProvider())
             {
-                clave[i] = caracteres[rng.Next(caracteres.Length)];
-            }
+                var clave = new char[longitud];
+                var bytesAleatorios = new byte[longitud];
+                rng.GetBytes(bytesAleatorios);
 
-            return new string(clave);
+                for (int i = 0; i < longitud; i++)
+                {
+                    clave[i] = caracteres[bytesAleatorios[i] % caracteres.Length];
+                }
+
+                return new string(clave);
+            }
         }
 
 
@@ -170,15 +168,15 @@ namespace Vista.Módulo_de_Seguridad
                 return false;
             }
 
-            if(usuarioValido.Email != txtEmail.Text)
+            if (usuarioValido.Email != txtEmail.Text)
             {
                 MessageBox.Show("Email inválido.", "Datos incorrectos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
 
-            if(usuarioValido.EstadoUsuario.EstadoUsuarioId == 2)
+            if (usuarioValido.EstadoUsuario.EstadoUsuarioId == 2)
             {
-                MessageBox.Show("El usuario no se está activo.", "Datos incorrectos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("El usuario no está activo.", "Datos incorrectos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
 
@@ -193,11 +191,9 @@ namespace Vista.Módulo_de_Seguridad
             txtEmail.Text = "";
         }
 
-
-
         private void btnCancelar_Click(object sender, EventArgs e)
         {
             this.Close();
-        }   
+        }
     }
 }

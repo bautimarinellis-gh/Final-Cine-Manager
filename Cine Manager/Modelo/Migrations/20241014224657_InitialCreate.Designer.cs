@@ -12,8 +12,8 @@ using Modelo.EFCore;
 namespace Modelo.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20240913170823_NuevaIteracion")]
-    partial class NuevaIteracion
+    [Migration("20241014224657_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -94,6 +94,40 @@ namespace Modelo.Migrations
                     b.ToTable("Actores");
                 });
 
+            modelBuilder.Entity("Modelo.Entidades.Auditoria", b =>
+                {
+                    b.Property<int>("AuditoriaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AuditoriaId"), 1L, 1);
+
+                    b.Property<string>("Codigo_Director")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DirectorId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Fecha_Aud")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TipoMovimiento_Aud")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Usuario_AudId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AuditoriaId");
+
+                    b.HasIndex("DirectorId");
+
+                    b.HasIndex("Usuario_AudId");
+
+                    b.ToTable("Auditorias");
+                });
+
             modelBuilder.Entity("Modelo.Entidades.Cliente", b =>
                 {
                     b.Property<int>("ClienteId")
@@ -129,7 +163,10 @@ namespace Modelo.Migrations
                     b.Property<int>("Cantidad")
                         .HasColumnType("int");
 
-                    b.Property<int?>("OrdenCompraId")
+                    b.Property<bool>("Estado")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("OrdenCompraId")
                         .HasColumnType("int");
 
                     b.Property<int>("PeliculaId")
@@ -232,8 +269,13 @@ namespace Modelo.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrdenCompraId"), 1L, 1);
 
-                    b.Property<bool>("Estado")
-                        .HasColumnType("bit");
+                    b.Property<string>("Codigo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Estado")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("FechaOrden")
                         .HasColumnType("datetime2");
@@ -626,17 +668,40 @@ namespace Modelo.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Modelo.Entidades.Auditoria", b =>
+                {
+                    b.HasOne("Modelo.Entidades.Director", "Director")
+                        .WithMany()
+                        .HasForeignKey("DirectorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Modelo.Módulo_de_Seguridad.Usuario", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("Usuario_AudId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Director");
+
+                    b.Navigation("Usuario");
+                });
+
             modelBuilder.Entity("Modelo.Entidades.DetalleOrdenCompra", b =>
                 {
-                    b.HasOne("Modelo.Entidades.OrdenCompra", null)
-                        .WithMany("OrdenesCompra")
-                        .HasForeignKey("OrdenCompraId");
+                    b.HasOne("Modelo.Entidades.OrdenCompra", "OrdenCompra")
+                        .WithMany("DetallesOrdenesCompra")
+                        .HasForeignKey("OrdenCompraId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Modelo.Entidades.Pelicula", "Pelicula")
                         .WithMany()
                         .HasForeignKey("PeliculaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("OrdenCompra");
 
                     b.Navigation("Pelicula");
                 });
@@ -773,7 +838,7 @@ namespace Modelo.Migrations
 
             modelBuilder.Entity("Modelo.Entidades.OrdenCompra", b =>
                 {
-                    b.Navigation("OrdenesCompra");
+                    b.Navigation("DetallesOrdenesCompra");
                 });
 
             modelBuilder.Entity("Modelo.Entidades.Pedido", b =>

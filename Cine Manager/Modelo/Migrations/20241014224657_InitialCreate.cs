@@ -220,6 +220,29 @@ namespace Modelo.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "OrdenesCompra",
+                columns: table => new
+                {
+                    OrdenCompraId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Codigo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProveedorId = table.Column<int>(type: "int", nullable: false),
+                    FechaOrden = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Total = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Estado = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrdenesCompra", x => x.OrdenCompraId);
+                    table.ForeignKey(
+                        name: "FK_OrdenesCompra_Proveedores_ProveedorId",
+                        column: x => x.ProveedorId,
+                        principalTable: "Proveedores",
+                        principalColumn: "ProveedorId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PagosPedidos",
                 columns: table => new
                 {
@@ -238,6 +261,35 @@ namespace Modelo.Migrations
                         principalTable: "Pedidos",
                         principalColumn: "PedidoId",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Auditorias",
+                columns: table => new
+                {
+                    AuditoriaId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DirectorId = table.Column<int>(type: "int", nullable: false),
+                    Codigo_Director = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Usuario_AudId = table.Column<int>(type: "int", nullable: false),
+                    Fecha_Aud = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TipoMovimiento_Aud = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Auditorias", x => x.AuditoriaId);
+                    table.ForeignKey(
+                        name: "FK_Auditorias_Directores_DirectorId",
+                        column: x => x.DirectorId,
+                        principalTable: "Directores",
+                        principalColumn: "DirectorId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Auditorias_Usuarios_Usuario_AudId",
+                        column: x => x.Usuario_AudId,
+                        principalTable: "Usuarios",
+                        principalColumn: "UsuarioId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -302,15 +354,15 @@ namespace Modelo.Migrations
                 name: "Proveedores_Peliculas",
                 columns: table => new
                 {
-                    ListaPeliculasPeliculaId = table.Column<int>(type: "int", nullable: false),
+                    PeliculasPeliculaId = table.Column<int>(type: "int", nullable: false),
                     ProveedoresProveedorId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Proveedores_Peliculas", x => new { x.ListaPeliculasPeliculaId, x.ProveedoresProveedorId });
+                    table.PrimaryKey("PK_Proveedores_Peliculas", x => new { x.PeliculasPeliculaId, x.ProveedoresProveedorId });
                     table.ForeignKey(
-                        name: "FK_Proveedores_Peliculas_Peliculas_ListaPeliculasPeliculaId",
-                        column: x => x.ListaPeliculasPeliculaId,
+                        name: "FK_Proveedores_Peliculas_Peliculas_PeliculasPeliculaId",
+                        column: x => x.PeliculasPeliculaId,
                         principalTable: "Peliculas",
                         principalColumn: "PeliculaId",
                         onDelete: ReferentialAction.Cascade);
@@ -349,6 +401,35 @@ namespace Modelo.Migrations
                         column: x => x.FormularioId,
                         principalTable: "Formularios",
                         principalColumn: "FormularioId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DetallesOrdenesCompra",
+                columns: table => new
+                {
+                    DetalleOrdenCompraId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PeliculaId = table.Column<int>(type: "int", nullable: false),
+                    Cantidad = table.Column<int>(type: "int", nullable: false),
+                    Subtotal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Estado = table.Column<bool>(type: "bit", nullable: false),
+                    OrdenCompraId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DetallesOrdenesCompra", x => x.DetalleOrdenCompraId);
+                    table.ForeignKey(
+                        name: "FK_DetallesOrdenesCompra_OrdenesCompra_OrdenCompraId",
+                        column: x => x.OrdenCompraId,
+                        principalTable: "OrdenesCompra",
+                        principalColumn: "OrdenCompraId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DetallesOrdenesCompra_Peliculas_PeliculaId",
+                        column: x => x.PeliculaId,
+                        principalTable: "Peliculas",
+                        principalColumn: "PeliculaId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -406,6 +487,16 @@ namespace Modelo.Migrations
                 column: "RepartoActorId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Auditorias_DirectorId",
+                table: "Auditorias",
+                column: "DirectorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Auditorias_Usuario_AudId",
+                table: "Auditorias",
+                column: "Usuario_AudId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Componente_EstadoGrupoId",
                 table: "Componente",
                 column: "EstadoGrupoId");
@@ -426,6 +517,16 @@ namespace Modelo.Migrations
                 column: "UsuariosUsuarioId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DetallesOrdenesCompra_OrdenCompraId",
+                table: "DetallesOrdenesCompra",
+                column: "OrdenCompraId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DetallesOrdenesCompra_PeliculaId",
+                table: "DetallesOrdenesCompra",
+                column: "PeliculaId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_DetallesPedidos_PedidoId",
                 table: "DetallesPedidos",
                 column: "PedidoId");
@@ -439,6 +540,11 @@ namespace Modelo.Migrations
                 name: "IX_Formularios_ModuloId",
                 table: "Formularios",
                 column: "ModuloId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrdenesCompra_ProveedorId",
+                table: "OrdenesCompra",
+                column: "ProveedorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PagosPedidos_PedidoId",
@@ -477,10 +583,16 @@ namespace Modelo.Migrations
                 name: "Actores_Peliculas");
 
             migrationBuilder.DropTable(
+                name: "Auditorias");
+
+            migrationBuilder.DropTable(
                 name: "ComponenteGrupo");
 
             migrationBuilder.DropTable(
                 name: "ComponenteUsuario");
+
+            migrationBuilder.DropTable(
+                name: "DetallesOrdenesCompra");
 
             migrationBuilder.DropTable(
                 name: "DetallesPedidos");
@@ -501,13 +613,13 @@ namespace Modelo.Migrations
                 name: "Usuarios");
 
             migrationBuilder.DropTable(
+                name: "OrdenesCompra");
+
+            migrationBuilder.DropTable(
                 name: "Pedidos");
 
             migrationBuilder.DropTable(
                 name: "Peliculas");
-
-            migrationBuilder.DropTable(
-                name: "Proveedores");
 
             migrationBuilder.DropTable(
                 name: "EstadosGrupo");
@@ -517,6 +629,9 @@ namespace Modelo.Migrations
 
             migrationBuilder.DropTable(
                 name: "EstadosUsuario");
+
+            migrationBuilder.DropTable(
+                name: "Proveedores");
 
             migrationBuilder.DropTable(
                 name: "Clientes");

@@ -48,6 +48,7 @@
             nombreDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             apellidoDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             clienteBindingSource = new BindingSource(components);
+            label5 = new Label();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numDNI).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvClientes).BeginInit();
@@ -56,6 +57,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(label5);
             groupBox1.Controls.Add(btnBuscar);
             groupBox1.Controls.Add(txtBuscar);
             groupBox1.Controls.Add(numDNI);
@@ -198,7 +200,7 @@
             dgvClientes.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvClientes.Columns.AddRange(new DataGridViewColumn[] { dNIDataGridViewTextBoxColumn, nombreDataGridViewTextBoxColumn, apellidoDataGridViewTextBoxColumn });
             dgvClientes.DataSource = clienteBindingSource;
-            dgvClientes.Location = new Point(386, 22);
+            dgvClientes.Location = new Point(386, 65);
             dgvClientes.Name = "dgvClientes";
             dgvClientes.ReadOnly = true;
             dgvClientes.RowTemplate.Height = 25;
@@ -229,6 +231,15 @@
             // clienteBindingSource
             // 
             clienteBindingSource.DataSource = typeof(Modelo.Entidades.Cliente);
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(386, 31);
+            label5.Name = "label5";
+            label5.Size = new Size(95, 15);
+            label5.TabIndex = 19;
+            label5.Text = "Grilla de Clientes";
             // 
             // FormClientes
             // 
@@ -268,5 +279,6 @@
         private BindingSource clienteBindingSource;
         private Button btnBuscar;
         private TextBox txtBuscar;
+        private Label label5;
     }
 }

@@ -71,9 +71,9 @@
             label1.AutoSize = true;
             label1.Location = new Point(27, 19);
             label1.Name = "label1";
-            label1.Size = new Size(85, 15);
+            label1.Size = new Size(115, 15);
             label1.TabIndex = 1;
-            label1.Text = "Detalles Ventas";
+            label1.Text = "Grilla Detalles Ventas";
             // 
             // dgvDetallesVenta
             // 
@@ -143,9 +143,9 @@
             label2.AutoSize = true;
             label2.Location = new Point(16, 19);
             label2.Name = "label2";
-            label2.Size = new Size(103, 15);
+            label2.Size = new Size(133, 15);
             label2.TabIndex = 2;
-            label2.Text = "Detalles Alquileres";
+            label2.Text = "Grilla Detalles Alquileres";
             // 
             // dgvDetallesAlquiler
             // 

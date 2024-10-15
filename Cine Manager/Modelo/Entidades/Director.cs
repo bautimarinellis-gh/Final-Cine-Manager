@@ -12,6 +12,8 @@ namespace Modelo.Entidades
         private string codigo;
         private string nombre;
         private string apellido;
+        private bool estado;
+
 
 
         public int DirectorId
@@ -39,6 +41,13 @@ namespace Modelo.Entidades
         {
             get { return apellido; }
             set { apellido = value; }
+        }
+
+
+        public bool Estado
+        {
+            get { return estado; }
+            set { estado = value;}
         }
 
 

@@ -45,6 +45,7 @@
             NombreGrupo = new DataGridViewTextBoxColumn();
             EstadoGrupo = new DataGridViewTextBoxColumn();
             grupoBindingSource = new BindingSource(components);
+            label2 = new Label();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvGrupos).BeginInit();
@@ -53,6 +54,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(btnSalir);
             groupBox1.Controls.Add(groupBox2);
             groupBox1.Controls.Add(btnModificar);
@@ -61,13 +63,13 @@
             groupBox1.Controls.Add(dgvGrupos);
             groupBox1.Location = new Point(12, 26);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(776, 398);
+            groupBox1.Size = new Size(776, 440);
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             // 
             // btnSalir
             // 
-            btnSalir.Location = new Point(684, 360);
+            btnSalir.Location = new Point(684, 411);
             btnSalir.Name = "btnSalir";
             btnSalir.Size = new Size(75, 23);
             btnSalir.TabIndex = 6;
@@ -136,7 +138,7 @@
             // 
             // btnModificar
             // 
-            btnModificar.Location = new Point(223, 347);
+            btnModificar.Location = new Point(223, 411);
             btnModificar.Name = "btnModificar";
             btnModificar.Size = new Size(75, 23);
             btnModificar.TabIndex = 3;
@@ -146,7 +148,7 @@
             // 
             // btnEliminar
             // 
-            btnEliminar.Location = new Point(123, 347);
+            btnEliminar.Location = new Point(123, 411);
             btnEliminar.Name = "btnEliminar";
             btnEliminar.Size = new Size(75, 23);
             btnEliminar.TabIndex = 2;
@@ -156,7 +158,7 @@
             // 
             // btnAgregar
             // 
-            btnAgregar.Location = new Point(20, 347);
+            btnAgregar.Location = new Point(20, 411);
             btnAgregar.Name = "btnAgregar";
             btnAgregar.Size = new Size(75, 23);
             btnAgregar.TabIndex = 1;
@@ -170,7 +172,7 @@
             dgvGrupos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvGrupos.Columns.AddRange(new DataGridViewColumn[] { codigoDataGridViewTextBoxColumn, NombreGrupo, EstadoGrupo });
             dgvGrupos.DataSource = grupoBindingSource;
-            dgvGrupos.Location = new Point(20, 92);
+            dgvGrupos.Location = new Point(20, 152);
             dgvGrupos.Name = "dgvGrupos";
             dgvGrupos.ReadOnly = true;
             dgvGrupos.RowTemplate.Height = 25;
@@ -202,15 +204,25 @@
             // 
             grupoBindingSource.DataSource = typeof(Modelo.Módulo_de_Seguridad.Grupo);
             // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(323, 114);
+            label2.Name = "label2";
+            label2.Size = new Size(91, 15);
+            label2.TabIndex = 19;
+            label2.Text = "Grilla de Grupos";
+            // 
             // FormGestionarGrupos
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(800, 478);
             Controls.Add(groupBox1);
             Name = "FormGestionarGrupos";
             Text = "FormGestionarGrupos";
             groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
             groupBox2.ResumeLayout(false);
             groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvGrupos).EndInit();
@@ -239,5 +251,6 @@
         private DataGridViewTextBoxColumn NombreGrupo;
         private DataGridViewTextBoxColumn EstadoGrupo;
         private TextBox txtNombre;
+        private Label label2;
     }
 }

@@ -4,23 +4,23 @@
 
 namespace Modelo.Migrations
 {
-    public partial class AddAtributeToOrdenCompra : Migration
+    public partial class EstadoDirector : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
+            migrationBuilder.AddColumn<bool>(
                 name: "Estado",
-                table: "OrdenesCompra",
-                type: "nvarchar(max)",
+                table: "Directores",
+                type: "bit",
                 nullable: false,
-                defaultValue: "");
+                defaultValue: false);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
                 name: "Estado",
-                table: "OrdenesCompra");
+                table: "Directores");
         }
     }
 }

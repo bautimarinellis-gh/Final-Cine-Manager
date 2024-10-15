@@ -30,6 +30,8 @@
         {
             components = new System.ComponentModel.Container();
             groupBox1 = new GroupBox();
+            btnBuscar = new Button();
+            txtBuscar = new TextBox();
             btnVolver = new Button();
             btnPagar = new Button();
             btnInformacion = new Button();
@@ -43,8 +45,7 @@
             pedidoBindingSource1 = new BindingSource(components);
             pedidoBindingSource = new BindingSource(components);
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            btnBuscar = new Button();
-            txtBuscar = new TextBox();
+            label1 = new Label();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvPedidos).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pedidoBindingSource1).BeginInit();
@@ -53,6 +54,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(label1);
             groupBox1.Controls.Add(btnBuscar);
             groupBox1.Controls.Add(txtBuscar);
             groupBox1.Controls.Add(btnVolver);
@@ -61,13 +63,31 @@
             groupBox1.Controls.Add(dgvPedidos);
             groupBox1.Location = new Point(12, 12);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(658, 411);
+            groupBox1.Size = new Size(658, 424);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             // 
+            // btnBuscar
+            // 
+            btnBuscar.Location = new Point(178, 21);
+            btnBuscar.Name = "btnBuscar";
+            btnBuscar.Size = new Size(93, 23);
+            btnBuscar.TabIndex = 17;
+            btnBuscar.Text = "Buscar";
+            btnBuscar.UseVisualStyleBackColor = true;
+            btnBuscar.Click += btnBuscar_Click;
+            // 
+            // txtBuscar
+            // 
+            txtBuscar.Location = new Point(17, 22);
+            txtBuscar.Name = "txtBuscar";
+            txtBuscar.PlaceholderText = "Ingrese DNI del cliente";
+            txtBuscar.Size = new Size(128, 23);
+            txtBuscar.TabIndex = 16;
+            // 
             // btnVolver
             // 
-            btnVolver.Location = new Point(561, 373);
+            btnVolver.Location = new Point(561, 395);
             btnVolver.Name = "btnVolver";
             btnVolver.Size = new Size(75, 23);
             btnVolver.TabIndex = 3;
@@ -77,7 +97,7 @@
             // 
             // btnPagar
             // 
-            btnPagar.Location = new Point(148, 373);
+            btnPagar.Location = new Point(148, 395);
             btnPagar.Name = "btnPagar";
             btnPagar.Size = new Size(93, 23);
             btnPagar.TabIndex = 2;
@@ -87,7 +107,7 @@
             // 
             // btnInformacion
             // 
-            btnInformacion.Location = new Point(17, 373);
+            btnInformacion.Location = new Point(17, 395);
             btnInformacion.Name = "btnInformacion";
             btnInformacion.Size = new Size(103, 23);
             btnInformacion.TabIndex = 1;
@@ -101,7 +121,7 @@
             dgvPedidos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvPedidos.Columns.AddRange(new DataGridViewColumn[] { codigoDataGridViewTextBoxColumn, totalDataGridViewTextBoxColumn, clienteDataGridViewTextBoxColumn, fechaDataGridViewTextBoxColumn, estadoDataGridViewCheckBoxColumn, recargoDataGridViewCheckBoxColumn });
             dgvPedidos.DataSource = pedidoBindingSource1;
-            dgvPedidos.Location = new Point(17, 58);
+            dgvPedidos.Location = new Point(17, 102);
             dgvPedidos.Name = "dgvPedidos";
             dgvPedidos.ReadOnly = true;
             dgvPedidos.RowTemplate.Height = 25;
@@ -158,29 +178,20 @@
             // 
             pedidoBindingSource.DataSource = typeof(Modelo.Entidades.Pedido);
             // 
-            // btnBuscar
+            // label1
             // 
-            btnBuscar.Location = new Point(178, 21);
-            btnBuscar.Name = "btnBuscar";
-            btnBuscar.Size = new Size(93, 23);
-            btnBuscar.TabIndex = 17;
-            btnBuscar.Text = "Buscar";
-            btnBuscar.UseVisualStyleBackColor = true;
-            btnBuscar.Click += btnBuscar_Click;
-            // 
-            // txtBuscar
-            // 
-            txtBuscar.Location = new Point(17, 22);
-            txtBuscar.Name = "txtBuscar";
-            txtBuscar.PlaceholderText = "Ingrese DNI del cliente";
-            txtBuscar.Size = new Size(128, 23);
-            txtBuscar.TabIndex = 16;
+            label1.AutoSize = true;
+            label1.Location = new Point(288, 69);
+            label1.Name = "label1";
+            label1.Size = new Size(95, 15);
+            label1.TabIndex = 18;
+            label1.Text = "Grilla de Pedidos";
             // 
             // FormGestorPedidos
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(682, 435);
+            ClientSize = new Size(682, 448);
             Controls.Add(groupBox1);
             Name = "FormGestorPedidos";
             Text = "FormGestorPedidos";
@@ -210,5 +221,6 @@
         private BindingSource pedidoBindingSource1;
         private Button btnBuscar;
         private TextBox txtBuscar;
+        private Label label1;
     }
 }

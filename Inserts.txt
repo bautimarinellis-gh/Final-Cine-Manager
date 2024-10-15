@@ -1,0 +1,78 @@
+-- Activar Identity Insert
+SET IDENTITY_INSERT Modulos ON;
+
+INSERT INTO Modulos (ModuloId, NombreModulo)
+VALUES
+(7, 'Modulo de Ventas'),
+(8, 'Modulo de Compras'),
+(9, 'Modulo de Seguridad'),
+(10, 'Modulo Mi Perfil'),
+(11, 'Modulo de Inventario');
+
+-- Desactivar Identity Insert
+SET IDENTITY_INSERT Modulos OFF;
+
+
+-- Activar Identity Insert
+SET IDENTITY_INSERT Formularios ON;
+
+INSERT INTO Formularios (FormularioId, NombreFormulario, ModuloId)
+VALUES
+(10, 'Realizar Pedido', 7),
+(11, 'Gestionar Clientes', 7),
+(12, 'Gestionar Pedidos', 7),
+(13, 'Gestionar Proveedores', 8),
+(14, 'Gestionar Usuarios', 9),
+(15, 'Gestionar Grupos', 9),
+(16, 'Mi Perfil', 10),
+(17, 'Cambiar Clave', 10),
+(18, 'Gestionar Inventario', 11),
+(19, 'Gestionar Ordenes de Compra', 8);
+
+-- Desactivar Identity Insert
+SET IDENTITY_INSERT Formularios OFF;
+
+
+
+-- Activar Identity Insert
+SET IDENTITY_INSERT Componente ON;
+
+INSERT INTO Componente (Id, Nombre, Discriminator, FormularioId, Codigo, DescripcionGrupo, EstadoGrupoId)
+VALUES
+(26, 'Realizar Pedido', 'Accion', 10, NULL, NULL, NULL),
+(27, 'Gestionar Clientes', 'Accion', 11, NULL, NULL, NULL),
+(28, 'Gestionar Pedidos', 'Accion', 12, NULL, NULL, NULL),
+(29, 'Gestionar Proveedores', 'Accion', 13, NULL, NULL, NULL),
+(30, 'Gestionar Usuarios', 'Accion', 14, NULL, NULL, NULL),
+(31, 'Gestionar Grupos', 'Accion', 15, NULL, NULL, NULL),
+(32, 'Mi Perfil', 'Accion', 16, NULL, NULL, NULL),
+(33, 'Cambiar Clave', 'Accion', 17, NULL, NULL, NULL),
+(34, 'Gestionar Inventario', 'Accion', 18, NULL, NULL, NULL),
+(35, 'Gestionar Ordenes de Compra', 'Accion', 19, NULL, NULL, NULL);
+
+-- Desactivar Identity Insert
+SET IDENTITY_INSERT Componente OFF;
+
+
+-- Activar Identity Insert
+SET IDENTITY_INSERT EstadoGrupo ON;
+
+INSERT INTO EstadoGrupo (EstadoGrupoId, EstadoGrupoNombre)
+VALUES
+(1, 'Activo'),
+(2, 'Inactivo');
+
+-- Desactivar Identity Insert
+SET IDENTITY_INSERT EstadoGrupo OFF;
+
+
+-- Activar Identity Insert
+SET IDENTITY_INSERT EstadoUsuario ON;
+
+INSERT INTO EstadoUsuario (EstadoUsuarioId, EstadoUsuarioNombre)
+VALUES
+(1, 'Activo'),
+(2, 'Inactivo');
+
+-- Desactivar Identity Insert
+SET IDENTITY_INSERT EstadoUsuario OFF;
