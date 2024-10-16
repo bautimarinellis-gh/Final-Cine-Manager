@@ -11,7 +11,8 @@ namespace Modelo.Entidades
     {
         private int detalleOrdenCompraId;
         private Pelicula pelicula;
-        private int cantidad;
+        private int cantidadOrdenada;
+        private int cantidadEntregada;
         private decimal subtotal;
         private bool estado;
         private OrdenCompra ordenCompra;
@@ -32,10 +33,17 @@ namespace Modelo.Entidades
         }
 
 
-        public int Cantidad
+        public int CantidadOrdenada
         {
-            get { return cantidad; }
-            set { cantidad = value; }
+            get { return cantidadOrdenada; }
+            set { cantidadOrdenada = value; }
+        }
+
+
+        public int CantidadEntregada
+        {
+            get { return cantidadEntregada; }
+            set { cantidadEntregada = value; }
         }
 
 
@@ -64,6 +72,14 @@ namespace Modelo.Entidades
         {
             get { return ordenCompraId; }
             set { ordenCompraId = value; }
+        }
+
+
+
+        public DetalleOrdenCompra()
+        {
+            CantidadEntregada = 0; 
+            Estado = false; 
         }
     } 
 }

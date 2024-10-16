@@ -18,7 +18,6 @@ namespace Vista
     {
         private Sesion _sesion;
 
-
         public FormGestorPeliculas(Sesion sesion)
         {
             InitializeComponent();
@@ -29,6 +28,7 @@ namespace Vista
 
 
 
+        #region Métodos de Actualización
 
         private void ActualizarGrilla()
         {
@@ -36,16 +36,16 @@ namespace Vista
             dgvPeliculas.DataSource = ControladoraGestionarPeliculas.Instancia.RecuperarPeliculas();
         }
 
+        #endregion
 
 
 
+        #region Eventos del Menú
         private void directoresToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var formDirectores = new FormDirectores(_sesion);
             formDirectores.ShowDialog();
         }
-
-
 
 
         private void generosCinematograficosToolStripMenuItem_Click(object sender, EventArgs e)
@@ -55,17 +55,16 @@ namespace Vista
         }
 
 
-
-
         private void actoresToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var formActores = new FormActores();
             formActores.ShowDialog();
         }
+        #endregion
 
 
 
-        //Abre Formulario "FormPelicula" constructor para agregar
+        #region Eventos de Botones
         private void btnAgregar_Click(object sender, EventArgs e)
         {
             var formPelicula = new FormPelicula();
@@ -73,9 +72,6 @@ namespace Vista
             ActualizarGrilla();
         }
 
-
-
-        //Abre Formulario "FormPelicula" constructor para Modificar
         private void btnModificar_Click(object sender, EventArgs e)
         {
             if (dgvPeliculas.CurrentRow != null)
@@ -93,7 +89,6 @@ namespace Vista
 
 
 
-
         private void btnEliminar_Click(object sender, EventArgs e)
         {
             if (dgvPeliculas.SelectedRows.Count > 0)
@@ -108,14 +103,12 @@ namespace Vista
                     MessageBox.Show(mensaje, "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     ActualizarGrilla();
                 }
-
             }
             else
             {
                 MessageBox.Show("No tienes ninguna pelicula seleccionada", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
-
 
 
 
@@ -127,10 +120,10 @@ namespace Vista
 
 
 
-
         private void btnVolver_Click(object sender, EventArgs e)
         {
             this.Close();
         }
+        #endregion
     }
 }

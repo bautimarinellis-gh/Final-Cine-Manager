@@ -31,20 +31,25 @@
             components = new System.ComponentModel.Container();
             btnVolver = new Button();
             groupBox2 = new GroupBox();
-            btnPagar = new Button();
+            label1 = new Label();
+            txtCantidadPeliculas = new TextBox();
+            btnGuardar = new Button();
             dgvDetallesOrdenCompra = new DataGridView();
             peliculaDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-            cantidadDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            cantidadOrdenadaDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            cantidadEntregadaDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             estadoDataGridViewCheckBoxColumn = new DataGridViewCheckBoxColumn();
+            detalleOrdenCompraBindingSource1 = new BindingSource(components);
             detalleOrdenCompraBindingSource = new BindingSource(components);
             groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvDetallesOrdenCompra).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)detalleOrdenCompraBindingSource1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)detalleOrdenCompraBindingSource).BeginInit();
             SuspendLayout();
             // 
             // btnVolver
             // 
-            btnVolver.Location = new Point(402, 387);
+            btnVolver.Location = new Point(447, 415);
             btnVolver.Name = "btnVolver";
             btnVolver.Size = new Size(75, 23);
             btnVolver.TabIndex = 4;
@@ -54,35 +59,55 @@
             // 
             // groupBox2
             // 
-            groupBox2.Controls.Add(btnPagar);
+            groupBox2.Controls.Add(label1);
+            groupBox2.Controls.Add(txtCantidadPeliculas);
+            groupBox2.Controls.Add(btnGuardar);
             groupBox2.Controls.Add(dgvDetallesOrdenCompra);
             groupBox2.Location = new Point(12, 12);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(465, 369);
+            groupBox2.Size = new Size(510, 397);
             groupBox2.TabIndex = 3;
             groupBox2.TabStop = false;
             // 
-            // btnPagar
+            // label1
             // 
-            btnPagar.Location = new Point(16, 339);
-            btnPagar.Name = "btnPagar";
-            btnPagar.Size = new Size(111, 24);
-            btnPagar.TabIndex = 3;
-            btnPagar.Text = "Pagar Detalle";
-            btnPagar.UseVisualStyleBackColor = true;
-            btnPagar.Click += btnPagar_Click;
+            label1.AutoSize = true;
+            label1.Location = new Point(16, 19);
+            label1.Name = "label1";
+            label1.Size = new Size(214, 15);
+            label1.TabIndex = 5;
+            label1.Text = "Grilla de detalles de ordenes de compra";
+            // 
+            // txtCantidadPeliculas
+            // 
+            txtCantidadPeliculas.Location = new Point(16, 358);
+            txtCantidadPeliculas.Name = "txtCantidadPeliculas";
+            txtCantidadPeliculas.PlaceholderText = "Ingrese la cantidad a entregar";
+            txtCantidadPeliculas.Size = new Size(172, 23);
+            txtCantidadPeliculas.TabIndex = 4;
+            txtCantidadPeliculas.KeyPress += txtCantidadPeliculas_KeyPress;
+            // 
+            // btnGuardar
+            // 
+            btnGuardar.Location = new Point(212, 358);
+            btnGuardar.Name = "btnGuardar";
+            btnGuardar.Size = new Size(111, 24);
+            btnGuardar.TabIndex = 3;
+            btnGuardar.Text = "Entregar";
+            btnGuardar.UseVisualStyleBackColor = true;
+            btnGuardar.Click += btnGuardar_Click;
             // 
             // dgvDetallesOrdenCompra
             // 
             dgvDetallesOrdenCompra.AutoGenerateColumns = false;
             dgvDetallesOrdenCompra.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvDetallesOrdenCompra.Columns.AddRange(new DataGridViewColumn[] { peliculaDataGridViewTextBoxColumn, cantidadDataGridViewTextBoxColumn, estadoDataGridViewCheckBoxColumn });
-            dgvDetallesOrdenCompra.DataSource = detalleOrdenCompraBindingSource;
+            dgvDetallesOrdenCompra.Columns.AddRange(new DataGridViewColumn[] { peliculaDataGridViewTextBoxColumn, cantidadOrdenadaDataGridViewTextBoxColumn, cantidadEntregadaDataGridViewTextBoxColumn, estadoDataGridViewCheckBoxColumn });
+            dgvDetallesOrdenCompra.DataSource = detalleOrdenCompraBindingSource1;
             dgvDetallesOrdenCompra.Location = new Point(16, 47);
             dgvDetallesOrdenCompra.Name = "dgvDetallesOrdenCompra";
             dgvDetallesOrdenCompra.ReadOnly = true;
             dgvDetallesOrdenCompra.RowTemplate.Height = 25;
-            dgvDetallesOrdenCompra.Size = new Size(443, 270);
+            dgvDetallesOrdenCompra.Size = new Size(477, 270);
             dgvDetallesOrdenCompra.TabIndex = 0;
             // 
             // peliculaDataGridViewTextBoxColumn
@@ -92,12 +117,19 @@
             peliculaDataGridViewTextBoxColumn.Name = "peliculaDataGridViewTextBoxColumn";
             peliculaDataGridViewTextBoxColumn.ReadOnly = true;
             // 
-            // cantidadDataGridViewTextBoxColumn
+            // cantidadOrdenadaDataGridViewTextBoxColumn
             // 
-            cantidadDataGridViewTextBoxColumn.DataPropertyName = "Cantidad";
-            cantidadDataGridViewTextBoxColumn.HeaderText = "Cantidad";
-            cantidadDataGridViewTextBoxColumn.Name = "cantidadDataGridViewTextBoxColumn";
-            cantidadDataGridViewTextBoxColumn.ReadOnly = true;
+            cantidadOrdenadaDataGridViewTextBoxColumn.DataPropertyName = "CantidadOrdenada";
+            cantidadOrdenadaDataGridViewTextBoxColumn.HeaderText = "CantidadOrdenada";
+            cantidadOrdenadaDataGridViewTextBoxColumn.Name = "cantidadOrdenadaDataGridViewTextBoxColumn";
+            cantidadOrdenadaDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // cantidadEntregadaDataGridViewTextBoxColumn
+            // 
+            cantidadEntregadaDataGridViewTextBoxColumn.DataPropertyName = "CantidadEntregada";
+            cantidadEntregadaDataGridViewTextBoxColumn.HeaderText = "CantidadEntregada";
+            cantidadEntregadaDataGridViewTextBoxColumn.Name = "cantidadEntregadaDataGridViewTextBoxColumn";
+            cantidadEntregadaDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // estadoDataGridViewCheckBoxColumn
             // 
@@ -105,6 +137,10 @@
             estadoDataGridViewCheckBoxColumn.HeaderText = "Estado";
             estadoDataGridViewCheckBoxColumn.Name = "estadoDataGridViewCheckBoxColumn";
             estadoDataGridViewCheckBoxColumn.ReadOnly = true;
+            // 
+            // detalleOrdenCompraBindingSource1
+            // 
+            detalleOrdenCompraBindingSource1.DataSource = typeof(Modelo.Entidades.DetalleOrdenCompra);
             // 
             // detalleOrdenCompraBindingSource
             // 
@@ -114,13 +150,15 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(498, 450);
+            ClientSize = new Size(534, 450);
             Controls.Add(btnVolver);
             Controls.Add(groupBox2);
             Name = "FormDetallesOrdenesCompra";
             Text = "FormDetallesOrdenesCompra";
             groupBox2.ResumeLayout(false);
+            groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvDetallesOrdenCompra).EndInit();
+            ((System.ComponentModel.ISupportInitialize)detalleOrdenCompraBindingSource1).EndInit();
             ((System.ComponentModel.ISupportInitialize)detalleOrdenCompraBindingSource).EndInit();
             ResumeLayout(false);
         }
@@ -129,11 +167,16 @@
 
         private Button btnVolver;
         private GroupBox groupBox2;
-        private Button btnPagar;
+        private Button btnGuardar;
         private DataGridView dgvDetallesOrdenCompra;
-        private DataGridViewTextBoxColumn peliculaDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn cantidadDataGridViewTextBoxColumn;
-        private DataGridViewCheckBoxColumn estadoDataGridViewCheckBoxColumn;
         private BindingSource detalleOrdenCompraBindingSource;
+        private DataGridViewTextBoxColumn peliculaDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn cantidadOrdenadaDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn cantidadEntregadaDataGridViewTextBoxColumn;
+        private DataGridViewCheckBoxColumn estadoDataGridViewCheckBoxColumn;
+        private BindingSource detalleOrdenCompraBindingSource1;
+        private TextBox txtCantidadPeliculas;
+        private Label label1;
     }
 }

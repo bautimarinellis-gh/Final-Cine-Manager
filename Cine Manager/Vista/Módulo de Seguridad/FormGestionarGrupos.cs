@@ -4,7 +4,6 @@ using Modelo.Entidades;
 using Modelo.Módulo_de_Seguridad;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -21,9 +20,9 @@ namespace Vista.Módulo_de_Seguridad
         public FormGestionarGrupos(Sesion sesion)
         {
             InitializeComponent();
-            dgvGrupos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             _sesion = sesion;
 
+            dgvGrupos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             cmbEstado.SelectedIndex = 0;
 
             ActualizarGrilla();
@@ -31,23 +30,24 @@ namespace Vista.Módulo_de_Seguridad
 
 
 
+        #region Métodos
         private void ActualizarGrilla()
         {
             dgvGrupos.DataSource = null;
             dgvGrupos.DataSource = ControladoraGestionarGrupos.Instancia.RecuperarGrupos();
-
             Refresh();
         }
 
+        #endregion
 
-
+        #region Eventos de Botones
         private void btnAgregar_Click(object sender, EventArgs e)
         {
             var formAgregarGrupo = new FormAgregarGrupo();
             formAgregarGrupo.ShowDialog();
-
             ActualizarGrilla();
         }
+
 
 
 
@@ -57,7 +57,9 @@ namespace Vista.Módulo_de_Seguridad
             {
                 var grupoSeleccionado = dgvGrupos.SelectedRows[0].DataBoundItem as Grupo;
 
-                DialogResult respuesta = MessageBox.Show("¿Estas seguro que quieres eliminar el grupo: " + grupoSeleccionado.Codigo + " ?", "Eliminar Grupo", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                DialogResult respuesta = MessageBox.Show(
+                    "¿Estás seguro que quieres eliminar el grupo: " + grupoSeleccionado.Codigo + " ?",
+                    "Eliminar Grupo", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (respuesta == DialogResult.Yes)
                 {
@@ -68,8 +70,7 @@ namespace Vista.Módulo_de_Seguridad
             }
             else
             {
-                MessageBox.Show("No tienes ningun grupo seleccionado", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+                MessageBox.Show("No tienes ningún grupo seleccionado", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -91,23 +92,16 @@ namespace Vista.Módulo_de_Seguridad
         }
 
 
+
         private void btnBuscar_Click(object sender, EventArgs e)
         {
             string filtroNombre = txtNombre.Text.Trim();
-
             bool? filtroEstado = null;
+
             if (cmbEstado.SelectedItem != null)
             {
                 string estadoSeleccionado = cmbEstado.SelectedItem.ToString();
-
-                if (estadoSeleccionado == "Activo")
-                {
-                    filtroEstado = true;
-                }
-                else if (estadoSeleccionado == "Inactivo")
-                {
-                    filtroEstado = false;
-                }
+                filtroEstado = estadoSeleccionado == "Activo";
             }
 
             var listaGrupos = new List<Grupo>(ControladoraGestionarGrupos.Instancia.RecuperarGrupos());
@@ -117,6 +111,7 @@ namespace Vista.Módulo_de_Seguridad
                 listaGrupos = listaGrupos.Where(g => g.Nombre.Contains(filtroNombre, StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
+            // Filtrar por estado
             if (filtroEstado.HasValue)
             {
                 listaGrupos = listaGrupos.Where(g => g.EstadoGrupo.EstadoGrupoNombre == "Activo" == filtroEstado.Value).ToList();
@@ -133,6 +128,8 @@ namespace Vista.Módulo_de_Seguridad
             this.Close();
         }
 
-
+        #endregion
     }
 }
+
+

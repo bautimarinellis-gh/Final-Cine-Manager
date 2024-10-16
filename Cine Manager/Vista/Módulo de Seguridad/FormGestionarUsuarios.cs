@@ -27,27 +27,25 @@ namespace Vista.Módulo_de_Seguridad
             _sesion = sesion;
             ActualizarGrilla();
             cmbEstado.SelectedIndex = 0;
-
             LlenarComboBox();
         }
 
-
-
+        #region Métodos de Actualización
         private void ActualizarGrilla()
         {
             dgvUsuarios.DataSource = null;
             dgvUsuarios.DataSource = ControladoraGestionarUsuarios.Instancia.RecuperarUsuarios();
-
             Refresh();
         }
+        #endregion
 
 
 
+        #region Eventos de Botones
         private void btnAgregar_Click(object sender, EventArgs e)
         {
             var formAgregarUsuario = new FormAgregarUsuario();
             formAgregarUsuario.ShowDialog();
-
             ActualizarGrilla();
         }
 
@@ -58,8 +56,7 @@ namespace Vista.Módulo_de_Seguridad
             if (dgvUsuarios.SelectedRows.Count > 0)
             {
                 var usuarioSeleccionado = dgvUsuarios.SelectedRows[0].DataBoundItem as Usuario;
-
-                DialogResult respuesta = MessageBox.Show("¿Estas seguro que quieres eliminar el usuario: " + usuarioSeleccionado.NombreUsuario + " ?", "Eliminar usuario", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                DialogResult respuesta = MessageBox.Show("¿Estás seguro que quieres eliminar el usuario: " + usuarioSeleccionado.NombreUsuario + " ?", "Eliminar usuario", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (respuesta == DialogResult.Yes)
                 {
@@ -70,8 +67,7 @@ namespace Vista.Módulo_de_Seguridad
             }
             else
             {
-                MessageBox.Show("No tienes ningun usuario seleccionado", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+                MessageBox.Show("No tienes ningún usuario seleccionado", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -93,94 +89,77 @@ namespace Vista.Módulo_de_Seguridad
         }
 
 
-
         private void btnResetear_Click(object sender, EventArgs e)
         {
             if (dgvUsuarios.CurrentRow != null)
             {
-                // Obtener el usuario seleccionado
                 var usuarioSeleccionado = dgvUsuarios.SelectedRows[0].DataBoundItem as Usuario;
-
-                // Confirmación de reseteo
-                var resultado = MessageBox.Show($"¿Estás seguro de que quieres resetear la clave del usuario '{usuarioSeleccionado.NombreUsuario}'?",
-                                                "Confirmar Reseteo de Clave",
-                                                MessageBoxButtons.YesNo,
-                                                MessageBoxIcon.Question);
+                var resultado = MessageBox.Show($"¿Estás seguro de que quieres resetear la clave del usuario '{usuarioSeleccionado.NombreUsuario}'?", "Confirmar Reseteo de Clave", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (resultado == DialogResult.Yes)
                 {
                     ResetearClaveUsuario(usuarioSeleccionado);
-
                 }
             }
             else
             {
                 MessageBox.Show("No tienes ningún usuario seleccionado", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
             }
         }
-
 
 
         private void btnBuscar_Click(object sender, EventArgs e)
         {
             string filtroNombreUsuario = txtNombre.Text.Trim();
-
-            // Obtener el filtro de grupo
             Grupo filtroGrupo = cmbGrupo.SelectedItem as Grupo;
-
-            // Obtener el filtro de estado
             bool? filtroEstado = null;
 
             if (cmbEstado.SelectedItem != null)
             {
                 string estadoSeleccionado = cmbEstado.SelectedItem.ToString();
-
-                if (estadoSeleccionado == "Activo")
-                {
-                    filtroEstado = true;
-                }
-                else if (estadoSeleccionado == "Inactivo")
-                {
-                    filtroEstado = false;
-                }
+                filtroEstado = estadoSeleccionado == "Activo" ? true : (estadoSeleccionado == "Inactivo" ? false : (bool?)null);
             }
 
-            // Obtener todos los usuarios
             var listaUsuarios = new List<Usuario>(ControladoraGestionarUsuarios.Instancia.RecuperarUsuarios());
 
-            // Filtrar por nombre de usuario si no está vacío
+            // Filtrar por nombre de usuario
             if (!string.IsNullOrEmpty(filtroNombreUsuario))
             {
                 listaUsuarios = listaUsuarios.Where(u => u.Nombre.Contains(filtroNombreUsuario, StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
-            // Filtrar por grupo si se seleccionó un grupo
+            // Filtrar por grupo
             if (filtroGrupo != null)
             {
-                // Asegurarse de que los componentes incluyan grupos, luego filtrar por el grupo seleccionado
-                listaUsuarios = listaUsuarios.Where(u => u.Componentes != null
-                                            && u.Componentes.OfType<Grupo>().Any(g => g.Codigo == filtroGrupo.Codigo)).ToList();
+                listaUsuarios = listaUsuarios.Where(u => u.Componentes != null && u.Componentes.OfType<Grupo>().Any(g => g.Codigo == filtroGrupo.Codigo)).ToList();
             }
 
-            // Filtrar por estado si se seleccionó "Activo" o "Inactivo"
+            // Filtrar por estado
             if (filtroEstado.HasValue)
             {
                 listaUsuarios = listaUsuarios.Where(u => u.EstadoUsuario.EstadoUsuarioNombre == "Activo" == filtroEstado.Value).ToList();
             }
 
-            // Actualizar el DataGridView con los usuarios filtrados
+            // Actualizar el DataGridView
             dgvUsuarios.DataSource = null;
             dgvUsuarios.DataSource = listaUsuarios;
         }
 
 
 
+        private void btnSalir_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+        #endregion
+
+
+
+        #region Métodos de Reseteo de Clave
         private void ResetearClaveUsuario(Usuario usuario)
         {
             var nuevaClave = GenerarClaveAleatoria();
             usuario.Clave = EncriptarClave(nuevaClave);
-
             ControladoraGestionarUsuarios.Instancia.ActualizarClaveUsuario(usuario);
 
             if (!EnviarClavePorEmail(usuario.Email, nuevaClave))
@@ -213,23 +192,16 @@ namespace Vista.Módulo_de_Seguridad
 
         private string EncriptarClave(string clave)
         {
-            // Crear una instancia del algoritmo SHA-256
             using (var sha256 = SHA256.Create())
             {
-                // Convertir la cadena de texto 'clave' en un arreglo de bytes y calcular el hash
                 var bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(clave));
-
-                // Crear un StringBuilder para construir la cadena encriptada en formato hexadecimal
                 var claveEncriptada = new StringBuilder();
 
-                // Recorrer cada byte en el arreglo 'bytes'
                 foreach (var b in bytes)
                 {
-                    // Convertir cada byte a su representación en hexadecimal y agregarlo al StringBuilder
                     claveEncriptada.Append(b.ToString("x2"));
                 }
 
-                // Retornar la cadena encriptada (el hash en formato hexadecimal)
                 return claveEncriptada.ToString();
             }
         }
@@ -240,61 +212,49 @@ namespace Vista.Módulo_de_Seguridad
         {
             try
             {
-                // Crear un nuevo mensaje de correo
                 var mensaje = new MailMessage
                 {
-                    From = new MailAddress("tu_correo@gmail.com"), // Dirección de correo del remitente
-                    Subject = "Tu nueva clave de acceso", // Asunto del correo
-                    Body = $"Tu nueva clave de acceso es: {clave}", // Cuerpo del correo, incluyendo la clave generada
-                    IsBodyHtml = false // Indica que el cuerpo del correo no es HTML
+                    From = new MailAddress("tu_correo@gmail.com"),
+                    Subject = "Tu nueva clave de acceso",
+                    Body = $"Tu nueva clave de acceso es: {clave}",
+                    IsBodyHtml = false
                 };
 
-                // Añadir el destinatario al mensaje
-                mensaje.To.Add(destinatario); // Dirección de correo del destinatario (usuario al que se le envía la clave)
+                mensaje.To.Add(destinatario);
 
-                // Configurar el cliente SMTP para enviar el correo
                 using (var cliente = new SmtpClient("smtp.gmail.com"))
                 {
-                    cliente.Port = 587; // Puerto para TLS (Transport Layer Security)
-                    cliente.EnableSsl = true; // Habilitar SSL (Secure Sockets Layer) para una conexión segura
-                    cliente.Credentials = new NetworkCredential("bautimarinelli100@gmail.com", "ldzm yahi hvac osiu"); // Credenciales del remitente (correo y contraseña de aplicación)
-                    cliente.Timeout = 10000; // Tiempo de espera máximo para el envío del correo en milisegundos (10 segundos)
+                    cliente.Port = 587;
+                    cliente.EnableSsl = true;
+                    cliente.Credentials = new NetworkCredential("bautimarinelli100@gmail.com", "ldzm yahi hvac osiu");
+                    cliente.Timeout = 10000;
 
-                    // Enviar el correo electrónico
                     cliente.Send(mensaje);
                 }
 
-                // Si el envío fue exitoso, retornar true
                 return true;
             }
             catch (SmtpException ex)
             {
-                // Captura de excepciones específicas de SMTP (errores relacionados con el envío de correo)
-                MessageBox.Show($"Error al enviar el email:\n{ex.Message}\n" +
-                                "Verifica tus credenciales de Gmail, la configuración del servidor SMTP o si has habilitado el acceso para aplicaciones menos seguras.");
-                return false; // Retornar false si ocurre un error durante el envío del correo
+                MessageBox.Show($"Error al enviar el email:\n{ex.Message}\nVerifica tus credenciales de Gmail, la configuración del servidor SMTP o si has habilitado el acceso para aplicaciones menos seguras.");
+                return false;
             }
             catch (Exception ex)
             {
-                // Captura de cualquier otra excepción no relacionada con SMTP
                 MessageBox.Show($"Error inesperado al enviar el email:\n{ex.Message}");
-                return false; // Retornar false en caso de otro tipo de error
+                return false;
             }
         }
+        #endregion
 
 
 
+        #region Métodos de Inicialización
         private void LlenarComboBox()
         {
             cmbGrupo.DataSource = ControladoraGestionarGrupos.Instancia.RecuperarGrupos();
             cmbGrupo.DisplayMember = "Nombre";
         }
-
-
-
-        private void btnSalir_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
+        #endregion
     }
 }

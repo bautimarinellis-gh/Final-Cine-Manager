@@ -11,6 +11,7 @@ namespace Vista.Módulo_de_Seguridad
 {
     public partial class FormCineManager : Form
     {
+
         private Sesion? _sesion;
 
         public FormCineManager(Sesion sesion)
@@ -19,6 +20,11 @@ namespace Vista.Módulo_de_Seguridad
             _sesion = sesion;
             ConfigurarModulosDisponibles();
         }
+
+
+
+
+        #region Métodos de Configuración de Módulos
 
         private void ConfigurarModulosDisponibles()
         {
@@ -94,7 +100,11 @@ namespace Vista.Módulo_de_Seguridad
             return modulos;
         }
 
-        // Toolstrip event handlers
+        #endregion
+
+
+
+        #region Manejadores de Eventos de ToolStrip
 
         private void gestionarUsuariosToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -168,5 +178,7 @@ namespace Vista.Módulo_de_Seguridad
                 this.Close();
             }
         }
+
+        #endregion
     }
 }

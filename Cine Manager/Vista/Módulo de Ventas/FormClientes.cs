@@ -16,27 +16,31 @@ namespace Vista.Módulo_de_Administración
     public partial class FormClientes : Form
     {
         private Sesion _sesion;
+
+        
         public FormClientes(Sesion sesion)
         {
             InitializeComponent();
-
             dgvClientes.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             _sesion = sesion;
             ActualizarGrilla();
         }
 
 
+        #region Métodos de Actualización de Datos
 
-
+        
         private void ActualizarGrilla()
         {
             dgvClientes.DataSource = null;
             dgvClientes.DataSource = ControladoraGestionarClientes.Instancia.RecuperarClientes();
         }
 
+        #endregion
 
+        #region Botones de Gestión de Clientes
 
-
+        
         private void btnAgregar_Click(object sender, EventArgs e)
         {
             if (ValidarDatos())
@@ -55,16 +59,14 @@ namespace Vista.Módulo_de_Administración
             }
         }
 
-
-
-
+        
         private void btnEliminar_Click(object sender, EventArgs e)
         {
             if (dgvClientes.SelectedRows.Count > 0)
             {
                 var clienteSeleccionado = dgvClientes.SelectedRows[0].DataBoundItem as Cliente;
 
-                DialogResult respuesta = MessageBox.Show("¿Estas seguro que quieres eliminar el cliente: " + clienteSeleccionado.DNI + " ?", "Eliminar Cliente", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                DialogResult respuesta = MessageBox.Show("¿Estás seguro que quieres eliminar el cliente: " + clienteSeleccionado.DNI + " ?", "Eliminar Cliente", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (respuesta == DialogResult.Yes)
                 {
@@ -72,17 +74,14 @@ namespace Vista.Módulo_de_Administración
                     MessageBox.Show(mensaje, "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     ActualizarGrilla();
                 }
-
             }
             else
             {
-                MessageBox.Show("No tienes ningun cliente seleccionado", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("No tienes ningún cliente seleccionado", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
-
-
-
+        
         private void btnModificar_Click(object sender, EventArgs e)
         {
             if (dgvClientes.SelectedRows.Count > 0)
@@ -104,7 +103,7 @@ namespace Vista.Módulo_de_Administración
 
                     var mensaje = ControladoraGestionarClientes.Instancia.ModificarCliente(clienteSeleccionado);
 
-                    ActualizarGrilla(); // Método para actualizar la grilla de actores.
+                    ActualizarGrilla();
                     LimpiarDetalles();
                     MessageBox.Show(mensaje);
                 }
@@ -115,9 +114,7 @@ namespace Vista.Módulo_de_Administración
             }
         }
 
-
-
-
+        
         private void btnBuscar_Click(object sender, EventArgs e)
         {
             string textoBusqueda = txtBuscar.Text.Trim();
@@ -136,9 +133,13 @@ namespace Vista.Módulo_de_Administración
             }
         }
 
+        #endregion
 
 
 
+        #region Métodos de Validación
+
+        
         private bool ValidarDatos()
         {
             if (string.IsNullOrEmpty(this.txtNombre.Text))
@@ -161,8 +162,6 @@ namespace Vista.Módulo_de_Administración
 
             return true;
         }
-
-
 
 
         private bool ValidarDatosModificar(Cliente clienteSeleccionado)
@@ -197,7 +196,6 @@ namespace Vista.Módulo_de_Administración
                 return false;
             }
 
-            // Validar que el código no esté en uso por otro actor
             var clienteConMismoDNI = ControladoraGestionarClientes.Instancia.Buscar((int)numDNI.Value);
             if (clienteConMismoDNI != null && clienteConMismoDNI.ClienteId != clienteSeleccionado.ClienteId)
             {
@@ -206,12 +204,14 @@ namespace Vista.Módulo_de_Administración
             }
 
             return true;
-
         }
 
+        #endregion
 
 
+        #region Métodos de Interfaz
 
+       
         private void LimpiarDetalles()
         {
             txtNombre.Text = "";
@@ -219,16 +219,12 @@ namespace Vista.Módulo_de_Administración
             numDNI.Value = 0;
         }
 
-
-
-
+        
         private void btnVolver_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-
-
-
+        #endregion
     }
 }

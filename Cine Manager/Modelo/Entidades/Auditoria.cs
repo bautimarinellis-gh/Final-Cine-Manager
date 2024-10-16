@@ -19,12 +19,16 @@ namespace Modelo.Entidades
         private DateTime fecha_aud;
         private string tipoMovimientoAud;
 
+
+
         // Propiedad para el ID de auditoría
         public int AuditoriaId
         {
             get { return auditoriaId; }
             set { auditoriaId = value; }
         }
+
+
 
         // Propiedad para el ID del director
         public int DirectorId
@@ -33,12 +37,16 @@ namespace Modelo.Entidades
             set { directorId = value; }
         }
 
+
+
         // Propiedad para el código del director
         public string Codigo_Director
         {
             get { return codigo_director; }
             set { codigo_director = value; }
         }
+
+
 
         // Propiedad para el nombre del director
         public string Nombre_Director
@@ -47,12 +55,16 @@ namespace Modelo.Entidades
             set { nombre_director = value; }
         }
 
+
+
         // Propiedad para el apellido del director
         public string Apellido_Director
         {
             get { return apellido_director; }
             set { apellido_director = value; }
         }
+
+
 
         // Propiedad para el ID del usuario que audita
         public int Usuario_AudId
@@ -61,12 +73,16 @@ namespace Modelo.Entidades
             set { usuario_AudId = value; }
         }
 
+
+
         // Propiedad para la fecha de auditoría
         public DateTime Fecha_Aud
         {
             get { return fecha_aud; }
             set { fecha_aud = value; }
         }
+
+
 
         // Propiedad para el tipo de movimiento
         public string TipoMovimiento_Aud

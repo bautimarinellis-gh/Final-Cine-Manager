@@ -45,7 +45,8 @@ namespace Controladora.Negocio
                 // Recuperar detalles de venta con inclusión de la entidad Pelicula
                 return context.DetallesOrdenesCompra
                               .Where(doc => doc.OrdenCompraId == ordenCompra.OrdenCompraId)
-                              .Include(doc => doc.Pelicula) // Incluimos Pelicula
+                              .Include(doc => doc.Pelicula).
+                              Include(doc => doc.OrdenCompra)
                               .ToList()
                               .AsReadOnly();
             }
@@ -57,13 +58,12 @@ namespace Controladora.Negocio
 
 
 
-        public string PagarDetalleOrdenCompra(DetalleOrdenCompra detalleOrdenCompra)
+        public string EntregarDetalleOrdenCompra(DetalleOrdenCompra detalleOrdenCompra, int cantidadEntregada)
         {
             try
             {
-                // Cargar el detalle incluyendo la OrdenCompra asociada
                 var detalleOrdenCompraExistente = context.DetallesOrdenesCompra
-                    .Include(d => d.OrdenCompra) // Asegurar que OrdenCompra está cargada
+                    .Include(d => d.OrdenCompra) 
                     .FirstOrDefault(d => d.DetalleOrdenCompraId == detalleOrdenCompra.DetalleOrdenCompraId);
 
                 if (detalleOrdenCompraExistente == null)
@@ -71,16 +71,20 @@ namespace Controladora.Negocio
                     return "El detalle de la orden de compra no existe.";
                 }
 
-                // Verificar si el detalle ya ha sido pagado
-                if (detalleOrdenCompraExistente.Estado)
+                // Verificamos que no exceda la cantidad ordenada
+                if (detalleOrdenCompraExistente.CantidadEntregada + cantidadEntregada > detalleOrdenCompraExistente.CantidadOrdenada)
                 {
-                    return "El detalle de la orden ya ha sido pagado.";
+                    return "La cantidad entregada no puede exceder la cantidad ordenada.";
                 }
 
-                // Marcar el detalle como pagado
-                detalleOrdenCompraExistente.Estado = true;
+                // Actualizamos la cantidad entregada
+                detalleOrdenCompraExistente.CantidadEntregada += cantidadEntregada;
 
-                // Procesar el detalle y actualizar el stock
+                if (detalleOrdenCompraExistente.CantidadEntregada >= detalleOrdenCompraExistente.CantidadOrdenada)
+                {
+                    detalleOrdenCompraExistente.Estado = true; 
+                }
+
                 var mensaje = ProcesarDetalleOrdenCompra(detalleOrdenCompraExistente);
 
                 if (!mensaje)
@@ -88,7 +92,6 @@ namespace Controladora.Negocio
                     return "Error al procesar el detalle de la orden de compra.";
                 }
 
-                // Actualizar el estado de la orden de compra basado en los detalles
                 var ordenCompra = detalleOrdenCompraExistente.OrdenCompra;
 
                 if (ordenCompra == null)
@@ -96,22 +99,20 @@ namespace Controladora.Negocio
                     return "El detalle de la orden no tiene una orden de compra asociada.";
                 }
 
-                if (ordenCompra.TodosLosDetallesPagos())
+                if (ordenCompra.TodosLosDetallesEntregados())
                 {
                     ordenCompra.CambiarEstado(new EstadoCompletada());
                 }
-                else if (ordenCompra.AlgunosDetallesPagos())
+                else if (ordenCompra.HayItemsEnDetalle())
                 {
                     ordenCompra.CambiarEstado(new EstadoParcialmenteCompletada());
                 }
 
-                // Guardar los cambios en la base de datos
                 context.DetallesOrdenesCompra.Update(detalleOrdenCompraExistente);
                 context.OrdenesCompra.Update(ordenCompra);
                 context.SaveChanges();
 
-                return "El detalle de la orden de compra ha sido pagado y el stock actualizado.";
-
+                return "La cantidad entregada ha sido registrada correctamente y el stock actualizado.";
             }
             catch (Exception ex)
             {
@@ -119,6 +120,9 @@ namespace Controladora.Negocio
             }
         }
 
+
+
+        
 
 
 
@@ -134,7 +138,7 @@ namespace Controladora.Negocio
                 }
 
                 // Actualizar el stock sumando la cantidad del detalle
-                peliculaExistente.Cantidad += detalleOrdenCompra.Cantidad;
+                peliculaExistente.Cantidad += detalleOrdenCompra.CantidadOrdenada;
 
                 // Actualizar en la base de datos el stock de la película
                 var stockActualizado = ControladoraGestionarPeliculas.Instancia.ActualizarStockPeliculas(peliculaExistente);

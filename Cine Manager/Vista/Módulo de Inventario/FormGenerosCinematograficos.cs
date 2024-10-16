@@ -1,29 +1,23 @@
 ﻿using Controladora;
 using Modelo.Entidades;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Vista
 {
     public partial class FormGenerosCinematograficos : Form
     {
+
         public FormGenerosCinematograficos()
         {
             InitializeComponent();
-
             dgvGenerosCinematograficos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             ActualizarGrilla();
         }
 
 
-
+        #region Métodos de Actualización
 
         private void ActualizarGrilla()
         {
@@ -31,7 +25,16 @@ namespace Vista
             dgvGenerosCinematograficos.DataSource = ControladoraGestionarGenerosCinematograficos.Instancia.RecuperarGenerosCinematograficos();
         }
 
+        private void LimpiarDetalles()
+        {
+            txtNombre.Text = "";
+        }
 
+        #endregion
+
+
+
+        #region Eventos de Botones
 
 
         private void btnAgregar_Click(object sender, EventArgs e)
@@ -52,7 +55,6 @@ namespace Vista
 
 
 
-
         private void btnEliminar_Click(object sender, EventArgs e)
         {
             if (dgvGenerosCinematograficos.SelectedRows.Count > 0)
@@ -67,14 +69,12 @@ namespace Vista
                     MessageBox.Show(mensaje, "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     ActualizarGrilla();
                 }
-
             }
             else
             {
                 MessageBox.Show("No tienes ningun género cinematografico seleccionado", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
-
 
 
 
@@ -110,7 +110,6 @@ namespace Vista
 
 
 
-
         private void btnBuscar_Click(object sender, EventArgs e)
         {
             string textoBusqueda = txtBuscar.Text.Trim(); //El método Trim()  elimina cualquier espacio en blanco al principio o al final del texto
@@ -119,10 +118,19 @@ namespace Vista
 
 
 
+        private void btnVolver_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        #endregion
+
+
+
+        #region Métodos de Validación
 
         private bool ValidarDatos()
         {
-
             if (string.IsNullOrEmpty(this.txtNombre.Text))
             {
                 MessageBox.Show("Debe ingresar el nombre", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -138,12 +146,8 @@ namespace Vista
             return true;
         }
 
-
-
-
         private bool ValidarDatosModificar(GeneroCinematografico generoCinematograficoSeleccionado)
         {
-
             if (string.IsNullOrEmpty(this.txtNombre.Text))
             {
                 MessageBox.Show("Debe ingresar el nombre", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -167,20 +171,6 @@ namespace Vista
             return true;
         }
 
-
-        private void LimpiarDetalles()
-        {
-            txtNombre.Text = "";
-        }
-
-
-
-
-        private void btnVolver_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-
+        #endregion
     }
 }

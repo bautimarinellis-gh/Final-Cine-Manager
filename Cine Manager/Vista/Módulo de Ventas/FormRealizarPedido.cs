@@ -1,22 +1,15 @@
 ﻿using Controladora;
 using Modelo.Entidades;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Vista.Módulo_de_Administración;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace Vista.Módulo_de_Transacciones
 {
     public partial class FormRealizarPedido : Form
     {
         private Pedido pedidoActual;
+
 
         public FormRealizarPedido()
         {
@@ -32,9 +25,10 @@ namespace Vista.Módulo_de_Transacciones
         }
 
 
+        #region Métodos de Actualización de Grillas y ComboBox
+
         private void ActualizarGrilla()
         {
-
             dgvPeliculasDisponibles.DataSource = null;
             dgvPeliculasDisponibles.DataSource = ControladoraGestionarPeliculas.Instancia.RecuperarPeliculas();
 
@@ -42,8 +36,17 @@ namespace Vista.Módulo_de_Transacciones
             dgvDetallesPedido.DataSource = pedidoActual.RecuperarDetalles();
         }
 
+        private void LlenarComboBox()
+        {
+            cmbDNI.DataSource = ControladoraGestionarClientes.Instancia.RecuperarClientes();
+            cmbDNI.DisplayMember = "DNI";
+        }
+
+        #endregion
 
 
+
+        #region Botones: Venta, Alquiler, Quitar, Finalizar Pedido
 
         private void btnVenta_Click(object sender, EventArgs e)
         {
@@ -67,11 +70,8 @@ namespace Vista.Módulo_de_Transacciones
                 string mensaje = pedidoActual.AgregarDetalle(detalleVenta, false);
                 MessageBox.Show(mensaje);
 
-                // Actualizar UI
                 txtTotal.Text = pedidoActual.Total.ToString();
-
                 ActualizarGrilla();
-
                 txtCantidadPeliculas.Text = "";
             }
             else
@@ -79,9 +79,6 @@ namespace Vista.Módulo_de_Transacciones
                 MessageBox.Show("Seleccione una película de la lista.");
             }
         }
-
-
-
 
         private void btnAlquiler_Click(object sender, EventArgs e)
         {
@@ -105,11 +102,8 @@ namespace Vista.Módulo_de_Transacciones
                 string mensaje = pedidoActual.AgregarDetalle(detalleAlquiler, true);
                 MessageBox.Show(mensaje);
 
-                // Actualizar UI
                 txtTotal.Text = pedidoActual.Total.ToString();
-
                 ActualizarGrilla();
-
                 txtCantidadPeliculas.Text = "";
             }
             else
@@ -118,47 +112,35 @@ namespace Vista.Módulo_de_Transacciones
             }
         }
 
-
-
-
         private void btnQuitar_Click(object sender, EventArgs e)
         {
             if (dgvDetallesPedido.SelectedRows.Count > 0)
             {
-                if (dgvDetallesPedido.SelectedRows.Count > 0)
+                DetallePedido detalleSeleccionado = (DetallePedido)dgvDetallesPedido.SelectedRows[0].DataBoundItem;
+
+                string mensaje;
+                if (detalleSeleccionado is DetalleVenta)
                 {
-                    DetallePedido detalleSeleccionado = (DetallePedido)dgvDetallesPedido.SelectedRows[0].DataBoundItem;
-
-                    string mensaje;
-
-                    if (detalleSeleccionado is DetalleVenta)
-                    {
-                        mensaje = pedidoActual.EliminarDetalle(detalleSeleccionado, false);
-                    }
-                    else if (detalleSeleccionado is DetalleAlquiler)
-                    {
-                        mensaje = pedidoActual.EliminarDetalle(detalleSeleccionado, true);
-                    }
-                    else
-                    {
-                        mensaje = "Tipo de detalle no reconocido.";
-                    }
-
-                    MessageBox.Show(mensaje);
-                    txtTotal.Text = pedidoActual.Total.ToString();
-
-                    ActualizarGrilla();
+                    mensaje = pedidoActual.EliminarDetalle(detalleSeleccionado, false);
+                }
+                else if (detalleSeleccionado is DetalleAlquiler)
+                {
+                    mensaje = pedidoActual.EliminarDetalle(detalleSeleccionado, true);
+                }
+                else
+                {
+                    mensaje = "Tipo de detalle no reconocido.";
                 }
 
+                MessageBox.Show(mensaje);
+                txtTotal.Text = pedidoActual.Total.ToString();
+                ActualizarGrilla();
             }
             else
             {
                 MessageBox.Show("Seleccione una pelicula de la lista.");
             }
         }
-
-
-
 
         private void btnFinalizarPedido_Click(object sender, EventArgs e)
         {
@@ -183,36 +165,24 @@ namespace Vista.Módulo_de_Transacciones
                     DetallesPedido = pedidoActual.DetallesPedido.ToList(),
                 };
 
-
                 string mensajePedido = ControladoraRealizarPedido.Instancia.AgregarPedido(nuevoPedido);
                 MessageBox.Show(mensajePedido);
 
-
                 pedidoActual.LimpiarDetalles();
-
                 ActualizarGrilla();
-
-                // Reiniciar el total y actualizar el textbox
                 txtTotal.Text = pedidoActual.Total.ToString();
             }
-            else if (eleccion == DialogResult.No)
+            else
             {
                 MessageBox.Show("Pedido cancelado.");
-
             }
         }
 
+        #endregion
 
 
 
-        private void btnBuscar_Click(object sender, EventArgs e)
-        {
-            string textoBusqueda = txtBuscar.Text.Trim();
-            dgvPeliculasDisponibles.DataSource = ControladoraRealizarPedido.Instancia.FiltrarPeliculasDisponibles(textoBusqueda);
-        }
-
-
-
+        #region Validaciones
 
         private bool ValidarDatos(Pelicula peliculaSeleccionada)
         {
@@ -220,12 +190,8 @@ namespace Vista.Módulo_de_Transacciones
             {
                 return false;
             }
-
             return true;
         }
-
-
-
 
         private bool ValidarDatosCompra()
         {
@@ -236,35 +202,30 @@ namespace Vista.Módulo_de_Transacciones
             }
 
             var cliente = (Cliente)cmbDNI.SelectedItem;
-
             if (ControladoraRealizarPedido.Instancia.ClienteTieneAlquileresSinDevolver(cliente))
             {
                 MessageBox.Show("El cliente tiene alquileres sin devolver. No se puede realizar un nuevo pedido.");
                 return false;
             }
-
             return true;
         }
 
+        #endregion
 
+
+
+        #region Métodos Auxiliares
 
         private string CodigoPedidoUnico()
         {
             return Guid.NewGuid().ToString();
         }
 
-
-
-
-        private void LlenarComboBox()
+        private void btnBuscar_Click(object sender, EventArgs e)
         {
-            cmbDNI.DataSource = ControladoraGestionarClientes.Instancia.RecuperarClientes();
-            cmbDNI.DisplayMember = "DNI";
-
+            string textoBusqueda = txtBuscar.Text.Trim();
+            dgvPeliculasDisponibles.DataSource = ControladoraRealizarPedido.Instancia.FiltrarPeliculasDisponibles(textoBusqueda);
         }
-
-
-
 
         private void btnVolver_Click(object sender, EventArgs e)
         {
@@ -276,8 +237,8 @@ namespace Vista.Módulo_de_Transacciones
             {
                 MessageBox.Show("Por favor, devuelve las ventas y/o alquileres de la grilla para volver.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-
         }
 
+        #endregion
     }
 }

@@ -1,16 +1,10 @@
 ﻿using Controladora;
 using Controladora.Seguridad;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Vista.Módulo_de_Seguridad
@@ -22,7 +16,7 @@ namespace Vista.Módulo_de_Seguridad
             InitializeComponent();
         }
 
-
+        #region Eventos
 
         private void btnAceptar_Click(object sender, EventArgs e)
         {
@@ -55,7 +49,57 @@ namespace Vista.Módulo_de_Seguridad
             }
         }
 
+        private void btnCancelar_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
 
+        #endregion
+
+        #region Métodos de Validación
+
+        private bool ValidarDatos()
+        {
+            // Verificar que los campos obligatorios estén completos
+            if (string.IsNullOrWhiteSpace(txtUsuario.Text) || string.IsNullOrWhiteSpace(txtEmail.Text))
+            {
+                MessageBox.Show("Por favor, complete todos los campos obligatorios.", "Campos incompletos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            var usuarioValido = ControladoraIniciarSesion.Instancia.Buscar(txtUsuario.Text);
+
+            // Verificar que el usuario exista, esté activo y el email coincida
+            if (usuarioValido == null)
+            {
+                MessageBox.Show("Usuario inválido.", "Datos incorrectos", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            if (usuarioValido.Email != txtEmail.Text)
+            {
+                MessageBox.Show("Email inválido.", "Datos incorrectos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            if (usuarioValido.EstadoUsuario.EstadoUsuarioId == 2)
+            {
+                MessageBox.Show("El usuario no está activo.", "Datos incorrectos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            return true;
+        }
+
+        private void LimpiarCampos()
+        {
+            txtUsuario.Text = "";
+            txtEmail.Text = "";
+        }
+
+        #endregion
+
+        #region Métodos de Generación y Encriptación de Clave
 
         private string GenerarClaveAleatoria(int longitud = 8)
         {
@@ -74,8 +118,6 @@ namespace Vista.Módulo_de_Seguridad
                 return new string(clave);
             }
         }
-
-
 
         private string EncriptarClave(string clave)
         {
@@ -100,7 +142,9 @@ namespace Vista.Módulo_de_Seguridad
             }
         }
 
+        #endregion
 
+        #region Métodos para Envío de Email
 
         private static bool EnviarClavePorEmail(string destinatario, string clave)
         {
@@ -148,52 +192,6 @@ namespace Vista.Módulo_de_Seguridad
             }
         }
 
-
-
-        private bool ValidarDatos()
-        {
-            // Verificar que los campos obligatorios estén completos
-            if (string.IsNullOrWhiteSpace(txtUsuario.Text) || string.IsNullOrWhiteSpace(txtEmail.Text))
-            {
-                MessageBox.Show("Por favor, complete todos los campos obligatorios.", "Campos incompletos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-
-            var usuarioValido = ControladoraIniciarSesion.Instancia.Buscar(txtUsuario.Text);
-
-            // Verificar que el usuario exista, esté activo y el email coincida
-            if (usuarioValido == null)
-            {
-                MessageBox.Show("Usuario inválido.", "Datos incorrectos", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-
-            if (usuarioValido.Email != txtEmail.Text)
-            {
-                MessageBox.Show("Email inválido.", "Datos incorrectos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-
-            if (usuarioValido.EstadoUsuario.EstadoUsuarioId == 2)
-            {
-                MessageBox.Show("El usuario no está activo.", "Datos incorrectos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-
-            return true;
-        }
-
-
-
-        private void LimpiarCampos()
-        {
-            txtUsuario.Text = "";
-            txtEmail.Text = "";
-        }
-
-        private void btnCancelar_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
+        #endregion
     }
 }

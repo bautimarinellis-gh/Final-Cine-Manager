@@ -49,22 +49,26 @@
             btnQuitar = new Button();
             dgvDetalles = new DataGridView();
             peliculaDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-            cantidadDataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
+            detalleOrdenCompraBindingSource1 = new BindingSource(components);
             detalleOrdenCompraBindingSource = new BindingSource(components);
             btnEmitirOrden = new Button();
             btnVolver = new Button();
             ordenCompraBindingSource = new BindingSource(components);
+            label5 = new Label();
+            label4 = new Label();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvPeliculas).BeginInit();
             ((System.ComponentModel.ISupportInitialize)peliculaBindingSource).BeginInit();
             groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvDetalles).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)detalleOrdenCompraBindingSource1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)detalleOrdenCompraBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ordenCompraBindingSource).BeginInit();
             SuspendLayout();
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(label4);
             groupBox1.Controls.Add(btnBuscar);
             groupBox1.Controls.Add(txtBuscar);
             groupBox1.Controls.Add(txtCantidadPeliculas);
@@ -75,7 +79,7 @@
             groupBox1.Controls.Add(dgvPeliculas);
             groupBox1.Location = new Point(12, 12);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(408, 426);
+            groupBox1.Size = new Size(408, 441);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             // 
@@ -115,7 +119,7 @@
             // 
             // btnAgregarDetalle
             // 
-            btnAgregarDetalle.Location = new Point(272, 379);
+            btnAgregarDetalle.Location = new Point(272, 410);
             btnAgregarDetalle.Name = "btnAgregarDetalle";
             btnAgregarDetalle.Size = new Size(102, 23);
             btnAgregarDetalle.TabIndex = 3;
@@ -147,7 +151,7 @@
             dgvPeliculas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvPeliculas.Columns.AddRange(new DataGridViewColumn[] { codigoDataGridViewTextBoxColumn, nombreDataGridViewTextBoxColumn, cantidadDataGridViewTextBoxColumn, precioDataGridViewTextBoxColumn });
             dgvPeliculas.DataSource = peliculaBindingSource;
-            dgvPeliculas.Location = new Point(25, 154);
+            dgvPeliculas.Location = new Point(25, 197);
             dgvPeliculas.Name = "dgvPeliculas";
             dgvPeliculas.RowTemplate.Height = 25;
             dgvPeliculas.Size = new Size(349, 194);
@@ -183,6 +187,7 @@
             // 
             // groupBox2
             // 
+            groupBox2.Controls.Add(label5);
             groupBox2.Controls.Add(label3);
             groupBox2.Controls.Add(txtTotal);
             groupBox2.Controls.Add(btnQuitar);
@@ -224,10 +229,11 @@
             // 
             dgvDetalles.AutoGenerateColumns = false;
             dgvDetalles.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvDetalles.Columns.AddRange(new DataGridViewColumn[] { peliculaDataGridViewTextBoxColumn, cantidadDataGridViewTextBoxColumn1 });
-            dgvDetalles.DataSource = detalleOrdenCompraBindingSource;
-            dgvDetalles.Location = new Point(22, 36);
+            dgvDetalles.Columns.AddRange(new DataGridViewColumn[] { peliculaDataGridViewTextBoxColumn });
+            dgvDetalles.DataSource = detalleOrdenCompraBindingSource1;
+            dgvDetalles.Location = new Point(22, 63);
             dgvDetalles.Name = "dgvDetalles";
+            dgvDetalles.ReadOnly = true;
             dgvDetalles.RowTemplate.Height = 25;
             dgvDetalles.Size = new Size(349, 194);
             dgvDetalles.TabIndex = 1;
@@ -237,12 +243,11 @@
             peliculaDataGridViewTextBoxColumn.DataPropertyName = "Pelicula";
             peliculaDataGridViewTextBoxColumn.HeaderText = "Pelicula";
             peliculaDataGridViewTextBoxColumn.Name = "peliculaDataGridViewTextBoxColumn";
+            peliculaDataGridViewTextBoxColumn.ReadOnly = true;
             // 
-            // cantidadDataGridViewTextBoxColumn1
+            // detalleOrdenCompraBindingSource1
             // 
-            cantidadDataGridViewTextBoxColumn1.DataPropertyName = "Cantidad";
-            cantidadDataGridViewTextBoxColumn1.HeaderText = "Cantidad";
-            cantidadDataGridViewTextBoxColumn1.Name = "cantidadDataGridViewTextBoxColumn1";
+            detalleOrdenCompraBindingSource1.DataSource = typeof(Modelo.Entidades.DetalleOrdenCompra);
             // 
             // detalleOrdenCompraBindingSource
             // 
@@ -272,6 +277,24 @@
             // 
             ordenCompraBindingSource.DataSource = typeof(Modelo.Entidades.OrdenCompra);
             // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(91, 36);
+            label5.Name = "label5";
+            label5.Size = new Size(214, 15);
+            label5.TabIndex = 16;
+            label5.Text = "Grilla de detalles de ordenes de compra";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(130, 163);
+            label4.Name = "label4";
+            label4.Size = new Size(102, 15);
+            label4.TabIndex = 16;
+            label4.Text = "Grilla de peliculas ";
+            // 
             // FormRealizarOrdenCompra
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -290,6 +313,7 @@
             groupBox2.ResumeLayout(false);
             groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvDetalles).EndInit();
+            ((System.ComponentModel.ISupportInitialize)detalleOrdenCompraBindingSource1).EndInit();
             ((System.ComponentModel.ISupportInitialize)detalleOrdenCompraBindingSource).EndInit();
             ((System.ComponentModel.ISupportInitialize)ordenCompraBindingSource).EndInit();
             ResumeLayout(false);
@@ -322,5 +346,8 @@
         private DataGridViewTextBoxColumn cantidadDataGridViewTextBoxColumn1;
         private BindingSource detalleOrdenCompraBindingSource;
         private BindingSource ordenCompraBindingSource;
+        private BindingSource detalleOrdenCompraBindingSource1;
+        private Label label5;
+        private Label label4;
     }
 }

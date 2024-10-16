@@ -6,25 +6,21 @@ using System.Threading.Tasks;
 
 namespace Modelo.Entidades.EstadosOrdenesCompra
 {
-    public class EstadoCancelada:IOrdenCompraState
+    public class EstadoCerradaConFaltante:IOrdenCompraState
     {
         public void Pagar(OrdenCompra orden)
         {
-            throw new InvalidOperationException("No puedes pagar una orden cancelada.");
+            throw new InvalidOperationException("No puedes pagar una orden cerrada con faltante.");
         }
-
-
 
         public void Cancelar(OrdenCompra orden)
         {
-            throw new InvalidOperationException("La orden ya ha sido cancelada.");
+            throw new InvalidOperationException("No se puede cancelar una orden que ya fue cerrada con faltante.");
         }
-
-
 
         public void Cerrar(OrdenCompra orden)
         {
-            throw new InvalidOperationException("No se puede cerrar una orden cancelada.");
+            throw new InvalidOperationException("La orden ya está cerrada.");
         }
     }
 }

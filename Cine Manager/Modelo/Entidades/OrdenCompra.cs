@@ -83,48 +83,15 @@ namespace Modelo.Entidades
             }
         }
 
-        // Método para obtener el nombre del estado actual
-        private string ObtenerNombreEstado(IOrdenCompraState estado)
-        {
-            if (estado is EstadoCompletada)
-                return "Completada";
-            else if (estado is EstadoPendiente)
-                return "Pendiente";
-            else if (estado is EstadoCancelada)
-                return "Cancelada";
-            else if (estado is EstadoParcialmenteCompletada)
-                return "Parcialmente Completada";
-            else
-                return "Desconocido"; // O un valor por defecto
-        }
 
-        public IOrdenCompraState AsignarEstado(string estado)
-        {
-            switch (estado)
-            {
-                case "Completada":
-                    return new EstadoCompletada();
-                case "Pendiente":
-                    return new EstadoPendiente();
-                case "Cancelada":
-                    return new EstadoCancelada();
-                case "Parcialmente Completada":
-                    return new EstadoParcialmenteCompletada();
-                default:
-                    throw new InvalidOperationException("Estado desconocido");
-            }
-        }
 
         public OrdenCompra()
         {
             detallesOrdenesCompra = new List<DetalleOrdenCompra>();
-            total = 0;
-            estadoActual = new EstadoPendiente(); // Por defecto, el estado es "Pendiente"
-            estado = "Pendiente";
         }
 
 
-
+        // Métodos públicos para cambiar el estado de la orden
         public void Pagar()
         {
             EstadoActual.Pagar(this);
@@ -139,20 +106,28 @@ namespace Modelo.Entidades
 
 
 
-        public bool TodosLosDetallesPagos()
+        public void Cerrar()
         {
-            return detallesOrdenesCompra.All(detalle => detalle.Estado == true); 
+            EstadoActual.Cerrar(this);
         }
 
 
 
-        public bool AlgunosDetallesPagos()
+        // Métodos auxiliares para verificar el estado de los detalles
+        public bool TodosLosDetallesEntregados()
         {
-            return detallesOrdenesCompra.Any(detalle => detalle.Estado == true) && detallesOrdenesCompra.Any(detalle => detalle.Estado == false);
+            return detallesOrdenesCompra.All(detalle => detalle.Estado == true); // Asume que "Estado" es un booleano
         }
 
 
 
+        public bool HayItemsEnDetalle()
+        {
+            return detallesOrdenesCompra.Any(detalle => detalle.CantidadEntregada > 0);
+
+        }
+
+        // Cambiar el estado actual de la orden
         public void CambiarEstado(IOrdenCompraState nuevoEstado)
         {
             EstadoActual = nuevoEstado;
@@ -160,12 +135,49 @@ namespace Modelo.Entidades
 
 
 
+        private string ObtenerNombreEstado(IOrdenCompraState estado)
+        {
+            if (estado is EstadoCompletada)
+                return "Completada";
+            else if (estado is EstadoPendiente)
+                return "Pendiente";
+            else if (estado is EstadoCancelada)
+                return "Cancelada";
+            else if (estado is EstadoParcialmenteCompletada)
+                return "Parcialmente Completada";
+            else if (estado is EstadoCerradaConFaltante)
+                return "Cerrada Con Faltante";
+            else
+                return "Desconocido"; 
+        }
+
+
+
+        public IOrdenCompraState AsignarEstado(string estado)
+        {
+            switch (estado)
+            {
+                case "Completada":
+                    return new EstadoCompletada();
+                case "Pendiente":
+                    return new EstadoPendiente();
+                case "Cancelada":
+                    return new EstadoCancelada();
+                case "Parcialmente Completada":
+                    return new EstadoParcialmenteCompletada();
+                case "Cerrada Con Faltante":
+                    return new EstadoCerradaConFaltante();
+                default:
+                    throw new InvalidOperationException("Estado desconocido");
+            }
+        }
+
 
 
         public string AgregarDetalle(DetalleOrdenCompra detalle)
         {
             // Calcular el subtotal basado en la cantidad de películas y el precio por unidad
-            decimal subtotal = detalle.Pelicula.Precio * detalle.Cantidad;
+            decimal subtotal = detalle.Pelicula.Precio * detalle.CantidadOrdenada;
 
             // Agregar el detalle a la lista de detalles de la orden de compra
             detallesOrdenesCompra.Add(detalle);
@@ -191,7 +203,7 @@ namespace Modelo.Entidades
             }
 
             // Calcular el subtotal del detalle que se eliminará
-            decimal subtotal = detalleExistente.Pelicula.Precio * detalleExistente.Cantidad;
+            decimal subtotal = detalleExistente.Pelicula.Precio * detalleExistente.CantidadOrdenada;
 
             // Restar el subtotal del total de la orden
             Total -= subtotal;

@@ -5,56 +5,49 @@ using Modelo.Entidades;
 using Modelo.Módulo_de_Seguridad;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Vista.Módulo_de_Administración;
 using Vista.Módulo_de_Transacciones;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Vista.Módulo_de_Seguridad
 {
     public partial class FormAgregarGrupo : Form
     {
+
         private Grupo grupo;
         private bool modificar = false;
 
 
-        //Constructor Agregar
+        #region Constructores
+
+        // Constructor Agregar
         public FormAgregarGrupo()
         {
             InitializeComponent();
-
-            var estados = ControladoraGestionarGrupos.Instancia.ObtenerEstadosGrupos();
-
-            this.grupo = new Grupo();
-
-            // Configurar el ComboBox
-            cmbEstado.DataSource = estados;
-            cmbEstado.DisplayMember = "EstadoGrupoNombre"; // Muestra el nombre del estado
-            cmbEstado.ValueMember = "EstadoGrupoId"; // Usa el ID del estado para la selección
-
-            // Seleccionar el primer estado como predeterminado
-            cmbEstado.SelectedIndex = 0;
-
+            InicializarFormulario();
         }
 
-
-
-        //Constructor Modificar
+        // Constructor Modificar
         public FormAgregarGrupo(Grupo grupoSeleccionado)
         {
             InitializeComponent();
+            this.grupo = grupoSeleccionado; // Asignar el grupo seleccionado a la variable de instancia
+            CargarDatosGrupo(); // Cargar los datos correctamente
+            InicializarFormulario();
+            txtCodigo.Enabled = false;
+            modificar = true;
+        }
 
-            this.grupo = grupoSeleccionado; // Asignar el grupo seleccionado a la variable de instancia antes de cargar los datos
+        #endregion
 
-            CargarDatosGrupo(); // Ahora puedes cargar los datos correctamente
 
+
+        #region Métodos de Inicialización
+
+        private void InicializarFormulario()
+        {
             var estados = ControladoraGestionarGrupos.Instancia.ObtenerEstadosGrupos();
 
             // Configurar el ComboBox
@@ -64,12 +57,13 @@ namespace Vista.Módulo_de_Seguridad
 
             // Seleccionar el primer estado como predeterminado
             cmbEstado.SelectedIndex = 0;
-            txtCodigo.Enabled = false;
-            modificar = true;
-
         }
 
+        #endregion
 
+
+
+        #region Métodos de Eventos
 
         private void btnGuardar_Click_1(object sender, EventArgs e)
         {
@@ -97,6 +91,23 @@ namespace Vista.Módulo_de_Seguridad
         }
 
 
+
+        private void btnCancelar_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        #endregion
+
+
+        #region Métodos Privados
 
         private List<Componente> ObtenerAccionesSeleccionadas()
         {
@@ -168,7 +179,6 @@ namespace Vista.Módulo_de_Seguridad
                             nodoAccion.Checked = true;
                         }
                     }
-
                 }
             }
         }
@@ -183,7 +193,6 @@ namespace Vista.Módulo_de_Seguridad
             cmbEstado.SelectedItem = grupo.EstadoGrupo;
 
             CargarAccionesGrupo();
-
         }
 
 
@@ -204,18 +213,6 @@ namespace Vista.Módulo_de_Seguridad
             return true;
         }
 
-
-
-        private void btnCancelar_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
+        #endregion
     }
 }

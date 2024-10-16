@@ -5,12 +5,7 @@ using Modelo.Entidades.EstadosOrdenesCompra;
 using Modelo.Módulo_de_Seguridad;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Vista.Módulo_de_Administración;
 
@@ -18,8 +13,13 @@ namespace Vista.Módulo_de_Compras
 {
     public partial class FormOrdenesCompra : Form
     {
+        #region Atributos
         private Sesion _sesion;
+        #endregion
 
+
+
+        #region Constructor
         public FormOrdenesCompra(Sesion sesion)
         {
             InitializeComponent();
@@ -30,16 +30,21 @@ namespace Vista.Módulo_de_Compras
 
             ActualizarGrilla();
         }
+        #endregion
 
 
+
+        #region Métodos Privados
         private void ActualizarGrilla()
         {
             dgvOrdenesCompra.DataSource = null;
             dgvOrdenesCompra.DataSource = ControladoraGestionarOrdenesCompra.Instancia.RecuperarOrdenesCompra();
         }
+        #endregion
 
 
 
+        #region Eventos
         private void btnRealizarOrden_Click(object sender, EventArgs e)
         {
             var formRealizarOrden = new FormRealizarOrdenCompra(_sesion);
@@ -49,10 +54,8 @@ namespace Vista.Módulo_de_Compras
         }
 
 
-
         private void btnInformacion_Click(object sender, EventArgs e)
         {
-
             if (dgvOrdenesCompra.SelectedRows.Count > 0)
             {
                 var ordenCompraSeleccionada = dgvOrdenesCompra.SelectedRows[0].DataBoundItem as OrdenCompra;
@@ -64,6 +67,13 @@ namespace Vista.Módulo_de_Compras
                     return;
                 }
 
+                // Verificar si la orden está cerrada con faltante
+                if (ordenCompraSeleccionada.Estado == "Cerrada Con Faltante")
+                {
+                    MessageBox.Show("Estás por abrir una orden de compra que ya ha sido cerrada. No podrás realizar entregas en esta orden.", "Orden Cerrada", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+
+                // Mostrar el formulario de detalles
                 var formDetallesOrdenCompra = new FormDetallesOrdenesCompra(ordenCompraSeleccionada);
                 formDetallesOrdenCompra.ShowDialog();
                 ActualizarGrilla();
@@ -74,6 +84,34 @@ namespace Vista.Módulo_de_Compras
             }
         }
 
+
+
+        private void btnCerrar_Click(object sender, EventArgs e)
+        {
+            if (dgvOrdenesCompra.SelectedRows.Count > 0)
+            {
+                var ordenSeleccionada = (OrdenCompra)dgvOrdenesCompra.SelectedRows[0].DataBoundItem;
+
+                var confirmResult = MessageBox.Show(
+                    "¿Estás seguro que deseas cerrar esta orden de compra? No podrás entregar más detalles.",
+                    "Confirmar Cierre",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+
+                // Si el usuario confirma
+                if (confirmResult == DialogResult.Yes)
+                {
+                    var mensaje = ControladoraGestionarOrdenesCompra.Instancia.CerrarOrdenCompra(ordenSeleccionada);
+
+                    MessageBox.Show(mensaje, "Resultado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ActualizarGrilla();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Seleccione una orden de compra para cerrar.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
 
 
 
@@ -96,7 +134,7 @@ namespace Vista.Módulo_de_Compras
                     var mensaje = ControladoraGestionarOrdenesCompra.Instancia.CancelarOrdenCompra(ordenSeleccionada);
 
                     MessageBox.Show(mensaje, "Cancelación Exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    ActualizarGrilla();  // Actualiza el DataGridView para reflejar los cambios
+                    ActualizarGrilla();
                 }
             }
             else
@@ -111,7 +149,6 @@ namespace Vista.Módulo_de_Compras
         {
             string textoBusqueda = txtBuscar.Text.Trim();
             dgvOrdenesCompra.DataSource = ControladoraGestionarOrdenesCompra.Instancia.FiltrarOrdenesCompra(textoBusqueda);
-
         }
 
 
@@ -132,39 +169,45 @@ namespace Vista.Módulo_de_Compras
             {
                 dgvOrdenesCompra.DataSource = null;
                 dgvOrdenesCompra.DataSource = todasLasOrdenes
-                    .Where(o => o.Estado == "Pendiente") // Filtrar por estado
+                    .Where(o => o.Estado == "Pendiente")
                     .ToList();
             }
             else if (estadoSeleccionado == "Completadas")
             {
                 dgvOrdenesCompra.DataSource = null;
                 dgvOrdenesCompra.DataSource = todasLasOrdenes
-                    .Where(o => o.Estado == "Completada") // Filtrar por estado
+                    .Where(o => o.Estado == "Completada")
                     .ToList();
             }
             else if (estadoSeleccionado == "Canceladas")
             {
                 dgvOrdenesCompra.DataSource = null;
                 dgvOrdenesCompra.DataSource = todasLasOrdenes
-                    .Where(o => o.Estado == "Cancelada") // Filtrar por estado
+                    .Where(o => o.Estado == "Cancelada")
                     .ToList();
             }
             else if (estadoSeleccionado == "Parcialmente Completadas")
             {
                 dgvOrdenesCompra.DataSource = null;
                 dgvOrdenesCompra.DataSource = todasLasOrdenes
-                    .Where(o => o.Estado == "Parcialmente Completada") // Filtrar por estado
+                    .Where(o => o.Estado == "Parcialmente Completada")
+                    .ToList();
+            }
+            else if (estadoSeleccionado == "Cerradas Con Faltante")
+            {
+                dgvOrdenesCompra.DataSource = null;
+                dgvOrdenesCompra.DataSource = todasLasOrdenes
+                    .Where(o => o.Estado == "Cerrada Con Faltante")
                     .ToList();
             }
         }
 
 
-      
-        
 
         private void btnVolver_Click(object sender, EventArgs e)
         {
             this.Close();
         }
+        #endregion
     }
 }

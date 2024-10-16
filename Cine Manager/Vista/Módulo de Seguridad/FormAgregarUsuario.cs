@@ -23,7 +23,7 @@ namespace Vista.Módulo_de_Seguridad
         private Usuario usuario;
         private bool modificar;
 
-
+        #region Constructores
 
         //Constructor Agregar
         public FormAgregarUsuario()
@@ -45,7 +45,6 @@ namespace Vista.Módulo_de_Seguridad
             CargarGruposEnCheckedListBox();
         }
 
-
         //Constructor Modificar
         public FormAgregarUsuario(Usuario usuarioSeleccionado)
         {
@@ -65,7 +64,11 @@ namespace Vista.Módulo_de_Seguridad
             CargarDatosUsuario();
         }
 
+        #endregion
 
+
+
+        #region  Eventos
 
         private void btnGuardar_Click_1(object sender, EventArgs e)
         {
@@ -122,7 +125,26 @@ namespace Vista.Módulo_de_Seguridad
             Close();
         }
 
+        private void btnCancelar_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        #endregion
+
+
+
+        #region Métodos Privados
 
         private List<Grupo> ObtenerGruposSeleccionados()
         {
@@ -141,8 +163,6 @@ namespace Vista.Módulo_de_Seguridad
 
             return gruposSeleccionados;
         }
-
-
 
         private List<Accion> ObtenerAccionesPersonalizadas()
         {
@@ -173,13 +193,10 @@ namespace Vista.Módulo_de_Seguridad
                         }
                     }
                 }
-
             }
 
             return accionesSeleccionadas;
         }
-
-
 
         private bool ValidarDatos()
         {
@@ -207,8 +224,6 @@ namespace Vista.Módulo_de_Seguridad
             return true;
         }
 
-
-
         private string GenerarClaveAleatoria(int longitud = 8)
         {
             const string caracteres = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -222,8 +237,6 @@ namespace Vista.Módulo_de_Seguridad
 
             return new string(clave);
         }
-
-
 
         private string EncriptarClave(string clave)
         {
@@ -247,8 +260,6 @@ namespace Vista.Módulo_de_Seguridad
                 return claveEncriptada.ToString();
             }
         }
-
-
 
         private static bool EnviarClavePorEmail(string destinatario, string clave)
         {
@@ -278,145 +289,81 @@ namespace Vista.Módulo_de_Seguridad
                     cliente.Send(mensaje);
                 }
 
-                // Si el envío fue exitoso, retornar true
-                return true;
-            }
-            catch (SmtpException ex)
-            {
-                // Captura de excepciones específicas de SMTP (errores relacionados con el envío de correo)
-                MessageBox.Show($"Error al enviar el email:\n{ex.Message}\n" +
-                                "Verifica tus credenciales de Gmail, la configuración del servidor SMTP o si has habilitado el acceso para aplicaciones menos seguras.");
-                return false; // Retornar false si ocurre un error durante el envío del correo
+                return true; // Retornar true si el envío fue exitoso
             }
             catch (Exception ex)
             {
-                // Captura de cualquier otra excepción no relacionada con SMTP
-                MessageBox.Show($"Error inesperado al enviar el email:\n{ex.Message}");
-                return false; // Retornar false en caso de otro tipo de error
+                // Manejo de excepciones: se puede registrar el error o mostrar un mensaje según sea necesario
+                Debug.WriteLine($"Error al enviar el correo: {ex.Message}");
+                return false; // Retornar false si ocurrió un error durante el envío
             }
         }
-
-
 
         private void CargarGruposEnCheckedListBox()
         {
-            // Limpiar cualquier elemento previo en el CheckedListBox
+            // Obtiene la lista de grupos disponibles y los agrega al CheckedListBox
+            var grupos = ControladoraGestionarGrupos.Instancia.RecuperarGrupos();
             clbGrupos.Items.Clear();
 
-            // Obtener todos los grupos del sistema
-            var todosLosGrupos = ControladoraGestionarGrupos.Instancia.RecuperarGrupos();
-
-            // Agregar cada grupo al CheckedListBox sin marcar
-            foreach (var grupo in todosLosGrupos)
+            foreach (var grupo in grupos)
             {
-                clbGrupos.Items.Add(grupo.Nombre, false);
+                clbGrupos.Items.Add(grupo.Nombre);
             }
         }
-
-
-
-        private void CargarGruposUsuario()
-        {
-            // Obtener todos los grupos del sistema
-            var todosLosGrupos = ControladoraGestionarGrupos.Instancia.RecuperarGrupos();
-
-            // Obtener los IDs de los grupos asignados al usuario desde la base de datos
-            var gruposAsignados = ControladoraGestionarGrupos.Instancia.ObtenerGruposUsuario(usuario.UsuarioId)
-                                   .Select(g => g.Id)
-                                   .ToList();
-
-
-
-            // Recorrer todos los grupos y marcar los que están asignados al usuario
-            foreach (var grupo in todosLosGrupos)
-            {
-                // Añadir el nombre del grupo al CheckedListBox y obtener su índice
-                int index = clbGrupos.Items.Add(grupo.Nombre);
-
-                // Verificar si el grupo está asignado al usuario
-                bool isChecked = gruposAsignados.Contains(grupo.Id);
-
-
-
-                // Marcar el grupo en el CheckedListBox si está asignado al usuario
-                clbGrupos.SetItemChecked(index, isChecked);
-            }
-        }
-
-
-
-        private void CargarAccionesUsuario()
-        {
-            // Obtener los nombres de las acciones asignadas al usuario desde la base de datos
-            var accionesAsignadas = ControladoraAcciones.Instancia.ObtenerAccionesUsuario(usuario).Select(a => a.Nombre).ToList();
-
-            // Recorrer cada nodo en el TreeView 
-            foreach (TreeNode nodoCategoria in treeAcciones.Nodes)
-            {
-                // Recorrer cada subnodo dentro de la categoría
-                foreach (TreeNode nodoAccion in nodoCategoria.Nodes)
-                {
-                    // Verificar que el Tag no sea nulo y que sea de tipo string
-                    if (nodoAccion.Tag is string nombreAccion)
-                    {
-                        // Si la acción está asignada al usuario, marcarla como seleccionada
-                        if (accionesAsignadas.Contains(nombreAccion))
-                        {
-                            nodoAccion.Checked = true;
-                        }
-                    }
-
-                }
-            }
-        }
-
-
 
         private void CargarDatosUsuario()
         {
-
             txtUsuario.Text = usuario.NombreUsuario;
             txtNombre.Text = usuario.Nombre;
             txtApellido.Text = usuario.Apellido;
             txtEmail.Text = usuario.Email;
-            cmbEstado.SelectedItem = usuario.EstadoUsuario;
 
-            // Cargar los grupos del usuario
-            CargarGruposUsuario();
+            // Establecer el estado del usuario
+            cmbEstado.SelectedValue = usuario.EstadoUsuario.EstadoUsuarioId;
 
-            CargarAccionesUsuario();
+            // Cargar los grupos y acciones asignadas
+            foreach (var grupo in usuario.Componentes.OfType<Grupo>())
+            {
+                int index = clbGrupos.Items.IndexOf(grupo.Nombre);
+                if (index != -1)
+                {
+                    clbGrupos.SetItemChecked(index, true); // Marcar el grupo como seleccionado
+                }
+            }
+
+            // Cargar acciones personalizadas en el TreeView
+            foreach (var accion in usuario.Componentes.OfType<Accion>())
+            {
+                foreach (TreeNode nodo in treeAcciones.Nodes)
+                {
+                    if (nodo.Text == accion.Nombre)
+                    {
+                        nodo.Checked = true; // Marcar la acción como seleccionada
+                    }
+                }
+            }
         }
-
-
 
         private void LimpiarCampos()
         {
             txtUsuario.Clear();
             txtNombre.Clear();
+            txtApellido.Clear();
             txtEmail.Clear();
-            cmbEstado.SelectedIndex = 1;
+            cmbEstado.SelectedIndex = 0;
+
+            // Desmarcar grupos y acciones en el CheckedListBox y TreeView
+            for (int i = 0; i < clbGrupos.Items.Count; i++)
+            {
+                clbGrupos.SetItemChecked(i, false);
+            }
+
+            foreach (TreeNode nodo in treeAcciones.Nodes)
+            {
+                nodo.Checked = false; // Desmarcar acciones
+            }
         }
 
-
-
-
-        private void btnCancelar_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
+        #endregion
     }
 }

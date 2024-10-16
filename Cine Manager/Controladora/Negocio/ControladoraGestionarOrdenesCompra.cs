@@ -96,6 +96,37 @@ namespace Controladora.Negocio
 
 
 
+        public string CerrarOrdenCompra(OrdenCompra ordenCompra)
+        {
+            try
+            {
+
+                var ordenExistente = Buscar(ordenCompra.Codigo);
+
+                if (ordenExistente == null)
+                {
+                    return "Orden de compra inexistente";
+                }
+
+
+                // Cambiar el estado de la orden
+                ordenExistente.Cerrar();
+                ordenExistente.CambiarEstado(new EstadoCerradaConFaltante());
+
+                // Actualizar la orden en el contexto
+                context.OrdenesCompra.Update(ordenExistente);
+                context.SaveChanges();
+
+                return "La orden de compra ha sido cerrada correctamente.";
+            }
+            catch (Exception ex)
+            {
+                return $"Error al cerrar la orden de compra: {ex.Message}";
+            }
+        }
+
+
+
         public string CancelarOrdenCompra(OrdenCompra ordenCompra)
         {
             try

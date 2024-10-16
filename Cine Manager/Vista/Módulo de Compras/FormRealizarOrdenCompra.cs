@@ -20,21 +20,22 @@ namespace Vista.Módulo_de_Compras
         private Sesion _sesion;
         private OrdenCompra ordenActual;
 
+
+
         public FormRealizarOrdenCompra(Sesion sesion)
         {
             InitializeComponent();
             _sesion = sesion;
-
             ordenActual = new OrdenCompra();
-
             dgvPeliculas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvDetalles.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-
             ActualizarGrilla();
             LlenarComboBox();
         }
 
 
+
+        #region Métodos Privados
         private void ActualizarGrilla()
         {
             dgvPeliculas.DataSource = null;
@@ -46,6 +47,66 @@ namespace Vista.Módulo_de_Compras
 
 
 
+        private void LlenarComboBox()
+        {
+            cmbProveedores.DataSource = ControladoraGestionarProveedores.Instancia.RecuperarProveedores();
+            cmbProveedores.DisplayMember = "Codigo";
+        }
+
+
+
+        private bool ValidarDatos()
+        {
+            if (cmbProveedores.SelectedIndex == -1)
+            {
+                MessageBox.Show("Debe seleccionar un proveedor antes de agregar un detalle a la orden de compra.", "Error de Validación", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(txtCantidadPeliculas.Text))
+            {
+                MessageBox.Show("El campo de cantidad no puede estar vacío.", "Error de Validación", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            if (!int.TryParse(txtCantidadPeliculas.Text, out int cantidad))
+            {
+                MessageBox.Show("Debe ingresar un número válido en la cantidad.", "Error de Validación", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            if (cantidad <= 0 || cantidad > 100)
+            {
+                MessageBox.Show("La cantidad debe ser mayor que 0 y menor o igual a 100.", "Error de Validación", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            return true;
+        }
+
+
+
+        private bool ValidarDatosEmitirOrden()
+        {
+            if (dgvDetalles.Rows.Count == 0)
+            {
+                MessageBox.Show("No hay peliculas para confirmar la compra.");
+                return false;
+            }
+            return true;
+        }
+
+
+
+        private string CodigoOrdenUnico()
+        {
+            return Guid.NewGuid().ToString();
+        }
+        #endregion
+
+
+
+        #region Eventos de Botones
         private void btnAgregarDetalle_Click(object sender, EventArgs e)
         {
             if (dgvPeliculas.SelectedRows.Count > 0)
@@ -60,7 +121,8 @@ namespace Vista.Módulo_de_Compras
                 DetalleOrdenCompra detalleOrdenCompra = new DetalleOrdenCompra
                 {
                     Pelicula = peliculaSeleccionada,
-                    Cantidad = int.Parse(txtCantidadPeliculas.Text),
+                    CantidadOrdenada = int.Parse(txtCantidadPeliculas.Text),
+                    Subtotal = int.Parse(txtCantidadPeliculas.Text) * peliculaSeleccionada.Precio, // Calcular el subtotal
                 };
 
                 // Agregar el detalle a la orden actual
@@ -86,21 +148,13 @@ namespace Vista.Módulo_de_Compras
         {
             if (dgvDetalles.SelectedRows.Count > 0)
             {
-                if (dgvDetalles.SelectedRows.Count > 0)
-                {
-                    DetalleOrdenCompra detalleSeleccionado = (DetalleOrdenCompra)dgvDetalles.SelectedRows[0].DataBoundItem;
+                DetalleOrdenCompra detalleSeleccionado = (DetalleOrdenCompra)dgvDetalles.SelectedRows[0].DataBoundItem;
 
-                    string mensaje;
+                string mensaje = ordenActual.EliminarDetalle(detalleSeleccionado);
 
-                    mensaje = ordenActual.EliminarDetalle(detalleSeleccionado);
-
-
-                    MessageBox.Show(mensaje);
-                    txtTotal.Text = ordenActual.Total.ToString();
-
-                    ActualizarGrilla();
-                }
-
+                MessageBox.Show(mensaje);
+                txtTotal.Text = ordenActual.Total.ToString();
+                ActualizarGrilla();
             }
             else
             {
@@ -137,20 +191,15 @@ namespace Vista.Módulo_de_Compras
                 MessageBox.Show(mensaje);
 
                 ordenActual.LimpiarDetalles();
-
                 ActualizarGrilla();
-
                 txtTotal.Text = ordenActual.Total.ToString();
-
-
             }
             else if (eleccion == DialogResult.No)
             {
                 MessageBox.Show("Orden de compra cancelada");
             }
-
-
         }
+
 
 
         private void btnBuscar_Click(object sender, EventArgs e)
@@ -161,63 +210,10 @@ namespace Vista.Módulo_de_Compras
 
 
 
-        private bool ValidarDatos()
-        {
-            if (string.IsNullOrEmpty(txtCantidadPeliculas.Text))
-            {
-                MessageBox.Show("El campo de cantidad no puede estar vacío.", "Error de Validación", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-
-            if (!int.TryParse(txtCantidadPeliculas.Text, out int cantidad))
-            {
-                MessageBox.Show("Debe ingresar un número válido en la cantidad.", "Error de Validación", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-
-            if (cantidad <= 0 || cantidad > 100)
-            {
-                MessageBox.Show("La cantidad debe ser mayor que 0 y menor o igual a 100.", "Error de Validación", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-
-            return true;
-        }
-
-
-
-        private bool ValidarDatosEmitirOrden()
-        {
-            if (dgvDetalles.Rows.Count == 0)
-            {
-                MessageBox.Show("No hay peliculas para confirmar la compra.");
-                return false;
-            }
-            return true;
-        }
-
-
-
-
-        private string CodigoOrdenUnico()
-        {
-            return Guid.NewGuid().ToString();
-        }
-
-
-
-        private void LlenarComboBox()
-        {
-            cmbProveedores.DataSource = ControladoraGestionarProveedores.Instancia.RecuperarProveedores();
-            cmbProveedores.DisplayMember = "Codigo";
-        }
-
-
-
         private void btnVolver_Click(object sender, EventArgs e)
         {
             this.Close();
         }
-
+        #endregion
     }
 }

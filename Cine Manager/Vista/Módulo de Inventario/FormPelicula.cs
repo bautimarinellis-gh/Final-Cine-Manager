@@ -16,16 +16,15 @@ namespace Vista
 {
     public partial class FormPelicula : Form
     {
-
         private Pelicula pelicula;
         private bool modificar = false;
 
+        #region Constructores
 
-        //Constructor Agregar
+        // Constructor Agregar
         public FormPelicula()
         {
             InitializeComponent();
-
             dgvActoresDisponibles.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvActoresAsignados.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             this.pelicula = new Pelicula();
@@ -33,39 +32,23 @@ namespace Vista
             ActualizarGrilla();
         }
 
-
-
-
-        //Constructor Modificar
+        // Constructor Modificar
         public FormPelicula(Pelicula peliculaSeleccionada)
         {
             InitializeComponent();
             this.pelicula = ControladoraGestionarPeliculas.Instancia.CargarPeliculaConRelaciones(peliculaSeleccionada.Codigo);
-
             LlenarComboBox();
             CargarDatosPelicula();
             txtCodigo.Enabled = false;
             modificar = true;
-
             ActualizarGrilla();
-
         }
 
+        #endregion
 
 
 
-
-        private void ActualizarGrilla()
-        {
-
-            dgvActoresDisponibles.DataSource = null;
-            dgvActoresDisponibles.DataSource = ControladoraGestionarActores.Instancia.RecuperarActores();
-
-            dgvActoresAsignados.DataSource = null;
-            dgvActoresAsignados.DataSource = pelicula.Reparto.ToList();
-        }
-
-
+        #region Métodos de Manejo de Eventos
 
         private void btnAceptar_Click(object sender, EventArgs e)
         {
@@ -78,7 +61,6 @@ namespace Vista
                 pelicula.GeneroCinematografico = generoSeleccionado;
                 pelicula.Codigo = txtCodigo.Text;
                 pelicula.Nombre = txtNombre.Text;
-                /*pelicula.Cantidad = (int)numCantidad.Value;*/
                 pelicula.Precio = (int)numPrecio.Value;
 
                 string mensaje;
@@ -94,18 +76,13 @@ namespace Vista
                 MessageBox.Show(mensaje, "Información Peliculas", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
             }
-
         }
-
-
-
 
         private void btnAsignarActor_Click(object sender, EventArgs e)
         {
             if (dgvActoresDisponibles.CurrentRow != null)
             {
                 var actorAsignado = (Actor)dgvActoresDisponibles.CurrentRow.DataBoundItem;
-
                 bool actorYaExiste = pelicula.Reparto.Any(p => p.Codigo == actorAsignado.Codigo);
 
                 if (!actorYaExiste)
@@ -125,22 +102,16 @@ namespace Vista
             }
         }
 
-
-
-
         private void btnEliminarActor_Click(object sender, EventArgs e)
         {
             if (dgvActoresAsignados.Rows.Count > 0)
             {
                 var actorEliminado = (Actor)dgvActoresAsignados.CurrentRow.DataBoundItem;
-
-                // Verificar si el proveedor a eliminar está en la lista de proveedores de la película
                 if (pelicula.Reparto.Contains(actorEliminado))
                 {
                     pelicula.Reparto.Remove(actorEliminado);
                     ActualizarGrilla();
-                    MessageBox.Show("Actor elimnado correctamente.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+                    MessageBox.Show("Actor eliminado correctamente.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
@@ -150,12 +121,45 @@ namespace Vista
             else
             {
                 MessageBox.Show("Por favor, seleccione un actor.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
             }
         }
 
+        private void btnCancelar_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        #endregion
 
 
+
+        #region Métodos de Actualización de Datos
+
+        private void ActualizarGrilla()
+        {
+            dgvActoresDisponibles.DataSource = null;
+            dgvActoresDisponibles.DataSource = ControladoraGestionarActores.Instancia.RecuperarActores();
+
+            dgvActoresAsignados.DataSource = null;
+            dgvActoresAsignados.DataSource = pelicula.Reparto.ToList();
+        }
+
+        private void CargarDatosPelicula()
+        {
+            txtCodigo.Text = pelicula.Codigo;
+            txtNombre.Text = pelicula.Nombre;
+            numPrecio.Value = pelicula.Precio;
+            cmbDirector.SelectedItem = pelicula.Director;
+            cmbGenero.SelectedItem = pelicula.GeneroCinematografico;
+
+            dgvActoresAsignados.DataSource = pelicula.Reparto.ToList();
+        }
+
+        #endregion
+
+
+
+        #region Métodos de Validación
 
         private bool ValidarDatos()
         {
@@ -185,9 +189,7 @@ namespace Vista
                 return false;
             }
 
-
-            // Validar que la película tenga al menos un proveedor
-            if (this.dgvActoresAsignados == null || this.dgvActoresAsignados.Rows.Count == 0)
+            if (this.dgvActoresAsignados.Rows.Count == 0)
             {
                 MessageBox.Show("Debe asignar al menos un actor a la película", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
@@ -195,23 +197,11 @@ namespace Vista
             return true;
         }
 
+        #endregion
 
 
 
-        private void CargarDatosPelicula()
-        {
-            txtCodigo.Text = pelicula.Codigo;
-            txtNombre.Text = pelicula.Nombre;
-            numPrecio.Value = pelicula.Precio;
-            cmbDirector.SelectedItem = pelicula.Director;
-            cmbGenero.SelectedItem = pelicula.GeneroCinematografico;
-
-            // Cargar los actores asignados a la película
-            dgvActoresAsignados.DataSource = pelicula.Reparto.ToList();
-        }
-
-
-
+        #region Métodos de Carga de Datos
 
         private void LlenarComboBox()
         {
@@ -222,12 +212,6 @@ namespace Vista
             cmbGenero.DisplayMember = "Nombre";
         }
 
-
-
-
-        private void btnCancelar_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
+        #endregion
     }
 }

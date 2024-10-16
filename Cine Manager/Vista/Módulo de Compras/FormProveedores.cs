@@ -16,7 +16,10 @@ namespace Vista
 {
     public partial class FormProveedores : Form
     {
+
         private Sesion _sesion;
+
+
 
         public FormProveedores(Sesion sesion)
         {
@@ -27,7 +30,7 @@ namespace Vista
         }
 
 
-
+        #region Métodos Privados
 
         private void ActualizarGrilla()
         {
@@ -37,6 +40,105 @@ namespace Vista
 
 
 
+        private void LimpiarDetalles()
+        {
+            txtCodigo.Text = "";
+            numCUIT.Text = "";
+            txtRazonSocial.Text = "";
+        }
+
+
+
+        private bool ValidarDatos()
+        {
+            if (string.IsNullOrEmpty(this.txtCodigo.Text))
+            {
+                MessageBox.Show("Debe ingresar el código", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(this.txtRazonSocial.Text))
+            {
+                MessageBox.Show("Debe ingresar la razón social del proveedor", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            string cuitString = this.numCUIT.Text;
+
+            if (!Regex.IsMatch(cuitString, @"^\d{2}-\d{8}-\d$"))
+            {
+                MessageBox.Show("El CUIT ingresado no es válido. El formato correcto es: XX-XXXXXXXX-X (por ejemplo: 20-30123456-2)", "Error de formato", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            if (!Regex.IsMatch(cuitString.Replace("-", ""), @"^\d+$"))
+            {
+                MessageBox.Show("El CUIT debe contener solo números.", "Error de formato", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            long cuit = long.Parse(cuitString.Replace("-", ""));
+
+            if (ControladoraGestionarProveedores.Instancia.ExisteProveedorConCUIT(cuit))
+            {
+                MessageBox.Show("Ya existe un proveedor con este CUIT.", "CUIT duplicado", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool ValidarDatosModificar(Proveedor proveedorSeleccionado)
+        {
+            if (string.IsNullOrEmpty(this.txtCodigo.Text))
+            {
+                MessageBox.Show("Debe ingresar el código", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(this.txtRazonSocial.Text))
+            {
+                MessageBox.Show("Debe ingresar la razón social del proveedor", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            var proveedorConMismoCodigo = ControladoraGestionarProveedores.Instancia.Buscar(txtCodigo.Text);
+            if (proveedorConMismoCodigo != null && proveedorConMismoCodigo.ProveedorId != proveedorSeleccionado.ProveedorId)
+            {
+                MessageBox.Show("El código ya está en uso por otro proveedor.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            string cuitString = this.numCUIT.Text;
+
+            if (!Regex.IsMatch(cuitString, @"^\d{2}-\d{8}-\d$"))
+            {
+                MessageBox.Show("El CUIT ingresado no es válido. El formato correcto es: XX-XXXXXXXX-X (por ejemplo: 20-30123456)", "Error de formato", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            if (!Regex.IsMatch(cuitString.Replace("-", ""), @"^\d+$"))
+            {
+                MessageBox.Show("El CUIT debe contener solo números.", "Error de formato", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            long cuit = long.Parse(cuitString.Replace("-", ""));
+
+            if (ControladoraGestionarProveedores.Instancia.ExisteProveedorConCUIT(cuit))
+            {
+                MessageBox.Show("Ya existe un proveedor con este CUIT.", "CUIT duplicado", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            return true;
+        }
+
+        #endregion
+
+
+
+        #region Eventos
 
         private void btnAgregar_Click(object sender, EventArgs e)
         {
@@ -55,9 +157,6 @@ namespace Vista
                 MessageBox.Show(mensaje, "Información Proveedores", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
-
-
-
 
         private void btnEliminar_Click(object sender, EventArgs e)
         {
@@ -78,11 +177,8 @@ namespace Vista
             else
             {
                 MessageBox.Show("No tienes ningun proveedor seleccionado", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
             }
         }
-
-
 
         private void btnModificar_Click(object sender, EventArgs e)
         {
@@ -105,7 +201,7 @@ namespace Vista
 
                     var mensaje = ControladoraGestionarProveedores.Instancia.ModificarProveedor(proveedorSeleccionado);
 
-                    ActualizarGrilla(); // Método para actualizar la grilla de actores.
+                    ActualizarGrilla();
                     LimpiarDetalles();
                     MessageBox.Show(mensaje);
                 }
@@ -118,7 +214,6 @@ namespace Vista
 
 
 
-
         private void btnBuscar_Click(object sender, EventArgs e)
         {
             string textoBusqueda = txtBuscar.Text.Trim();
@@ -127,126 +222,11 @@ namespace Vista
 
 
 
-
-        private bool ValidarDatos()
-        {
-            if (string.IsNullOrEmpty(this.txtCodigo.Text))
-            {
-                MessageBox.Show("Debe ingresar el código", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-
-            if (string.IsNullOrEmpty(this.txtRazonSocial.Text))
-            {
-                MessageBox.Show("Debe ingresar la razón social del proveedor", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-
-
-            string cuitString = this.numCUIT.Text;
-
-            // Validar que solo se ingresen números y el formato correcto
-            if (!Regex.IsMatch(cuitString, @"^\d{2}-\d{8}-\d$"))
-            {
-                MessageBox.Show("El CUIT ingresado no es válido. El formato correcto es: XX-XXXXXXXX-X (por ejemplo: 20-30123456-2)",
-                                "Error de formato", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-
-            // Validar que todos los caracteres sean dígitos (sin contar los guiones)
-            if (!Regex.IsMatch(cuitString.Replace("-", ""), @"^\d+$"))
-            {
-                MessageBox.Show("El CUIT debe contener solo números.", "Error de formato", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-
-            long cuit = long.Parse(cuitString.Replace("-", "")); // Quitar los guiones y convertir a long
-
-
-            // Validar la unicidad
-            if (ControladoraGestionarProveedores.Instancia.ExisteProveedorConCUIT(cuit))
-            {
-                MessageBox.Show("Ya existe un proveedor con este CUIT.", "CUIT duplicado", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-
-            return true;
-        }
-
-
-
-        private bool ValidarDatosModificar(Proveedor proveedorSeleccionado)
-        {
-            if (string.IsNullOrEmpty(this.txtCodigo.Text))
-            {
-                MessageBox.Show("Debe ingresar el código", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-
-            if (string.IsNullOrEmpty(this.txtRazonSocial.Text))
-            {
-                MessageBox.Show("Debe ingresar la razón social del proveedor", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-
-
-            // Validar que el código no esté en uso por otro proveedor
-            var proveedorConMismoCodigo = ControladoraGestionarProveedores.Instancia.Buscar(txtCodigo.Text);
-            if (proveedorConMismoCodigo != null && proveedorConMismoCodigo.ProveedorId != proveedorSeleccionado.ProveedorId)
-            {
-                MessageBox.Show("El codigo ya está en uso por otro proveedor.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-
-
-            string cuitString = this.numCUIT.Text;
-
-            // Validar que solo se ingresen números y el formato correcto
-            if (!Regex.IsMatch(cuitString, @"^\d{2}-\d{8}-\d$"))
-            {
-                MessageBox.Show("El CUIT ingresado no es válido. El formato correcto es: XX-XXXXXXXX-X (por ejemplo: 20-30123456)",
-                                "Error de formato", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-
-            // Validar que todos los caracteres sean dígitos (sin contar los guiones)
-            if (!Regex.IsMatch(cuitString.Replace("-", ""), @"^\d+$"))
-            {
-                MessageBox.Show("El CUIT debe contener solo números.", "Error de formato", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-
-            long cuit = long.Parse(cuitString.Replace("-", "")); // Quitar los guiones y convertir a long
-
-
-            // Validar la unicidad
-            if (ControladoraGestionarProveedores.Instancia.ExisteProveedorConCUIT(cuit))
-            {
-                MessageBox.Show("Ya existe un proveedor con este CUIT.", "CUIT duplicado", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-
-            return true;
-
-        }
-
-
-
-        private void LimpiarDetalles()
-        {
-            txtCodigo.Text = "";
-            numCUIT.Text = "";
-            txtRazonSocial.Text = "";
-        }
-
-
-
-
         private void btnVolver_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-
+        #endregion
     }
 }

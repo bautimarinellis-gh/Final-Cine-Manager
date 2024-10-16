@@ -17,5 +17,10 @@ namespace Modelo.Entidades.EstadosOrdenesCompra
         {
             throw new InvalidOperationException("No se puede cancelar una orden completada.");
         }
+
+        public void Cerrar(OrdenCompra orden)
+        {
+            throw new InvalidOperationException("No se puede cerrar una orden completada.");
+        }
     }
 }

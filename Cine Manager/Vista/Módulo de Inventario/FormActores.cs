@@ -22,8 +22,7 @@ namespace Vista
             ActualizarGrilla();
         }
 
-
-
+        #region Métodos de Actualización y Carga
 
         private void ActualizarGrilla()
         {
@@ -31,8 +30,18 @@ namespace Vista
             dgvActores.DataSource = ControladoraGestionarActores.Instancia.RecuperarActores();
         }
 
+        private void LimpiarDetalles()
+        {
+            txtCodigo.Text = "";
+            txtNombre.Text = "";
+            txtApellido.Text = "";
+        }
+
+        #endregion
 
 
+
+        #region Métodos de Eventos
 
         private void btnAgregar_Click(object sender, EventArgs e)
         {
@@ -54,14 +63,13 @@ namespace Vista
 
 
 
-
         private void btnEliminar_Click(object sender, EventArgs e)
         {
             if (dgvActores.SelectedRows.Count > 0)
             {
                 var actorSeleccionado = dgvActores.SelectedRows[0].DataBoundItem as Actor;
 
-                DialogResult respuesta = MessageBox.Show("¿Estas seguro que quieres eliminar el actor: " + actorSeleccionado.Codigo + " ?", "Eliminar Actor", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                DialogResult respuesta = MessageBox.Show("¿Estás seguro que quieres eliminar el actor: " + actorSeleccionado.Codigo + " ?", "Eliminar Actor", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (respuesta == DialogResult.Yes)
                 {
@@ -69,15 +77,12 @@ namespace Vista
                     MessageBox.Show(mensaje, "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     ActualizarGrilla();
                 }
-
             }
             else
             {
-                MessageBox.Show("No tienes ningun actor seleccionado", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+                MessageBox.Show("No tienes ningún actor seleccionado", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
-
 
 
 
@@ -116,15 +121,24 @@ namespace Vista
 
 
 
-
         private void btnBuscar_Click(object sender, EventArgs e)
         {
-            string textoBusqueda = txtBuscar.Text.Trim(); //El método Trim()  elimina cualquier espacio en blanco al principio o al final del texto
+            string textoBusqueda = txtBuscar.Text.Trim(); //El método Trim() elimina cualquier espacio en blanco al principio o al final del texto
             dgvActores.DataSource = ControladoraGestionarActores.Instancia.FiltrarActores(textoBusqueda);
         }
 
 
 
+        private void btnVolver_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        #endregion
+
+
+
+        #region Métodos de Validación
 
         private bool ValidarDatos()
         {
@@ -159,7 +173,6 @@ namespace Vista
 
 
 
-
         private bool ValidarDatosModificar(Actor actorSeleccionado)
         {
             if (string.IsNullOrEmpty(txtCodigo.Text))
@@ -191,25 +204,6 @@ namespace Vista
             return true;
         }
 
-
-
-
-        private void LimpiarDetalles()
-        {
-            txtCodigo.Text = "";
-            txtNombre.Text = "";
-            txtApellido.Text = "";
-        }
-
-
-
-
-        private void btnVolver_Click(object sender, EventArgs e)
-        {
-            this.Close();
-
-        }
-
-
+        #endregion
     }
 }

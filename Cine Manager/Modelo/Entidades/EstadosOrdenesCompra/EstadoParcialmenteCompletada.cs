@@ -10,22 +10,35 @@ namespace Modelo.Entidades.EstadosOrdenesCompra
     {
         public void Pagar(OrdenCompra orden)
         {
-            if (orden.TodosLosDetallesPagos())
+            if (orden.TodosLosDetallesEntregados())
             {
-                // La orden pasa de "Parcialmente Completada" a "Completada"
                 orden.CambiarEstado(new EstadoCompletada());
             }
             else
             {
-                // Sigue en estado "Parcialmente Completada" hasta que todos los detalles estén pagados
                 throw new InvalidOperationException("La orden sigue parcialmente completada, aún quedan detalles por pagar.");
             }
         }
 
+
+
         public void Cancelar(OrdenCompra orden)
         {
-            // Se permite cancelar incluso cuando está parcialmente completada
             orden.CambiarEstado(new EstadoCancelada());
+        }
+
+
+
+        public void Cerrar(OrdenCompra orden)
+        {
+            if (!orden.TodosLosDetallesEntregados())
+            {
+                orden.CambiarEstado(new EstadoCerradaConFaltante());
+            }
+            else
+            {
+                throw new InvalidOperationException("No se puede cerrar una orden parcialmente completada cuando todos los detalles están entregados.");
+            }
         }
     }
 }

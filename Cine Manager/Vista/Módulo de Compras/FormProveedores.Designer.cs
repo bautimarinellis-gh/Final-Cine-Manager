@@ -49,6 +49,7 @@
             RazonSocial = new DataGridViewTextBoxColumn();
             proveedorBindingSource1 = new BindingSource(components);
             proveedorBindingSource = new BindingSource(components);
+            label5 = new Label();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvProveedores).BeginInit();
             ((System.ComponentModel.ISupportInitialize)proveedorBindingSource1).BeginInit();
@@ -57,6 +58,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(label5);
             groupBox1.Controls.Add(btnBuscar);
             groupBox1.Controls.Add(numCUIT);
             groupBox1.Controls.Add(txtBuscar);
@@ -198,7 +200,7 @@
             dgvProveedores.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvProveedores.Columns.AddRange(new DataGridViewColumn[] { codigoDataGridViewTextBoxColumn, cuitDataGridViewTextBoxColumn, RazonSocial });
             dgvProveedores.DataSource = proveedorBindingSource1;
-            dgvProveedores.Location = new Point(386, 31);
+            dgvProveedores.Location = new Point(386, 57);
             dgvProveedores.Name = "dgvProveedores";
             dgvProveedores.ReadOnly = true;
             dgvProveedores.RowTemplate.Height = 25;
@@ -233,6 +235,15 @@
             // proveedorBindingSource
             // 
             proveedorBindingSource.DataSource = typeof(Modelo.Entidades.Proveedor);
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(509, 19);
+            label5.Name = "label5";
+            label5.Size = new Size(118, 15);
+            label5.TabIndex = 15;
+            label5.Text = "Grilla de proveedores";
             // 
             // FormProveedores
             // 
@@ -274,5 +285,6 @@
         private Button btnBuscar;
         private TextBox txtBuscar;
         private Button btnOrdenCompra;
+        private Label label5;
     }
 }

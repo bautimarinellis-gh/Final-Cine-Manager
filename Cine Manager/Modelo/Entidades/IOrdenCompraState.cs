@@ -10,5 +10,7 @@ namespace Modelo.Entidades
     {
         void Pagar(OrdenCompra orden);
         void Cancelar(OrdenCompra orden);
+        void Cerrar(OrdenCompra orden);
+
     }
 }

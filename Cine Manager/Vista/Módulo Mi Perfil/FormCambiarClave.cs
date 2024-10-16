@@ -2,14 +2,9 @@
 using Controladora.Seguridad;
 using Modelo.Módulo_de_Seguridad;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Vista.Módulo_de_Seguridad
@@ -18,12 +13,17 @@ namespace Vista.Módulo_de_Seguridad
     {
         private Sesion _sesion;
 
+
         public FormCambiarClave(Sesion sesion)
         {
             InitializeComponent();
             _sesion = sesion;
         }
 
+
+
+
+        #region Manejadores de Eventos
 
 
         private void btnAceptar_Click(object sender, EventArgs e)
@@ -50,8 +50,7 @@ namespace Vista.Módulo_de_Seguridad
                 // Recargar al usuario en la sesión con la nueva clave
                 _sesion.UsuarioSesion = ControladoraCambiarClave.Instancia.Buscar(usuarioActual.NombreUsuario);
 
-                // Asegúrate de que la sesión actualizada esté siendo utilizada correctamente
-                // Puedes imprimir los datos actualizados de la sesión para verificar
+                // Verificar que la sesión actualizada esté siendo utilizada correctamente
                 MessageBox.Show($"Usuario actualizado: {_sesion.UsuarioSesion.NombreUsuario}");
 
                 this.Close(); // Cierra el formulario de cambio de clave
@@ -59,6 +58,17 @@ namespace Vista.Módulo_de_Seguridad
         }
 
 
+
+        private void btnCancelar_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        #endregion
+
+
+
+        #region Métodos de Validación
 
         private string EncriptarClave(string clave)
         {
@@ -75,8 +85,6 @@ namespace Vista.Módulo_de_Seguridad
                 return sb.ToString();
             }
         }
-
-
 
         private bool ValidarDatos()
         {
@@ -112,8 +120,6 @@ namespace Vista.Módulo_de_Seguridad
 
             return true;
         }
-
-
 
         private bool ValidarClave(string clave)
         {
@@ -155,7 +161,9 @@ namespace Vista.Módulo_de_Seguridad
             return true;
         }
 
+        #endregion
 
+        #region Otros Métodos
 
         private void LimpiarCampos()
         {
@@ -164,12 +172,8 @@ namespace Vista.Módulo_de_Seguridad
             txtConfirmar.Text = "";
         }
 
+        #endregion
 
-
-        private void btnCancelar_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
+        
     }
 }

@@ -2,13 +2,7 @@
 using Controladora;
 using Modelo.Módulo_de_Seguridad;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Vista.Módulo_de_Seguridad
@@ -16,6 +10,7 @@ namespace Vista.Módulo_de_Seguridad
     public partial class FormDatosUsuario : Form
     {
         private Sesion _sesion;
+
 
         public FormDatosUsuario(Sesion sesion)
         {
@@ -25,7 +20,7 @@ namespace Vista.Módulo_de_Seguridad
         }
 
 
-
+        #region Métodos de Carga de Datos
 
         private void CargarDatosUsuario()
         {
@@ -37,8 +32,6 @@ namespace Vista.Módulo_de_Seguridad
             txtEmail.Text = usuarioActual.Email;
 
             var estadoUsuarioNombre = ControladoraMisDatos.Instancia.ObtenerEstadoUsuario(usuarioActual.UsuarioId);
-
-
             txtEstadoUsuario.Text = estadoUsuarioNombre;
 
             CargarGruposUsuario();
@@ -57,8 +50,6 @@ namespace Vista.Módulo_de_Seguridad
                                    .Select(g => g.Id)
                                    .ToList();
 
-
-
             // Recorrer todos los grupos y marcar los que están asignados al usuario
             foreach (var grupo in todosLosGrupos)
             {
@@ -67,8 +58,6 @@ namespace Vista.Módulo_de_Seguridad
 
                 // Verificar si el grupo está asignado al usuario
                 bool isChecked = gruposAsignados.Contains(grupo.Id);
-
-
 
                 // Marcar el grupo en el CheckedListBox si está asignado al usuario
                 clbGrupos.SetItemChecked(index, isChecked);
@@ -97,30 +86,30 @@ namespace Vista.Módulo_de_Seguridad
                             nodoAccion.Checked = true;
                         }
                     }
-
                 }
             }
         }
 
+        #endregion
 
+
+        #region Manejadores de Eventos
 
         private void btnCancelar_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-
-
         private void button1_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-
-
         private void button3_Click(object sender, EventArgs e)
         {
             this.Close();
         }
+
+        #endregion
     }
 }

@@ -2,13 +2,7 @@
 using Modelo.Entidades;
 using Modelo.Módulo_de_Seguridad;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Vista
@@ -27,6 +21,7 @@ namespace Vista
 
 
 
+        #region Métodos de Actualización y Carga
 
         private void ActualizarGrilla()
         {
@@ -34,22 +29,26 @@ namespace Vista
             dgvDirectores.DataSource = ControladoraGestionarDirectores.Instancia.RecuperarDirectores();
         }
 
+        private void LimpiarDetalles()
+        {
+            txtCodigo.Text = "";
+            txtNombre.Text = "";
+            txtApellido.Text = "";
+        }
+
+        #endregion
 
 
+
+        #region Métodos de Eventos
 
         private void btnAgregar_Click(object sender, EventArgs e)
         {
-            // Validar que los campos no estén vacíos
-            if (string.IsNullOrWhiteSpace(txtCodigo.Text) ||
-                string.IsNullOrWhiteSpace(txtNombre.Text) ||
-                string.IsNullOrWhiteSpace(txtApellido.Text))
+            if (!ValidarDatosComunes())
             {
-                // Mostrar mensaje de advertencia
-                MessageBox.Show("Por favor, complete todos los campos: Código, Nombre y Apellido.", "Campos incompletos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return; // Salir de la función si hay campos vacíos
+                return; // Si la validación falla, salimos del método
             }
 
-            // Crear objeto Director con los valores ingresados
             var director = new Director
             {
                 Codigo = txtCodigo.Text,
@@ -57,26 +56,24 @@ namespace Vista
                 Apellido = txtApellido.Text,
             };
 
-            // Agregar el director usando la lógica de negocio
-            var mensaje = ControladoraGestionarDirectores.Instancia.AgregarDirector(director, _sesion.UsuarioSesion);
-
-            // Actualizar la grilla y limpiar los campos
-            ActualizarGrilla();
-            LimpiarDetalles();
-
-            // Mostrar mensaje de confirmación
-            MessageBox.Show(mensaje, "Información Directores", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            try
+            {
+                var mensaje = ControladoraGestionarDirectores.Instancia.AgregarDirector(director, _sesion.UsuarioSesion);
+                ActualizarGrilla();
+                LimpiarDetalles();
+                MessageBox.Show(mensaje, "Información Directores", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ocurrió un error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
-
-
-
 
         private void btnEliminar_Click(object sender, EventArgs e)
         {
             if (dgvDirectores.SelectedRows.Count > 0)
             {
                 var directorSeleccionado = dgvDirectores.SelectedRows[0].DataBoundItem as Director;
-
                 DialogResult respuesta = MessageBox.Show("¿Estas seguro que quieres eliminar el director: " + directorSeleccionado.Nombre + " ?", "Eliminar Director", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (respuesta == DialogResult.Yes)
@@ -85,16 +82,12 @@ namespace Vista
                     MessageBox.Show(mensaje, "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     ActualizarGrilla();
                 }
-
             }
             else
             {
                 MessageBox.Show("No tienes ningun director seleccionado", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
             }
         }
-
-
 
         private void btnModificar_Click(object sender, EventArgs e)
         {
@@ -116,8 +109,7 @@ namespace Vista
                     directorSeleccionado.Apellido = txtApellido.Text;
 
                     var mensaje = ControladoraGestionarDirectores.Instancia.ModificarDirector(directorSeleccionado, _sesion.UsuarioSesion);
-
-                    ActualizarGrilla(); // Método para actualizar la grilla de actores.
+                    ActualizarGrilla();
                     LimpiarDetalles();
                     MessageBox.Show(mensaje);
                 }
@@ -128,45 +120,50 @@ namespace Vista
             }
         }
 
-
-
-
         private void btnBuscar_Click(object sender, EventArgs e)
         {
             string textoBusqueda = txtBuscar.Text.Trim(); //El método Trim()  elimina cualquier espacio en blanco al principio o al final del texto
             dgvDirectores.DataSource = ControladoraGestionarDirectores.Instancia.FiltrarDirectores(textoBusqueda);
         }
 
-
-
-
-        private bool ValidarDatos()
+        private void btnVolver_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(this.txtCodigo.Text))
+            this.Close();
+        }
+
+        #endregion
+
+
+
+        #region Métodos de Validación
+
+        private bool ValidarDatosComunes()
+        {
+            if (string.IsNullOrEmpty(txtCodigo.Text))
             {
                 MessageBox.Show("Debe ingresar el código", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
 
-            if (string.IsNullOrEmpty(this.txtNombre.Text))
+            if (string.IsNullOrEmpty(txtNombre.Text))
             {
                 MessageBox.Show("Debe ingresar el nombre", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
 
-            if (string.IsNullOrEmpty(this.txtApellido.Text))
+            if (string.IsNullOrEmpty(txtApellido.Text))
             {
                 MessageBox.Show("Debe ingresar el apellido", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
 
-            if (this.txtNombre.Text.Any(char.IsDigit))
+            if (txtNombre.Text.Any(char.IsDigit))
             {
                 MessageBox.Show("El nombre no puede contener números", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
 
-            if (this.txtApellido.Text.Any(char.IsDigit))
+            if (txtApellido.Text.Any(char.IsDigit))
             {
                 MessageBox.Show("El apellido no puede contener números", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
@@ -179,38 +176,9 @@ namespace Vista
 
         private bool ValidarDatosModificar(Director directorSeleccionado)
         {
-            if (string.IsNullOrEmpty(txtCodigo.Text))
-            {
-                MessageBox.Show("Debe ingresar el código", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
+            if (!ValidarDatosComunes()) return false;
 
-            if (string.IsNullOrEmpty(txtNombre.Text))
-            {
-                MessageBox.Show("Debe ingresar el nombre del actor", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-
-            if (string.IsNullOrEmpty(txtApellido.Text))
-            {
-                MessageBox.Show("Debe ingresar el apellido del actor", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-
-
-            if (this.txtNombre.Text.Any(char.IsDigit))
-            {
-                MessageBox.Show("El nombre no puede contener números", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-
-            if (this.txtApellido.Text.Any(char.IsDigit))
-            {
-                MessageBox.Show("El apellido no puede contener números", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-
-            // Validar que el código no esté en uso por otro actor
+            // Validar que el código no esté en uso por otro director
             var directorConMismoCodigo = ControladoraGestionarDirectores.Instancia.Buscar(txtCodigo.Text);
             if (directorConMismoCodigo != null && directorConMismoCodigo.DirectorId != directorSeleccionado.DirectorId)
             {
@@ -221,22 +189,6 @@ namespace Vista
             return true;
         }
 
-
-
-        private void LimpiarDetalles()
-        {
-            txtCodigo.Text = "";
-            txtNombre.Text = "";
-            txtApellido.Text = "";
-        }
-
-
-
-        private void btnVolver_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-
+        #endregion
     }
 }
