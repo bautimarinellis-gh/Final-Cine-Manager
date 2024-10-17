@@ -30,6 +30,7 @@
         {
             components = new System.ComponentModel.Container();
             groupBox1 = new GroupBox();
+            label1 = new Label();
             btnBuscar = new Button();
             txtBuscar = new TextBox();
             btnVolver = new Button();
@@ -45,7 +46,8 @@
             pedidoBindingSource1 = new BindingSource(components);
             pedidoBindingSource = new BindingSource(components);
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            label1 = new Label();
+            cmbMetodoPago = new ComboBox();
+            label2 = new Label();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvPedidos).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pedidoBindingSource1).BeginInit();
@@ -54,6 +56,8 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(cmbMetodoPago);
+            groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(label1);
             groupBox1.Controls.Add(btnBuscar);
             groupBox1.Controls.Add(txtBuscar);
@@ -66,6 +70,15 @@
             groupBox1.Size = new Size(658, 424);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(288, 69);
+            label1.Name = "label1";
+            label1.Size = new Size(95, 15);
+            label1.TabIndex = 18;
+            label1.Text = "Grilla de Pedidos";
             // 
             // btnBuscar
             // 
@@ -97,7 +110,7 @@
             // 
             // btnPagar
             // 
-            btnPagar.Location = new Point(148, 395);
+            btnPagar.Location = new Point(178, 395);
             btnPagar.Name = "btnPagar";
             btnPagar.Size = new Size(93, 23);
             btnPagar.TabIndex = 2;
@@ -107,7 +120,7 @@
             // 
             // btnInformacion
             // 
-            btnInformacion.Location = new Point(17, 395);
+            btnInformacion.Location = new Point(306, 395);
             btnInformacion.Name = "btnInformacion";
             btnInformacion.Size = new Size(103, 23);
             btnInformacion.TabIndex = 1;
@@ -125,7 +138,7 @@
             dgvPedidos.Name = "dgvPedidos";
             dgvPedidos.ReadOnly = true;
             dgvPedidos.RowTemplate.Height = 25;
-            dgvPedidos.Size = new Size(619, 287);
+            dgvPedidos.Size = new Size(619, 245);
             dgvPedidos.TabIndex = 0;
             // 
             // codigoDataGridViewTextBoxColumn
@@ -178,14 +191,23 @@
             // 
             pedidoBindingSource.DataSource = typeof(Modelo.Entidades.Pedido);
             // 
-            // label1
+            // cmbMetodoPago
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(288, 69);
-            label1.Name = "label1";
-            label1.Size = new Size(95, 15);
-            label1.TabIndex = 18;
-            label1.Text = "Grilla de Pedidos";
+            cmbMetodoPago.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbMetodoPago.FormattingEnabled = true;
+            cmbMetodoPago.Location = new Point(12, 396);
+            cmbMetodoPago.Name = "cmbMetodoPago";
+            cmbMetodoPago.Size = new Size(136, 23);
+            cmbMetodoPago.TabIndex = 20;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(12, 369);
+            label2.Name = "label2";
+            label2.Size = new Size(95, 15);
+            label2.TabIndex = 19;
+            label2.Text = "Metodo de Pago";
             // 
             // FormGestorPedidos
             // 
@@ -222,5 +244,7 @@
         private Button btnBuscar;
         private TextBox txtBuscar;
         private Label label1;
+        private ComboBox cmbMetodoPago;
+        private Label label2;
     }
 }

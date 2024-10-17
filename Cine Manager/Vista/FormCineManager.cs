@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using Vista.Módulo_de_Administración;
 using Vista.Módulo_de_Compras;
 using Vista.Módulo_de_Transacciones;
+using Vista.Módulo_de_Ventas;
 
 namespace Vista.Módulo_de_Seguridad
 {
@@ -164,6 +165,14 @@ namespace Vista.Módulo_de_Seguridad
         {
             var formOrdenesCompra = new FormOrdenesCompra(_sesion);
             formOrdenesCompra.ShowDialog();
+
+        }
+
+
+        private void gestionarMetodosDePagoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var formMetodospago = new FormMetodosPago(_sesion);
+            formMetodospago.ShowDialog();
         }
 
         private void cerrarSesiónToolStripMenuItem_Click(object sender, EventArgs e)
@@ -180,5 +189,7 @@ namespace Vista.Módulo_de_Seguridad
         }
 
         #endregion
+
+        
     }
 }

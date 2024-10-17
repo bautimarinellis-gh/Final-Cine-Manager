@@ -30,6 +30,7 @@
         {
             components = new System.ComponentModel.Container();
             groupBox1 = new GroupBox();
+            label5 = new Label();
             btnBuscar = new Button();
             txtBuscar = new TextBox();
             btnAlquiler = new Button();
@@ -47,6 +48,7 @@
             label2 = new Label();
             label1 = new Label();
             groupBox2 = new GroupBox();
+            label4 = new Label();
             btnQuitar = new Button();
             label3 = new Label();
             txtTotal = new TextBox();
@@ -58,8 +60,6 @@
             detallePedidoBindingSource = new BindingSource(components);
             btnFinalizarPedido = new Button();
             btnVolver = new Button();
-            label5 = new Label();
-            label4 = new Label();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvPeliculasDisponibles).BeginInit();
             ((System.ComponentModel.ISupportInitialize)peliculaBindingSource).BeginInit();
@@ -83,9 +83,18 @@
             groupBox1.Controls.Add(label1);
             groupBox1.Location = new Point(12, 12);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(401, 470);
+            groupBox1.Size = new Size(401, 510);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(135, 151);
+            label5.Name = "label5";
+            label5.Size = new Size(99, 15);
+            label5.TabIndex = 16;
+            label5.Text = "Grilla de peliculas";
             // 
             // btnBuscar
             // 
@@ -107,7 +116,7 @@
             // 
             // btnAlquiler
             // 
-            btnAlquiler.Location = new Point(229, 436);
+            btnAlquiler.Location = new Point(229, 471);
             btnAlquiler.Name = "btnAlquiler";
             btnAlquiler.Size = new Size(105, 23);
             btnAlquiler.TabIndex = 6;
@@ -117,7 +126,7 @@
             // 
             // btnVenta
             // 
-            btnVenta.Location = new Point(41, 436);
+            btnVenta.Location = new Point(41, 471);
             btnVenta.Name = "btnVenta";
             btnVenta.Size = new Size(104, 23);
             btnVenta.TabIndex = 5;
@@ -227,9 +236,18 @@
             groupBox2.Controls.Add(dgvDetallesPedido);
             groupBox2.Location = new Point(430, 12);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(412, 393);
+            groupBox2.Size = new Size(414, 426);
             groupBox2.TabIndex = 1;
             groupBox2.TabStop = false;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(128, 30);
+            label4.Name = "label4";
+            label4.Size = new Size(152, 15);
+            label4.TabIndex = 17;
+            label4.Text = "Grilla de detalles del pedido";
             // 
             // btnQuitar
             // 
@@ -264,7 +282,7 @@
             dgvDetallesPedido.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvDetallesPedido.Columns.AddRange(new DataGridViewColumn[] { peliculaDataGridViewTextBoxColumn, cantidadDataGridViewTextBoxColumn1, subtotalDataGridViewTextBoxColumn });
             dgvDetallesPedido.DataSource = detallePedidoBindingSource1;
-            dgvDetallesPedido.Location = new Point(39, 65);
+            dgvDetallesPedido.Location = new Point(27, 64);
             dgvDetallesPedido.Name = "dgvDetallesPedido";
             dgvDetallesPedido.ReadOnly = true;
             dgvDetallesPedido.RowTemplate.Height = 25;
@@ -302,7 +320,7 @@
             // 
             // btnFinalizarPedido
             // 
-            btnFinalizarPedido.Location = new Point(643, 415);
+            btnFinalizarPedido.Location = new Point(645, 464);
             btnFinalizarPedido.Name = "btnFinalizarPedido";
             btnFinalizarPedido.Size = new Size(105, 23);
             btnFinalizarPedido.TabIndex = 8;
@@ -312,7 +330,7 @@
             // 
             // btnVolver
             // 
-            btnVolver.Location = new Point(767, 415);
+            btnVolver.Location = new Point(769, 464);
             btnVolver.Name = "btnVolver";
             btnVolver.Size = new Size(75, 23);
             btnVolver.TabIndex = 9;
@@ -320,29 +338,11 @@
             btnVolver.UseVisualStyleBackColor = true;
             btnVolver.Click += btnVolver_Click;
             // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.Location = new Point(135, 151);
-            label5.Name = "label5";
-            label5.Size = new Size(99, 15);
-            label5.TabIndex = 16;
-            label5.Text = "Grilla de peliculas";
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Location = new Point(157, 31);
-            label4.Name = "label4";
-            label4.Size = new Size(152, 15);
-            label4.TabIndex = 17;
-            label4.Text = "Grilla de detalles del pedido";
-            // 
             // FormRealizarPedido
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(856, 494);
+            ClientSize = new Size(865, 534);
             Controls.Add(btnVolver);
             Controls.Add(btnFinalizarPedido);
             Controls.Add(groupBox2);

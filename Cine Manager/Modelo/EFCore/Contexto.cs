@@ -25,7 +25,7 @@ namespace Modelo.EFCore
         public DbSet<PagoPedido> PagosPedidos { get; set; }
         public DbSet<DetalleOrdenCompra> DetallesOrdenesCompra { get; set; }
         public DbSet<OrdenCompra> OrdenesCompra { get; set; }
-
+        public DbSet<MetodoPago> MetodosPago {  get; set; }
 
 
         //Modulo de Seguridad
@@ -57,17 +57,13 @@ namespace Modelo.EFCore
         {
 
 
-            /*modelBuilder.Entity<Auditoria>()
-                .HasOne(a => a.Director)
+
+            modelBuilder.Entity<PagoPedido>()
+                .HasOne(pp => pp.MetodoPago) 
                 .WithMany() 
-                .HasForeignKey(a => a.DirectorId)
+                .HasForeignKey(pp => pp.MetodoPagoId) 
                 .OnDelete(DeleteBehavior.Restrict); 
 
-            modelBuilder.Entity<Auditoria>()
-                .HasOne(a => a.Usuario)
-                .WithMany() 
-                .HasForeignKey(a => a.Usuario_AudId)
-                .OnDelete(DeleteBehavior.Restrict); */
 
             modelBuilder.Entity<Grupo>().HasMany(g => g.Componentes).WithMany(c => c.Grupos).UsingEntity<Dictionary<string, object>>(
                 "ComponenteGrupo",

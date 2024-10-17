@@ -1,45 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Modelo.Entidades;
 
-namespace Modelo.Entidades
+public class PagoPedido
 {
-    public class PagoPedido
+    private int pagoPedidoId;
+    private Pedido pedido;
+    private DateTime fechaPago;
+    private string codigo;
+    private MetodoPago metodoPago;
+
+    public int PagoPedidoId
     {
-        private int pagoPedidoId;
-        private Pedido pedido;
-        private DateTime fechaPago;
-        private string codigo;
-
-
-        public int PagoPedidoId
-        {
-            get { return pagoPedidoId; }
-            set { pagoPedidoId = value; }
-        }
-        
-
-        public Pedido Pedido
-        {
-            get { return pedido; }
-            set { pedido = value; }
-        }
-
-
-        public DateTime FechaPago
-        {
-            get { return fechaPago; }
-            set { fechaPago = value; }
-        }
-
-
-        public string Codigo
-        {
-            get { return codigo; }
-            set { codigo = value; }
-        }
-
+        get { return pagoPedidoId; }
+        set { pagoPedidoId = value; }
     }
+
+    public Pedido Pedido
+    {
+        get { return pedido; }
+        set { pedido = value; }
+    }
+
+    public DateTime FechaPago
+    {
+        get { return fechaPago; }
+        set { fechaPago = value; }
+    }
+
+    public string Codigo
+    {
+        get { return codigo; }
+        set { codigo = value; }
+    }
+
+    public MetodoPago MetodoPago
+    {
+        get { return metodoPago; }
+        set { metodoPago = value; }
+    }
+
+    // Agregamos la propiedad MetodoPagoId para la clave foránea
+    public int MetodoPagoId { get; set; }
 }

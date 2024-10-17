@@ -1,4 +1,5 @@
 ﻿using Controladora;
+using Controladora.Negocio;
 using Modelo.Entidades;
 using System;
 using System.Linq;
@@ -27,6 +28,8 @@ namespace Vista.Módulo_de_Transacciones
 
         #region Métodos de Actualización de Grillas y ComboBox
 
+
+
         private void ActualizarGrilla()
         {
             dgvPeliculasDisponibles.DataSource = null;
@@ -35,6 +38,7 @@ namespace Vista.Módulo_de_Transacciones
             dgvDetallesPedido.DataSource = null;
             dgvDetallesPedido.DataSource = pedidoActual.RecuperarDetalles();
         }
+
 
         private void LlenarComboBox()
         {
@@ -79,6 +83,8 @@ namespace Vista.Módulo_de_Transacciones
                 MessageBox.Show("Seleccione una película de la lista.");
             }
         }
+
+
 
         private void btnAlquiler_Click(object sender, EventArgs e)
         {
@@ -197,16 +203,30 @@ namespace Vista.Módulo_de_Transacciones
         {
             if (dgvDetallesPedido.Rows.Count == 0)
             {
-                MessageBox.Show("No hay peliculas para confirmar la compra.");
+                MessageBox.Show("No hay películas para confirmar la compra.");
                 return false;
             }
 
             var cliente = (Cliente)cmbDNI.SelectedItem;
+            if (cliente == null)
+            {
+                MessageBox.Show("Debe seleccionar un cliente.");
+                return false;
+            }
+
             if (ControladoraRealizarPedido.Instancia.ClienteTieneAlquileresSinDevolver(cliente))
             {
                 MessageBox.Show("El cliente tiene alquileres sin devolver. No se puede realizar un nuevo pedido.");
                 return false;
             }
+
+            /*var metodoPagoSeleccionado = (MetodoPago)cmbMetodoPago.SelectedItem;
+            if (metodoPagoSeleccionado == null)
+            {
+                MessageBox.Show("Debe seleccionar un método de pago.");
+                return false;
+            }*/
+
             return true;
         }
 
@@ -221,11 +241,15 @@ namespace Vista.Módulo_de_Transacciones
             return Guid.NewGuid().ToString();
         }
 
+
+
         private void btnBuscar_Click(object sender, EventArgs e)
         {
             string textoBusqueda = txtBuscar.Text.Trim();
             dgvPeliculasDisponibles.DataSource = ControladoraRealizarPedido.Instancia.FiltrarPeliculasDisponibles(textoBusqueda);
         }
+
+
 
         private void btnVolver_Click(object sender, EventArgs e)
         {

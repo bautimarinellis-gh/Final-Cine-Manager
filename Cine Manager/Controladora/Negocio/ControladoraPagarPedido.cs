@@ -47,11 +47,14 @@ namespace Controladora
             try
             {
 
-                // Cargar el pedido desde la base de datos para asegurar que no se está tratando de establecer un valor de identidad explícitamente
                 var pedido = context.Pedidos.FirstOrDefault(p => p.PedidoId == pagoPedido.Pedido.PedidoId);
+
+                var metodoPago = context.MetodosPago.FirstOrDefault(mp => mp.MetodoPagoId == pagoPedido.MetodoPago.MetodoPagoId);
+
 
                 // Asignar la entidad del pedido cargada al pago
                 pagoPedido.Pedido = pedido;
+                pagoPedido.MetodoPago = metodoPago;
 
                 context.PagosPedidos.Add(pagoPedido);
                 context.SaveChanges();

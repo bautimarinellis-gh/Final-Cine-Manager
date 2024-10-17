@@ -85,7 +85,7 @@ namespace Controladora.Negocio
                     detalleOrdenCompraExistente.Estado = true; 
                 }
 
-                var mensaje = ProcesarDetalleOrdenCompra(detalleOrdenCompraExistente);
+                var mensaje = ProcesarDetalleOrdenCompra(detalleOrdenCompraExistente, cantidadEntregada);
 
                 if (!mensaje)
                 {
@@ -126,7 +126,7 @@ namespace Controladora.Negocio
 
 
 
-        public bool ProcesarDetalleOrdenCompra(DetalleOrdenCompra detalleOrdenCompra)
+        public bool ProcesarDetalleOrdenCompra(DetalleOrdenCompra detalleOrdenCompra, int cantidadEntregada)
         {
             try
             {
@@ -137,8 +137,8 @@ namespace Controladora.Negocio
                     return false;
                 }
 
-                // Actualizar el stock sumando la cantidad del detalle
-                peliculaExistente.Cantidad += detalleOrdenCompra.CantidadOrdenada;
+                // Actualizar el stock sumando solo la cantidad entregada en esta operación
+                peliculaExistente.Cantidad += cantidadEntregada;
 
                 // Actualizar en la base de datos el stock de la película
                 var stockActualizado = ControladoraGestionarPeliculas.Instancia.ActualizarStockPeliculas(peliculaExistente);

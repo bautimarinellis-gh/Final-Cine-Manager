@@ -1,4 +1,5 @@
 ﻿using Controladora;
+using Controladora.Negocio;
 using Modelo.Entidades;
 using Modelo.Módulo_de_Seguridad;
 using System;
@@ -20,6 +21,7 @@ namespace Vista.Módulo_de_Administración
             InitializeComponent();
             dgvPedidos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             _sesion = sesion;
+            LlenarComboBox();
             pedido = new Pedido();
 
             try
@@ -48,13 +50,20 @@ namespace Vista.Módulo_de_Administración
             }
         }
 
+        private void LlenarComboBox()
+        {
+            cmbMetodoPago.DataSource = ControladoraGestionarMetodosPago.Instancia.RecuperarMetodosPago();
+            cmbMetodoPago.DisplayMember = "Codigo";
+        }
+
+
         #endregion
 
 
 
         #region Botones de Acciones
 
-        
+
         private void btnInformacion_Click(object sender, EventArgs e)
         {
             if (dgvPedidos.SelectedRows.Count > 0)
@@ -77,31 +86,36 @@ namespace Vista.Módulo_de_Administración
             }
         }
 
-      
+
         private void btnPagar_Click(object sender, EventArgs e)
         {
             if (dgvPedidos.SelectedRows.Count > 0)
             {
                 var pedidoSeleccionado = dgvPedidos.SelectedRows[0].DataBoundItem as Pedido;
 
+                // Validar si se seleccionó un pedido y el método de pago
                 if (pedidoSeleccionado != null && ValidarDatos(pedidoSeleccionado))
                 {
+                    var metodoPagoSeleccionado = cmbMetodoPago.SelectedItem as MetodoPago; // Obtener el método de pago seleccionado
+
                     try
                     {
                         var nuevoPagoPedido = new PagoPedido
                         {
                             Pedido = pedidoSeleccionado,
                             FechaPago = DateTime.Now,
+                            MetodoPago = metodoPagoSeleccionado, // Asignar el método de pago
                             Codigo = CodigoPagoUnico()
                         };
 
                         var mensaje = ControladoraPagarPedido.Instancia.AgregarPagoPedido(nuevoPagoPedido);
 
+                        // Actualizar el estado del pedido a pagado
                         pedidoSeleccionado.Estado = true;
                         ControladoraPagarPedido.Instancia.ModificarPedido(pedidoSeleccionado);
 
                         MessageBox.Show(mensaje, "Pago realizado", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        ActualizarGrilla();
+                        ActualizarGrilla(); // Refrescar la grilla de pedidos
                     }
                     catch (Exception ex)
                     {
@@ -115,7 +129,7 @@ namespace Vista.Módulo_de_Administración
             }
         }
 
-      
+
         private void btnBuscar_Click(object sender, EventArgs e)
         {
             string textoBusqueda = txtBuscar.Text.Trim();
@@ -144,7 +158,7 @@ namespace Vista.Módulo_de_Administración
             }
         }
 
-        
+
         private void btnVolver_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -155,7 +169,7 @@ namespace Vista.Módulo_de_Administración
 
         #region Validaciones
 
-        
+
         private bool ValidarDatos(Pedido pedido)
         {
             if (pedido.Estado == true)
@@ -172,6 +186,15 @@ namespace Vista.Módulo_de_Administración
                 return false;
             }
 
+
+            // Validar que se ha seleccionado un método de pago
+            var metodoPagoSeleccionado = cmbMetodoPago.SelectedItem as MetodoPago;
+            if (metodoPagoSeleccionado == null)
+            {
+                MessageBox.Show("Debe seleccionar un método de pago.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
             return true;
         }
 
@@ -180,7 +203,7 @@ namespace Vista.Módulo_de_Administración
 
 
         #region Utilidades
-        
+
         private string CodigoPagoUnico()
         {
             return Guid.NewGuid().ToString();

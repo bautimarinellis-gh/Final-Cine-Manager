@@ -27,6 +27,10 @@ namespace Vista.Módulo_de_Seguridad
         {
             InitializeComponent();
             InicializarFormulario();
+
+            this.grupo = new Grupo();
+
+            modificar = false; 
         }
 
         // Constructor Modificar
