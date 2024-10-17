@@ -61,6 +61,7 @@ namespace Vista.Módulo_de_Seguridad
             cmbEstado.SelectedValue = usuario.EstadoUsuario;
 
             // Cargar datos del usuario
+            CargarGruposEnCheckedListBox();
             CargarDatosUsuario();
         }
 
@@ -298,6 +299,8 @@ namespace Vista.Módulo_de_Seguridad
                 return false; // Retornar false si ocurrió un error durante el envío
             }
         }
+
+
 
         private void CargarGruposEnCheckedListBox()
         {
