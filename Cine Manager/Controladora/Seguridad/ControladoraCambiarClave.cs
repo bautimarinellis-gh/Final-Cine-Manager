@@ -66,7 +66,8 @@ namespace Controladora.Seguridad
                 if (usuario != null)
                 {
                     usuario.Clave = nuevaClaveEncriptada;
-                    context.SaveUsuario(usuario);
+                    context.Usuarios.Update(usuario);
+                    context.SaveChanges();
                     return "La clave ha sido cambiada exitosamente.";
                 }
                 else

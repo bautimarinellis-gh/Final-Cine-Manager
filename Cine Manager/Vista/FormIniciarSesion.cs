@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Security.Cryptography;
 using System.Windows.Forms;
+using Modelo.Entidades;
 
 namespace Vista.Módulo_de_Seguridad
 {
@@ -27,7 +28,7 @@ namespace Vista.Módulo_de_Seguridad
                 return;
             }
 
-            Usuario usuario = ControladoraIniciarSesion.Instancia.Buscar(txtUsuario.Text);
+            Usuario usuario = ControladoraIniciarSesion.Instancia.Buscar(txtUsuario.Text); //Recarga desde la BD
 
             if (UsuarioInactivo(usuario))
             {
@@ -44,6 +45,9 @@ namespace Vista.Módulo_de_Seguridad
                 LimpiarCampos();
                 return;
             }
+            
+            // Registrar auditoría de login
+            RegistrarAuditoriaSesion(usuario.UsuarioId, "Login");
 
             MostrarFormularioPrincipal(sesion);
         }
@@ -117,6 +121,8 @@ namespace Vista.Módulo_de_Seguridad
             };
         }
 
+
+
         private bool VerificarPermisos(Sesion sesion)
         {
             var accionesPersonalizadas = sesion.SesionPerfil
@@ -153,11 +159,28 @@ namespace Vista.Módulo_de_Seguridad
 
             return sesion.SesionPerfil.Any();
         }
+
+
+        private void RegistrarAuditoriaSesion(int usuarioId, string tipoMovimiento)
+        {
+            AuditoriaSesion auditoria = new AuditoriaSesion
+            {
+                UsuarioId = usuarioId,
+                FechaMovimiento = DateTime.Now,
+                TipoMovimiento = tipoMovimiento
+            };
+
+            // Aquí agregas la lógica para insertar la auditoría en la base de datos
+            ControladoraIniciarSesion.Instancia.Registrar(auditoria);
+        }
+
+
         #endregion
 
 
 
         #region Métodos auxiliares
+
         private string EncriptarClave(string clave)
         {
             using (var sha256 = SHA256.Create())
@@ -174,16 +197,20 @@ namespace Vista.Módulo_de_Seguridad
             }
         }
 
+
         private void LimpiarCampos()
         {
             txtUsuario.Text = "";
             txtClave.Text = "";
         }
 
+
         private void MostrarFormularioPrincipal(Sesion sesion)
         {
-            var formCineManager = new FormCineManager(sesion);
-            formCineManager.Show();
+            FormCineManager formPrincipal = new FormCineManager(sesion);
+
+            formPrincipal.Show();
+
             this.Hide();
         }
         #endregion

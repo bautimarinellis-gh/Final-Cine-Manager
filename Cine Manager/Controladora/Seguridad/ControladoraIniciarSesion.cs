@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Modelo.EFCore;
+using Modelo.Entidades;
 using Modelo.Módulo_de_Seguridad;
 using System;
 using System.Collections.Generic;
@@ -39,29 +40,54 @@ namespace Controladora.Seguridad
 
         public Usuario Buscar(string nombreUsuario)
         {
-            var usuario = context.Usuarios.Include(u => u.EstadoUsuario).Include(u => u.Componentes).ThenInclude(c => (c as Accion).Formulario)
-        .ThenInclude(f => f.Modulo)
-        .FirstOrDefault(u => u.NombreUsuario == nombreUsuario);
+            // Cargar el usuario y todas sus relaciones sin seguimiento para mejorar el rendimiento
+            var usuario = context.Usuarios
+                .AsNoTracking() // Evita que Entity Framework rastree los cambios en las entidades cargadas
+                .Include(u => u.EstadoUsuario) // Cargar el estado del usuario
+                .Include(u => u.Componentes)
+                    .ThenInclude(c => (c as Grupo).EstadoGrupo) // Incluir el estado del grupo en los componentes de tipo Grupo
+                .Include(u => u.Componentes)
+                    .ThenInclude(c => (c as Grupo).Componentes) // Incluir los componentes de los grupos
+                        .ThenInclude(gc => (gc as Accion).Formulario) // Incluir los formularios de las acciones dentro de los grupos
+                            .ThenInclude(f => f.Modulo) // Incluir los módulos asociados a los formularios
+                .Include(u => u.Componentes)
+                    .ThenInclude(c => (c as Accion).Formulario) // Incluir los formularios de las acciones personalizadas
+                        .ThenInclude(f => f.Modulo) // Incluir los módulos de los formularios personalizados
+                .FirstOrDefault(u => u.NombreUsuario == nombreUsuario); // Obtener el primer usuario que coincide con el nombre
 
             if (usuario != null)
             {
+                // Filtra los Componentes del usuario para obtener solo aquellos que son de tipo Grupo
                 var grupos = usuario.Componentes.OfType<Grupo>().ToList();
+
+
+                // Para cada grupo, se filtran sus componentes para obtener solo las Acciones asociadas a ese grupo
                 foreach (var grupo in grupos)
                 {
-                    // Cargar el estado del grupo
-                    context.Entry(grupo).Reference(g => g.EstadoGrupo).Load();
-
-                    // Cargar todos los componentes del grupo (sin filtrar por Accion aún)
-                    context.Entry(grupo).Collection(g => g.Componentes).Load();
-
-                    // Filtrar los componentes que sean de tipo Accion
                     var accionesDelGrupo = grupo.Componentes.OfType<Accion>().ToList();
-
                 }
+
+                //  Filtra los componentes del usuario para obtener todas las Acciones que no están dentro de ningún grupo (acciones personalizadas)
+                var accionesPersonalizadas = usuario.Componentes.OfType<Accion>().ToList();
+                
             }
 
             return usuario;
+        }
 
+
+        public void Registrar(AuditoriaSesion auditoriaSesion)
+        {
+            try
+            {
+                // Agregar la auditoría de sesión a la base de datos
+                context.AuditoriasSesiones.Add(auditoriaSesion);
+                context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw; // Manejo de excepciones en caso de algún error
+            }
         }
 
 

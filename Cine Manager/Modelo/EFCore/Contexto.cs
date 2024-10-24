@@ -43,6 +43,9 @@ namespace Modelo.EFCore
         //Auditoria
 
         public DbSet<Auditoria> Auditorias { get; set; }
+        public DbSet<AuditoriaSesion> AuditoriasSesiones { get; set; }
+
+
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -55,9 +58,6 @@ namespace Modelo.EFCore
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
-
-
             modelBuilder.Entity<PagoPedido>()
                 .HasOne(pp => pp.MetodoPago) 
                 .WithMany() 
@@ -89,74 +89,5 @@ namespace Modelo.EFCore
                 .UsingEntity(j => j.ToTable("Actores_Peliculas"));
 
         }
-        
-
-
-        // Métodos para la gestión de Usuarios
-        public List<Usuario> GetAllUsuarios() //Obtiene todos los usuarios.
-        {
-            return Usuarios.ToList();
-        }
-
-
-        public Usuario GetUsuarioByID(int id) //Obtiene un usuario por ID.
-        {
-            return Usuarios.Find(id);
-        }
-
-        public bool AddUsuario(Usuario usuario) //Añade un nuevo usuario.
-        {
-            Usuarios.Add(usuario);
-            return SaveChanges() > 0;
-        }
-
-        public bool SaveUsuario(Usuario usuario) //Actualiza un usuario existente.
-        {
-            Usuarios.Update(usuario);
-            return SaveChanges() > 0;
-        }
-
-        public bool DeleteUsuario(Usuario usuario) // Elimina un usuario.
-        {
-            Usuarios.Remove(usuario);
-            return SaveChanges() > 0;
-        }
-
-        // Métodos para la gestión de Grupos
-        public List<Grupo> GetAllGrupos() //Obtiene todos los grupos.
-        {
-            return Grupos.ToList();
-        }
-
-        public List<Grupo> GetAllGrupos(string nombre, string estado) //Filtra grupos por nombre y estado.
-        {
-            return Grupos
-                .Where(g => g.Nombre.Contains(nombre) && g.EstadoGrupo.EstadoGrupoNombre == estado)
-                .ToList();
-        }
-
-        public Grupo GetGrupoByID(int id) //Obtiene un grupo por ID.
-        {
-            return Grupos.Find(id);
-        }
-
-        public bool AddGrupo(Grupo grupo) // Añade un nuevo grupo.
-        {
-            Grupos.Add(grupo);
-            return SaveChanges() > 0;
-        }
-
-        public bool SaveGrupo(Grupo grupo) //Actualiza un grupo existente.
-        {
-            Grupos.Update(grupo);
-            return SaveChanges() > 0;
-        }
-
-        public bool DeleteGrupo(Grupo grupo) //Elimina un grupo.
-        {
-            Grupos.Remove(grupo);
-            return SaveChanges() > 0;
-        }
-
     }
 }

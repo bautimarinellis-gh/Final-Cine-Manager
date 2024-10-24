@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -97,7 +98,9 @@ namespace Controladora.Seguridad
                 }
 
                 // Agregar el grupo a la base de datos
-                context.AddGrupo(grupo);
+                context.Grupos.Add(grupo);
+                context.SaveChanges();
+
                 return "Grupo agregado correctamente";
             }
             catch (Exception ex)
@@ -133,8 +136,7 @@ namespace Controladora.Seguridad
                         return "No se puede eliminar el grupo porque tiene usuarios asociados.";
                     }
 
-                    // Proceder con la eliminación del grupo
-                    context.DeleteGrupo(grupoExistente);
+                    context.Grupos.Remove(grupoExistente);
                     return "Grupo eliminado correctamente";
                 }
                 else
@@ -144,7 +146,6 @@ namespace Controladora.Seguridad
             }
             catch (Exception ex)
             {
-                // Loguear el error para depuración (opcional)
                 return "Error desconocido: " + ex.Message;
             }
         }
@@ -185,11 +186,13 @@ namespace Controladora.Seguridad
                     ActualizarComponentesUsuario(usuario, grupoExistente);
 
                     // Guardar cambios en el usuario
-                    context.SaveUsuario(usuario);
+                    context.Usuarios.Update(usuario);
+                    context.SaveChanges();
                 }
 
                 // Guardar los cambios en el grupo
-                context.SaveGrupo(grupoExistente);
+                context.Grupos.Update(grupoExistente);
+                context.SaveChanges();
 
                 return "Grupo modificado correctamente";
             }

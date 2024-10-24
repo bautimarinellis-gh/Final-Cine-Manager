@@ -26,9 +26,16 @@ namespace Vista.Módulo_de_Seguridad
         public FormAgregarGrupo()
         {
             InitializeComponent();
-            InicializarFormulario();
 
             this.grupo = new Grupo();
+            var estados = ControladoraGestionarGrupos.Instancia.ObtenerEstadosGrupos();
+
+
+            cmbEstado.DataSource = estados;
+            cmbEstado.DisplayMember = "EstadoGrupoNombre"; // Muestra el nombre del estado
+            cmbEstado.ValueMember = "EstadoGrupoId"; // Usa el ID del estado para la selección
+
+            cmbEstado.SelectedIndex = 0;
 
             modificar = false; 
         }
@@ -37,33 +44,26 @@ namespace Vista.Módulo_de_Seguridad
         public FormAgregarGrupo(Grupo grupoSeleccionado)
         {
             InitializeComponent();
-            this.grupo = grupoSeleccionado; // Asignar el grupo seleccionado a la variable de instancia
-            CargarDatosGrupo(); // Cargar los datos correctamente
-            InicializarFormulario();
+
+            this.grupo = grupoSeleccionado;
+            this.modificar = true;
+
             txtCodigo.Enabled = false;
-            modificar = true;
-        }
 
-        #endregion
-
-
-
-        #region Métodos de Inicialización
-
-        private void InicializarFormulario()
-        {
             var estados = ControladoraGestionarGrupos.Instancia.ObtenerEstadosGrupos();
 
-            // Configurar el ComboBox
             cmbEstado.DataSource = estados;
             cmbEstado.DisplayMember = "EstadoGrupoNombre"; // Muestra el nombre del estado
             cmbEstado.ValueMember = "EstadoGrupoId"; // Usa el ID del estado para la selección
+            cmbEstado.SelectedValue = grupo.EstadoGrupo;
 
-            // Seleccionar el primer estado como predeterminado
-            cmbEstado.SelectedIndex = 0;
+
+            CargarDatosGrupo(); // Cargar los datos correctamente
+
         }
 
         #endregion
+
 
 
 
@@ -194,7 +194,7 @@ namespace Vista.Módulo_de_Seguridad
             txtCodigo.Text = grupo.Codigo;
             txtNombre.Text = grupo.Nombre;
             txtDescripcion.Text = grupo.DescripcionGrupo;
-            cmbEstado.SelectedItem = grupo.EstadoGrupo;
+            cmbEstado.SelectedValue = grupo.EstadoGrupo.EstadoGrupoId;
 
             CargarAccionesGrupo();
         }

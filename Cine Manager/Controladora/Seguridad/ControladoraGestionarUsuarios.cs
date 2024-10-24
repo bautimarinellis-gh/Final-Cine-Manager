@@ -99,7 +99,8 @@ namespace Controladora
                     usuario.Componentes = componentes;
 
                     // Guardar el usuario en la base de datos
-                    context.AddUsuario(usuario);
+                    context.Usuarios.Add(usuario);
+                    context.SaveChanges();
 
                     return "Usuario agregado correctamente y se envió la contraseña por correo";
                 }
@@ -125,7 +126,8 @@ namespace Controladora
 
                 if (usuarioExistente != null)
                 {
-                    context.DeleteUsuario(usuario);
+                    context.Usuarios.Remove(usuario);
+                    context.SaveChanges();
 
                     return "Usuario eliminado correctamente";
                 }
@@ -164,7 +166,8 @@ namespace Controladora
                 usuarioExistente.Componentes = nuevosComponentes;
 
                 // Guardar los cambios en la base de datos
-                context.SaveUsuario(usuarioExistente);
+                context.Usuarios.Update(usuarioExistente);
+                context.SaveChanges();
                 return "Usuario modificado correctamente";
             }
             catch (Exception ex)
@@ -188,7 +191,8 @@ namespace Controladora
 
             usuarioExistente.Clave = usuario.Clave;
 
-            context.SaveUsuario(usuarioExistente);
+            context.Update(usuarioExistente);
+            context.SaveChanges();
             return "Usuario modificado correctamente";
         }
 

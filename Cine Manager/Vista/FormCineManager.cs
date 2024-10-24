@@ -1,4 +1,6 @@
-﻿using Modelo.Módulo_de_Seguridad;
+﻿using Controladora.Seguridad;
+using Modelo.Entidades;
+using Modelo.Módulo_de_Seguridad;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -101,6 +103,20 @@ namespace Vista.Módulo_de_Seguridad
             return modulos;
         }
 
+
+        private void RegistrarAuditoriaSesion(int usuarioId, string tipoMovimiento)
+        {
+            AuditoriaSesion auditoria = new AuditoriaSesion
+            {
+                UsuarioId = usuarioId,
+                FechaMovimiento = DateTime.Now,
+                TipoMovimiento = tipoMovimiento
+            };
+
+            // Aquí agregas la lógica para insertar la auditoría en la base de datos
+            ControladoraIniciarSesion.Instancia.Registrar(auditoria);
+        }
+
         #endregion
 
 
@@ -113,11 +129,13 @@ namespace Vista.Módulo_de_Seguridad
             formGestorUsuarios.ShowDialog();
         }
 
+
         private void gestionarGruposToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var formGestorGrupos = new FormGestionarGrupos(_sesion);
             formGestorGrupos.ShowDialog();
         }
+
 
         private void misDatosToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -125,11 +143,13 @@ namespace Vista.Módulo_de_Seguridad
             formDatosUsuario.ShowDialog();
         }
 
+
         private void cambiarClaveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var formCambiarClave = new FormCambiarClave(_sesion);
             formCambiarClave.ShowDialog();
         }
+
 
         private void realizarPedidoToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -137,11 +157,13 @@ namespace Vista.Módulo_de_Seguridad
             formRealizarPedido.ShowDialog();
         }
 
+
         private void gestionarProveedoresToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var formProveeores = new FormProveedores(_sesion);
             formProveeores.ShowDialog();
         }
+
 
         private void gestionarClientesToolStripMenuItem1_Click(object sender, EventArgs e)
         {
@@ -149,17 +171,20 @@ namespace Vista.Módulo_de_Seguridad
             formGestionarClientes.ShowDialog();
         }
 
+
         private void gestionarPedidosToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var formGestionarPedidos = new FormGestorPedidos(_sesion);
             formGestionarPedidos.ShowDialog();
         }
 
+
         private void gestionarPeliculasToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var formGestionarPeliculas = new FormGestorPeliculas(_sesion);
             formGestionarPeliculas.ShowDialog();
         }
+
 
         private void órdenesDeCompraToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -175,21 +200,32 @@ namespace Vista.Módulo_de_Seguridad
             formMetodospago.ShowDialog();
         }
 
+
         private void cerrarSesiónToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var confirmResult = MessageBox.Show("¿Está seguro de que desea cerrar sesión?", "Confirmar Cierre de Sesión", MessageBoxButtons.YesNo);
 
             if (confirmResult == DialogResult.Yes)
             {
+                // Registrar auditoría de logout
+                if (_sesion != null && _sesion.UsuarioSesion != null)
+                {
+                    RegistrarAuditoriaSesion(_sesion.UsuarioSesion.UsuarioId, "Logout");
+                }
+
+                // Cerrar la sesión actual (asegurándonos de que todos los datos se destruyan)
                 _sesion = null;
-                var formLogin = new FormIniciarSesion();
+
+                // Mostrar un nuevo formulario de login, recargando todos los datos
+                FormIniciarSesion formLogin = new FormIniciarSesion();
                 formLogin.Show();
+
+                // Cerrar el formulario actual (CineManager)
                 this.Close();
             }
         }
 
         #endregion
 
-        
     }
 }
