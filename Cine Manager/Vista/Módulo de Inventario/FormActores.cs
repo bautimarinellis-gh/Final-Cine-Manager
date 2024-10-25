@@ -1,5 +1,6 @@
 ﻿using Controladora;
 using Modelo.Entidades;
+using Modelo.Módulo_de_Seguridad;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,10 +15,13 @@ namespace Vista
 {
     public partial class FormActores : Form
     {
-        public FormActores()
+
+        private Sesion _sesion;
+
+        public FormActores(Sesion sesion)
         {
             InitializeComponent();
-
+            this._sesion = sesion;
             dgvActores.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             ActualizarGrilla();
         }

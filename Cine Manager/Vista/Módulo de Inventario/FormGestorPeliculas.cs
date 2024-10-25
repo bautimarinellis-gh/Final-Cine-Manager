@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Vista.Módulo_de_Administración;
+using Vista.Módulo_de_Inventario;
 
 namespace Vista
 {
@@ -50,15 +51,22 @@ namespace Vista
 
         private void generosCinematograficosToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var formGenerosCinematograficos = new FormGenerosCinematograficos();
+            var formGenerosCinematograficos = new FormGenerosCinematograficos(_sesion);
             formGenerosCinematograficos.ShowDialog();
         }
 
 
         private void actoresToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var formActores = new FormActores();
+            var formActores = new FormActores(_sesion);
             formActores.ShowDialog();
+        }
+
+
+        private void reportesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var formReportes = new FormReportesPeliculas(_sesion);
+            formReportes.ShowDialog();
         }
         #endregion
 
@@ -125,5 +133,7 @@ namespace Vista
             this.Close();
         }
         #endregion
+
+        
     }
 }

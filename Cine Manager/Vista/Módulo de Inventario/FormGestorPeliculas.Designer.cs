@@ -39,6 +39,7 @@
             generoCinematograficoDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             peliculaBindingSource = new BindingSource(components);
             groupBox1 = new GroupBox();
+            label1 = new Label();
             btnBuscar = new Button();
             txtBuscar = new TextBox();
             btnVolver = new Button();
@@ -50,7 +51,7 @@
             directoresToolStripMenuItem = new ToolStripMenuItem();
             generosCinematograficosToolStripMenuItem = new ToolStripMenuItem();
             actoresToolStripMenuItem = new ToolStripMenuItem();
-            label1 = new Label();
+            reportesToolStripMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)dgvPeliculas).BeginInit();
             ((System.ComponentModel.ISupportInitialize)peliculaBindingSource).BeginInit();
             groupBox1.SuspendLayout();
@@ -133,6 +134,15 @@
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(302, 104);
+            label1.Name = "label1";
+            label1.Size = new Size(99, 15);
+            label1.TabIndex = 19;
+            label1.Text = "Grilla de Peliculas";
+            // 
             // btnBuscar
             // 
             btnBuscar.Location = new Point(242, 47);
@@ -203,7 +213,7 @@
             // toolStripInformacion
             // 
             toolStripInformacion.DisplayStyle = ToolStripItemDisplayStyle.Text;
-            toolStripInformacion.DropDownItems.AddRange(new ToolStripItem[] { directoresToolStripMenuItem, generosCinematograficosToolStripMenuItem, actoresToolStripMenuItem });
+            toolStripInformacion.DropDownItems.AddRange(new ToolStripItem[] { directoresToolStripMenuItem, generosCinematograficosToolStripMenuItem, actoresToolStripMenuItem, reportesToolStripMenuItem });
             toolStripInformacion.Image = (Image)resources.GetObject("toolStripInformacion.Image");
             toolStripInformacion.ImageTransparentColor = Color.Magenta;
             toolStripInformacion.Name = "toolStripInformacion";
@@ -231,14 +241,12 @@
             actoresToolStripMenuItem.Text = "Actores";
             actoresToolStripMenuItem.Click += actoresToolStripMenuItem_Click;
             // 
-            // label1
+            // reportesToolStripMenuItem
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(302, 104);
-            label1.Name = "label1";
-            label1.Size = new Size(99, 15);
-            label1.TabIndex = 19;
-            label1.Text = "Grilla de Peliculas";
+            reportesToolStripMenuItem.Name = "reportesToolStripMenuItem";
+            reportesToolStripMenuItem.Size = new Size(214, 22);
+            reportesToolStripMenuItem.Text = "Reportes";
+            reportesToolStripMenuItem.Click += reportesToolStripMenuItem_Click;
             // 
             // FormGestorPeliculas
             // 
@@ -280,5 +288,6 @@
         private Button btnBuscar;
         private TextBox txtBuscar;
         private Label label1;
+        private ToolStripMenuItem reportesToolStripMenuItem;
     }
 }

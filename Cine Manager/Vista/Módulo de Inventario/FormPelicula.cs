@@ -206,10 +206,10 @@ namespace Vista
         private void LlenarComboBox()
         {
             cmbDirector.DataSource = ControladoraGestionarDirectores.Instancia.RecuperarDirectores();
-            cmbDirector.DisplayMember = "Codigo";
+            cmbDirector.DisplayMember = "Apellido";
 
             cmbGenero.DataSource = ControladoraGestionarGenerosCinematograficos.Instancia.RecuperarGenerosCinematograficos();
-            cmbGenero.DisplayMember = "Nombre";
+            cmbGenero.DisplayMember = "Apellido";
         }
 
         #endregion

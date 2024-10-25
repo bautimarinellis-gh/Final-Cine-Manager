@@ -1,5 +1,6 @@
 ﻿using Controladora;
 using Modelo.Entidades;
+using Modelo.Módulo_de_Seguridad;
 using System;
 using System.Linq;
 using System.Windows.Forms;
@@ -9,9 +10,12 @@ namespace Vista
     public partial class FormGenerosCinematograficos : Form
     {
 
-        public FormGenerosCinematograficos()
+        private Sesion _sesion;
+
+        public FormGenerosCinematograficos(Sesion sesion)
         {
             InitializeComponent();
+            this._sesion = sesion;
             dgvGenerosCinematograficos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             ActualizarGrilla();
         }

@@ -35,9 +35,6 @@ namespace Controladora.Seguridad
         }
 
 
-
-        
-
         public Usuario Buscar(string nombreUsuario)
         {
             // Cargar el usuario y todas sus relaciones sin seguimiento para mejorar el rendimiento
@@ -54,6 +51,7 @@ namespace Controladora.Seguridad
                     .ThenInclude(c => (c as Accion).Formulario) // Incluir los formularios de las acciones personalizadas
                         .ThenInclude(f => f.Modulo) // Incluir los módulos de los formularios personalizados
                 .FirstOrDefault(u => u.NombreUsuario == nombreUsuario); // Obtener el primer usuario que coincide con el nombre
+
 
             if (usuario != null)
             {
@@ -74,6 +72,7 @@ namespace Controladora.Seguridad
 
             return usuario;
         }
+
 
 
         public void Registrar(AuditoriaSesion auditoriaSesion)
