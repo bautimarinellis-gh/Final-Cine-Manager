@@ -19,6 +19,9 @@ using Modelo.Entidades;
 using iText.Layout.Properties;
 using iText.Kernel.Colors;
 
+using System.Windows.Forms.DataVisualization.Charting; // Para gráficos
+using System.Drawing.Imaging;
+
 namespace Vista.Módulo_de_Inventario
 {
     public partial class FormReportesPeliculas : Form
@@ -71,6 +74,17 @@ namespace Vista.Módulo_de_Inventario
                 // Agregar contenido al documento
                 AgregarEncabezado(document);
                 AgregarTabla(document, peliculasMasVendidas);
+
+                // Generar gráfico y agregarlo al documento
+                var grafico = GenerarGrafico(peliculasMasVendidas);
+                using (var stream = new MemoryStream())
+                {
+                    grafico.Save(stream, ImageFormat.Png);
+                    var image = iText.IO.Image.ImageDataFactory.Create(stream.ToArray());
+                    document.Add(new iText.Layout.Element.Image(image).SetHorizontalAlignment(iText.Layout.Properties.HorizontalAlignment.CENTER));
+                }
+
+
 
                 document.Close(); // Cerrar el documento
             }
@@ -177,8 +191,44 @@ namespace Vista.Módulo_de_Inventario
             // Agregar el título y la fecha al documento
             document.Add(title);
             document.Add(date);
-            document.Add(new Paragraph("\n")); 
+            document.Add(new Paragraph("\n"));
         }
+
+        private Bitmap GenerarGrafico(ReadOnlyCollection<(Pelicula, int)> peliculasMasVendidas)
+        {
+            // Crear un nuevo gráfico
+            var chart = new Chart();
+            chart.Width = 600; // Ancho del gráfico
+            chart.Height = 400; // Alto del gráfico
+
+            // Crear un área del gráfico
+            var chartArea = new ChartArea();
+            chart.ChartAreas.Add(chartArea);
+
+            // Agregar una serie de datos (gráfico de barras)
+            var series = new Series
+            {
+                Name = "Cantidad Vendida",
+                Color = System.Drawing.Color.Blue,
+                IsValueShownAsLabel = true,
+                ChartType = SeriesChartType.Bar // Cambiar a SeriesChartType.Bar para gráfico de barras
+            };
+
+            // Agregar los datos de las películas al gráfico
+            foreach (var pelicula in peliculasMasVendidas)
+            {
+                series.Points.AddXY(pelicula.Item1.Nombre, pelicula.Item2);
+            }
+
+            chart.Series.Add(series);
+
+            // Guardar el gráfico como una imagen
+            var bmp = new Bitmap(chart.Width, chart.Height);
+            chart.DrawToBitmap(bmp, new Rectangle(0, 0, chart.Width, chart.Height));
+
+            return bmp; // Devolver la imagen del gráfico
+        }
+
 
         #endregion
 

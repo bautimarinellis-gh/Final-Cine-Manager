@@ -63,6 +63,7 @@
             dgvVentasPeliculas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvVentasPeliculas.Location = new Point(25, 50);
             dgvVentasPeliculas.Name = "dgvVentasPeliculas";
+            dgvVentasPeliculas.ReadOnly = true;
             dgvVentasPeliculas.RowTemplate.Height = 25;
             dgvVentasPeliculas.Size = new Size(626, 308);
             dgvVentasPeliculas.TabIndex = 2;
