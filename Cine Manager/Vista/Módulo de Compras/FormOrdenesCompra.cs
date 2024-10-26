@@ -156,50 +156,37 @@ namespace Vista.Módulo_de_Compras
         private void cmbEstado_SelectedIndexChanged(object sender, EventArgs e)
         {
             var estadoSeleccionado = cmbEstado.SelectedItem.ToString();
-
-            // Obtener todas las órdenes de compra
             var todasLasOrdenes = ControladoraGestionarOrdenesCompra.Instancia.RecuperarOrdenesCompra();
+            IEnumerable<OrdenCompra> ordenesFiltradas;
 
-            if (estadoSeleccionado == "Todas")
+            switch (estadoSeleccionado)
             {
-                dgvOrdenesCompra.DataSource = null;
-                dgvOrdenesCompra.DataSource = todasLasOrdenes.ToList();
+                case "Todas":
+                    ordenesFiltradas = todasLasOrdenes;
+                    break;
+                case "Pendientes":
+                    ordenesFiltradas = todasLasOrdenes.Where(o => o.Estado == "Pendiente");
+                    break;
+                case "Completadas":
+                    ordenesFiltradas = todasLasOrdenes.Where(o => o.Estado == "Completada");
+                    break;
+                case "Canceladas":
+                    ordenesFiltradas = todasLasOrdenes.Where(o => o.Estado == "Cancelada");
+                    break;
+                case "Parcialmente Completadas":
+                    ordenesFiltradas = todasLasOrdenes.Where(o => o.Estado == "Parcialmente Completada");
+                    break;
+                case "Cerradas Con Faltante":
+                    ordenesFiltradas = todasLasOrdenes.Where(o => o.Estado == "Cerrada Con Faltante");
+                    break;
+                default:
+                    ordenesFiltradas = todasLasOrdenes;
+                    break;
             }
-            else if (estadoSeleccionado == "Pendientes")
-            {
-                dgvOrdenesCompra.DataSource = null;
-                dgvOrdenesCompra.DataSource = todasLasOrdenes
-                    .Where(o => o.Estado == "Pendiente")
-                    .ToList();
-            }
-            else if (estadoSeleccionado == "Completadas")
-            {
-                dgvOrdenesCompra.DataSource = null;
-                dgvOrdenesCompra.DataSource = todasLasOrdenes
-                    .Where(o => o.Estado == "Completada")
-                    .ToList();
-            }
-            else if (estadoSeleccionado == "Canceladas")
-            {
-                dgvOrdenesCompra.DataSource = null;
-                dgvOrdenesCompra.DataSource = todasLasOrdenes
-                    .Where(o => o.Estado == "Cancelada")
-                    .ToList();
-            }
-            else if (estadoSeleccionado == "Parcialmente Completadas")
-            {
-                dgvOrdenesCompra.DataSource = null;
-                dgvOrdenesCompra.DataSource = todasLasOrdenes
-                    .Where(o => o.Estado == "Parcialmente Completada")
-                    .ToList();
-            }
-            else if (estadoSeleccionado == "Cerradas Con Faltante")
-            {
-                dgvOrdenesCompra.DataSource = null;
-                dgvOrdenesCompra.DataSource = todasLasOrdenes
-                    .Where(o => o.Estado == "Cerrada Con Faltante")
-                    .ToList();
-            }
+
+            // Asignar el resultado al DataSource
+            dgvOrdenesCompra.DataSource = null;
+            dgvOrdenesCompra.DataSource = ordenesFiltradas.ToList();
         }
 
 

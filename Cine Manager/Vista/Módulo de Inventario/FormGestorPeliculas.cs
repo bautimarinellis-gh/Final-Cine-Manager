@@ -65,7 +65,7 @@ namespace Vista
 
         private void reportesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var formReportes = new FormReportesPeliculas(_sesion);
+            var formReportes = new FormReportes(_sesion);
             formReportes.ShowDialog();
         }
         #endregion

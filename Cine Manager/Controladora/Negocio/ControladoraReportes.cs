@@ -56,5 +56,43 @@ namespace Controladora.Negocio
             return peliculasVendidas.Select(p => (p.Pelicula, p.CantidadVendida)).ToList().AsReadOnly();
         }
 
+
+
+        public ReadOnlyCollection<(string RazonSocial, string Codigo, int CantidadOrdenesPendientes)> RecuperarProveedoresConOrdenesPendientes()
+        {
+            // Recuperar los proveedores y contar las órdenes de compra con estado pendiente o parcialmente completadas
+            var proveedoresConPendientes = context.Proveedores
+                .Select(proveedor => new
+                {
+                    Proveedor = proveedor,
+                    CantidadOrdenesPendientes = proveedor.OrdenesCompra
+                        .Count(o => o.Estado == "Pendiente" || o.Estado == "Parcialmente Completadas") // Contamos las órdenes de compra
+                })
+                .ToList()
+                .Where(item => item.CantidadOrdenesPendientes > 0); // Filtramos solo los proveedores con órdenes pendientes
+
+          // Convertir el resultado a una lista de tuplas y crear la colección de solo lectura
+         var resultado = proveedoresConPendientes
+         .Select(p => (
+            RazonSocial: p.Proveedor.RazonSocial,
+            Codigo: p.Proveedor.Codigo,
+            CantidadOrdenesPendientes: p.CantidadOrdenesPendientes
+         ))
+        .OrderByDescending(p => p.CantidadOrdenesPendientes) // Ordenar de mayor a menor cantidad de órdenes pendientes
+        .ToList();
+
+            return new ReadOnlyCollection<(string RazonSocial, string Codigo, int CantidadOrdenesPendientes)>(resultado);
+        }
+
+
+        public ReadOnlyCollection<Pelicula> RecuperarPeliculasConBajaDisponibilidad()
+        {
+            var peliculasBajaDisponibilidad = context.Peliculas
+                .Where(p => p.Cantidad< 30) 
+                .ToList().AsReadOnly();
+
+            return peliculasBajaDisponibilidad;
+        }
+
     }
 }
