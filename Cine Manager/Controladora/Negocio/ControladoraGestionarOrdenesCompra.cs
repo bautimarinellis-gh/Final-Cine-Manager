@@ -138,6 +138,12 @@ namespace Controladora.Negocio
                     return "Orden de compra inexistente";
                 }
 
+                // Validar si algún detalle de la orden ya ha sido entregado
+                if (ordenExistente.DetallesOrdenesCompra.Any(detalle => detalle.CantidadEntregada > 0))
+                {
+                    return "No se puede cancelar la orden de compra porque uno o más detalles ya han sido entregados.";
+                }
+
                 // Delegar la operación al estado actual
                 ordenExistente.Cancelar();
 

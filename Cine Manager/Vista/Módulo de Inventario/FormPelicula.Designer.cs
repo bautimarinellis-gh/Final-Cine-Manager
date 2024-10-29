@@ -217,6 +217,7 @@
             // 
             // cmbGenero
             // 
+            cmbGenero.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbGenero.FormattingEnabled = true;
             cmbGenero.Location = new Point(121, 253);
             cmbGenero.Name = "cmbGenero";
@@ -225,6 +226,7 @@
             // 
             // cmbDirector
             // 
+            cmbDirector.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbDirector.FormattingEnabled = true;
             cmbDirector.Location = new Point(121, 193);
             cmbDirector.Name = "cmbDirector";
@@ -234,10 +236,12 @@
             // numPrecio
             // 
             numPrecio.Location = new Point(121, 137);
-            numPrecio.Maximum = new decimal(new int[] { 1410065407, 2, 0, 0 });
+            numPrecio.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
+            numPrecio.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             numPrecio.Name = "numPrecio";
             numPrecio.Size = new Size(150, 23);
             numPrecio.TabIndex = 3;
+            numPrecio.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // txtNombre
             // 

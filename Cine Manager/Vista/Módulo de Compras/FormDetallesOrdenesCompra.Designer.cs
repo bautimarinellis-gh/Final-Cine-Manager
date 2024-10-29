@@ -31,6 +31,8 @@
             components = new System.ComponentModel.Container();
             btnVolver = new Button();
             groupBox2 = new GroupBox();
+            lblCodigoProveedor = new Label();
+            lblOrdenCompraCodigo = new Label();
             label1 = new Label();
             txtCantidadPeliculas = new TextBox();
             btnGuardar = new Button();
@@ -49,7 +51,7 @@
             // 
             // btnVolver
             // 
-            btnVolver.Location = new Point(447, 415);
+            btnVolver.Location = new Point(447, 474);
             btnVolver.Name = "btnVolver";
             btnVolver.Size = new Size(75, 23);
             btnVolver.TabIndex = 4;
@@ -59,20 +61,38 @@
             // 
             // groupBox2
             // 
+            groupBox2.Controls.Add(lblCodigoProveedor);
+            groupBox2.Controls.Add(lblOrdenCompraCodigo);
             groupBox2.Controls.Add(label1);
             groupBox2.Controls.Add(txtCantidadPeliculas);
             groupBox2.Controls.Add(btnGuardar);
             groupBox2.Controls.Add(dgvDetallesOrdenCompra);
             groupBox2.Location = new Point(12, 12);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(510, 397);
+            groupBox2.Size = new Size(510, 456);
             groupBox2.TabIndex = 3;
             groupBox2.TabStop = false;
+            // 
+            // lblCodigoProveedor
+            // 
+            lblCodigoProveedor.AutoSize = true;
+            lblCodigoProveedor.Location = new Point(16, 65);
+            lblCodigoProveedor.Name = "lblCodigoProveedor";
+            lblCodigoProveedor.Size = new Size(0, 15);
+            lblCodigoProveedor.TabIndex = 7;
+            // 
+            // lblOrdenCompraCodigo
+            // 
+            lblOrdenCompraCodigo.AutoSize = true;
+            lblOrdenCompraCodigo.Location = new Point(16, 27);
+            lblOrdenCompraCodigo.Name = "lblOrdenCompraCodigo";
+            lblOrdenCompraCodigo.Size = new Size(0, 15);
+            lblOrdenCompraCodigo.TabIndex = 6;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(16, 19);
+            label1.Location = new Point(144, 100);
             label1.Name = "label1";
             label1.Size = new Size(214, 15);
             label1.TabIndex = 5;
@@ -80,7 +100,7 @@
             // 
             // txtCantidadPeliculas
             // 
-            txtCantidadPeliculas.Location = new Point(16, 358);
+            txtCantidadPeliculas.Location = new Point(20, 415);
             txtCantidadPeliculas.Name = "txtCantidadPeliculas";
             txtCantidadPeliculas.PlaceholderText = "Ingrese la cantidad a entregar";
             txtCantidadPeliculas.Size = new Size(172, 23);
@@ -89,7 +109,7 @@
             // 
             // btnGuardar
             // 
-            btnGuardar.Location = new Point(212, 358);
+            btnGuardar.Location = new Point(216, 415);
             btnGuardar.Name = "btnGuardar";
             btnGuardar.Size = new Size(111, 24);
             btnGuardar.TabIndex = 3;
@@ -103,7 +123,7 @@
             dgvDetallesOrdenCompra.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvDetallesOrdenCompra.Columns.AddRange(new DataGridViewColumn[] { peliculaDataGridViewTextBoxColumn, cantidadOrdenadaDataGridViewTextBoxColumn, cantidadEntregadaDataGridViewTextBoxColumn, estadoDataGridViewCheckBoxColumn });
             dgvDetallesOrdenCompra.DataSource = detalleOrdenCompraBindingSource1;
-            dgvDetallesOrdenCompra.Location = new Point(16, 47);
+            dgvDetallesOrdenCompra.Location = new Point(16, 128);
             dgvDetallesOrdenCompra.Name = "dgvDetallesOrdenCompra";
             dgvDetallesOrdenCompra.ReadOnly = true;
             dgvDetallesOrdenCompra.RowTemplate.Height = 25;
@@ -150,7 +170,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(534, 450);
+            ClientSize = new Size(534, 509);
             Controls.Add(btnVolver);
             Controls.Add(groupBox2);
             Name = "FormDetallesOrdenesCompra";
@@ -178,5 +198,8 @@
         private BindingSource detalleOrdenCompraBindingSource1;
         private TextBox txtCantidadPeliculas;
         private Label label1;
+        private Label lblCodigoProveedor;
+        private Label lblOrdenCompraID;
+        private Label lblOrdenCompraCodigo;
     }
 }

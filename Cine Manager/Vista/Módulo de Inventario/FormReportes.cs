@@ -20,6 +20,9 @@ using iText.Layout.Properties;
 using iText.Kernel.Colors;
 
 
+using System.Windows.Forms.DataVisualization.Charting;
+using iText.IO.Image;
+using Color = System.Drawing.Color;
 
 namespace Vista.Módulo_de_Inventario
 {
@@ -63,17 +66,23 @@ namespace Vista.Módulo_de_Inventario
                     case 0: // Películas más vendidas
                         var peliculasMasVendidas = ControladoraReportes.Instancia.RecuperarPeliculasMasVendidas();
                         AgregarTablaPeliculasMasVendidas(document, peliculasMasVendidas);
+
+                        // Agregar margen entre la tabla y el gráfico
+                        document.Add(new Paragraph("\n").SetMarginTop(20));
+
+                        // Agregar el gráfico debajo de la tabla
+                        AgregarGraficoPeliculasMasVendidas(document, peliculasMasVendidas);
                         break;
 
                     case 1: // Proveedores con órdenes pendientes
                         var proveedoresConPendientes = ControladoraReportes.Instancia.RecuperarProveedoresConOrdenesPendientes();
                         AgregarTablaProveedoresConOrdenesPendientes(document, proveedoresConPendientes);
                         break;
-                    case 2:
+
+                    case 2: // Películas con baja disponibilidad
                         var peliculasBajaDisponibilidad = ControladoraReportes.Instancia.RecuperarPeliculasConBajaDisponibilidad();
                         AgregarTablaPeliculasConBajaDisponibilidad(document, peliculasBajaDisponibilidad);
                         break;
-
                 }
 
                 document.Close(); // Cerrar el documento
@@ -85,13 +94,23 @@ namespace Vista.Módulo_de_Inventario
 
 
 
+
         #region Metodos de exportación de PDFS
 
         /// Método para crear la ruta del PDF en la carpeta específica de cada reporte
         private string CrearRutaPdf()
         {
+            // Obtener la ruta del escritorio del usuario
             string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+
+            // Definir la ruta de la carpeta principal
             string folderPath = System.IO.Path.Combine(desktopPath, "PDFS CineManager");
+
+            // Crear la carpeta principal si no existe
+            if (!System.IO.Directory.Exists(folderPath))
+            {
+                System.IO.Directory.CreateDirectory(folderPath);
+            }
 
             // Subcarpetas específicas para cada tipo de reporte
             string subfolderPath;
@@ -105,6 +124,9 @@ namespace Vista.Módulo_de_Inventario
                     break;
                 case 2:
                     subfolderPath = System.IO.Path.Combine(folderPath, "Reportes Peliculas con baja disponibilidad");
+                    break;
+                case 3:
+                    subfolderPath = System.IO.Path.Combine(folderPath, "Reportes Peliculas alquiladas no devueltas"); // Nueva opción
                     break;
                 default:
                     subfolderPath = folderPath;
@@ -130,6 +152,9 @@ namespace Vista.Módulo_de_Inventario
                 case 2:
                     fileName = $"PeliculasConBajaDisponibilidad_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
                     break;
+                case 3:
+                    fileName = $"PeliculasAlquiladasNoDevueltas_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
+                    break;
                 default:
                     fileName = $"Reporte_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
                     break;
@@ -137,6 +162,7 @@ namespace Vista.Módulo_de_Inventario
 
             return System.IO.Path.Combine(subfolderPath, fileName);
         }
+
 
 
         // Métodos para agregar tablas y encabezados (sin cambios)
@@ -239,7 +265,76 @@ namespace Vista.Módulo_de_Inventario
             document.Add(new Paragraph("\n"));
         }
 
+
+
+        private void AgregarGraficoPeliculasMasVendidas(Document document, ReadOnlyCollection<(Pelicula, int)> peliculasMasVendidas)
+        {
+            // Crear el gráfico con estilo modernizado
+            Chart chart = new Chart
+            {
+                Width = 600,
+                Height = 400
+            };
+
+            var chartArea = new ChartArea("MainArea")
+            {
+                BackColor = Color.White, // Fondo blanco para un estilo limpio
+                AxisX =
+        {
+            Interval = 1,
+            LabelStyle = { Font = new Font("Arial", 10, FontStyle.Bold), ForeColor = Color.Gray },
+            LineColor = Color.LightGray // Color gris claro para el eje X
+        },
+                AxisY =
+        {
+            LabelStyle = { Font = new Font("Arial", 10), ForeColor = Color.Gray },
+            LineColor = Color.LightGray // Color gris claro para el eje Y
+        }
+            };
+            chart.ChartAreas.Add(chartArea);
+
+            var series = new Series("Ventas")
+            {
+                ChartType = SeriesChartType.Bar,
+                Color = Color.FromArgb(102, 204, 255), // Color azul suave para las barras
+                BorderWidth = 0,
+                IsValueShownAsLabel = true, // Mostrar los valores encima de cada barra
+                LabelForeColor = Color.DimGray, // Color gris oscuro para las etiquetas de valores
+                Font = new Font("Arial", 10, FontStyle.Bold)
+            };
+            chart.Series.Add(series);
+
+            // Agregar degradado de color para un efecto más moderno
+            series.BackGradientStyle = GradientStyle.LeftRight;
+            series.BackSecondaryColor = Color.FromArgb(51, 153, 255); // Azul más oscuro para el gradiente
+
+            // Agregar datos al gráfico
+            foreach (var pelicula in peliculasMasVendidas)
+            {
+                series.Points.AddXY(pelicula.Item1.Nombre, pelicula.Item2);
+            }
+
+            // Guardar el gráfico como imagen
+            string imagePath = Path.Combine(Path.GetTempPath(), "grafico_peliculas_mas_vendidas.png");
+            chart.SaveImage(imagePath, ChartImageFormat.Png);
+
+            // Agregar la imagen al PDF
+            ImageData imageData = ImageDataFactory.Create(imagePath);
+            iText.Layout.Element.Image pdfImage = new iText.Layout.Element.Image(imageData)
+                .SetHorizontalAlignment(iText.Layout.Properties.HorizontalAlignment.CENTER)
+                .SetMarginTop(20); // Espacio entre la tabla y el gráfico
+            document.Add(pdfImage);
+
+            // Borrar el archivo temporal de imagen
+            if (File.Exists(imagePath))
+            {
+                File.Delete(imagePath);
+            }
+        }
+
         #endregion
+
+
 
 
 

@@ -23,6 +23,9 @@ namespace Vista.Módulo_de_Compras
             this.ordenCompra = orden;
             dgvDetallesOrdenCompra.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
+            lblOrdenCompraCodigo.Text = $"Código Orden de Compra: {ordenCompra.Codigo}";
+            lblCodigoProveedor.Text = $"Código del Proveedor: {ordenCompra.Proveedor.Codigo}";
+
             ActualizarGrilla();
         }
 

@@ -34,19 +34,21 @@
             cmbTipoReporte = new ComboBox();
             dgvReportes = new DataGridView();
             btnVolver = new Button();
+            label2 = new Label();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvReportes).BeginInit();
             SuspendLayout();
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(label1);
             groupBox1.Controls.Add(btnExportar);
             groupBox1.Controls.Add(cmbTipoReporte);
             groupBox1.Controls.Add(dgvReportes);
             groupBox1.Location = new Point(12, 12);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(573, 422);
+            groupBox1.Size = new Size(573, 451);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             // 
@@ -82,7 +84,7 @@
             // dgvReportes
             // 
             dgvReportes.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvReportes.Location = new Point(25, 89);
+            dgvReportes.Location = new Point(25, 113);
             dgvReportes.Name = "dgvReportes";
             dgvReportes.ReadOnly = true;
             dgvReportes.RowTemplate.Height = 25;
@@ -91,7 +93,7 @@
             // 
             // btnVolver
             // 
-            btnVolver.Location = new Point(510, 449);
+            btnVolver.Location = new Point(510, 469);
             btnVolver.Name = "btnVolver";
             btnVolver.Size = new Size(75, 23);
             btnVolver.TabIndex = 0;
@@ -99,11 +101,20 @@
             btnVolver.UseVisualStyleBackColor = true;
             btnVolver.Click += btnVolver_Click;
             // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(212, 86);
+            label2.Name = "label2";
+            label2.Size = new Size(96, 15);
+            label2.TabIndex = 7;
+            label2.Text = "Grilla de reportes";
+            // 
             // FormReportes
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(597, 484);
+            ClientSize = new Size(597, 504);
             Controls.Add(groupBox1);
             Controls.Add(btnVolver);
             Name = "FormReportes";
@@ -122,5 +133,6 @@
         private Button btnVolver;
         private Label label1;
         private ComboBox cmbTipoReporte;
+        private Label label2;
     }
 }
