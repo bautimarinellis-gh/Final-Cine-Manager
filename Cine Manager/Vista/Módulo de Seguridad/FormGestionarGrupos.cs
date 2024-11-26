@@ -101,22 +101,34 @@ namespace Vista.Módulo_de_Seguridad
             if (cmbEstado.SelectedItem != null)
             {
                 string estadoSeleccionado = cmbEstado.SelectedItem.ToString();
-                filtroEstado = estadoSeleccionado == "Activo";
+                if (estadoSeleccionado == "Activo")
+                    filtroEstado = true;
+                else if (estadoSeleccionado == "Inactivo")
+                    filtroEstado = false;
+                else
+                    filtroEstado = null; // "Todos"
             }
 
+            // Recuperar la lista inicial de grupos
             var listaGrupos = new List<Grupo>(ControladoraGestionarGrupos.Instancia.RecuperarGrupos());
 
+            // Filtrar por nombre
             if (!string.IsNullOrEmpty(filtroNombre))
             {
-                listaGrupos = listaGrupos.Where(g => g.Nombre.Contains(filtroNombre, StringComparison.OrdinalIgnoreCase)).ToList();
+                listaGrupos = listaGrupos
+                    .Where(g => g.Nombre.Contains(filtroNombre, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
             }
 
             // Filtrar por estado
             if (filtroEstado.HasValue)
             {
-                listaGrupos = listaGrupos.Where(g => g.EstadoGrupo.EstadoGrupoNombre == "Activo" == filtroEstado.Value).ToList();
+                listaGrupos = listaGrupos
+                    .Where(g => g.EstadoGrupo.EstadoGrupoNombre == (filtroEstado.Value ? "Activo" : "Inactivo"))
+                    .ToList();
             }
 
+            // Actualizar el DataGridView
             dgvGrupos.DataSource = null;
             dgvGrupos.DataSource = listaGrupos;
         }

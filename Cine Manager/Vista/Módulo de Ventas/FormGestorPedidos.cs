@@ -16,38 +16,30 @@ namespace Vista.Módulo_de_Administración
         private Sesion _sesion;
 
 
+
         public FormGestorPedidos(Sesion sesion)
         {
             InitializeComponent();
             dgvPedidos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            _sesion = sesion;
+            this._sesion = sesion;
+
             LlenarComboBox();
             pedido = new Pedido();
 
-            try
-            {
-                pedido.AumentoPedido();
-                ActualizarGrilla();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error al cargar los pedidos: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            ActualizarGrilla();
         }
 
         #region Métodos de Carga y Actualización
 
         private void ActualizarGrilla()
         {
-            try
-            {
-                dgvPedidos.DataSource = null;
-                dgvPedidos.DataSource = ControladoraGestionarPedidos.Instancia.RecuperarPedidos();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error al actualizar la grilla: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            pedido.AumentoPedido();
+
+            // Consulta actualizada a la base de datos
+            var pedidos = ControladoraGestionarPedidos.Instancia.RecuperarPedidos();
+
+            dgvPedidos.DataSource = null; 
+            dgvPedidos.DataSource = pedidos; 
         }
 
         private void LlenarComboBox()

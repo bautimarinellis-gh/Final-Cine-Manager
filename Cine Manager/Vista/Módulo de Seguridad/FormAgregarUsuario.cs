@@ -75,7 +75,7 @@ namespace Vista.Módulo_de_Seguridad
         {
             if (!ValidarDatos())
             {
-                return;
+                return; // Si los datos no son válidos, no continuar
             }
 
             // Obtener los grupos, acciones asignadas, acciones personalizadas y acciones del módulo perfil
@@ -109,7 +109,8 @@ namespace Vista.Módulo_de_Seguridad
                 // Intentar enviar la clave por correo
                 if (!EnviarClavePorEmail(txtEmail.Text, claveGenerada))
                 {
-                    MessageBox.Show("No se pudo enviar la clave al email proporcionado.");
+                    MessageBox.Show("No se pudo enviar la clave al email proporcionado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return; 
                 }
             }
 
@@ -125,6 +126,8 @@ namespace Vista.Módulo_de_Seguridad
             LimpiarCampos();
             Close();
         }
+
+
 
         private void btnCancelar_Click(object sender, EventArgs e)
         {

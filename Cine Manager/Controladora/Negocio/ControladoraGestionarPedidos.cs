@@ -41,7 +41,7 @@ namespace Controladora
         {
             try
             {
-                return context.Pedidos.Include(c => c.Cliente).ToList().AsReadOnly();
+                return context.Pedidos.AsNoTracking().Include(c => c.Cliente).ToList().AsReadOnly();
             }
             catch(Exception ex)
             {

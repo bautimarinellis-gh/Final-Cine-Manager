@@ -45,14 +45,16 @@ namespace Vista.Módulo_de_Compras
                 var detalleOrdenSeleccionado = (DetalleOrdenCompra)dgvDetallesOrdenCompra.SelectedRows[0].DataBoundItem;
                 var ordenCompra = detalleOrdenSeleccionado.OrdenCompra;
 
-                // Realizar las validaciones necesarias
-                if (!ValidarOrdenCerrada(ordenCompra) || !ValidarCantidad(txtCantidadPeliculas.Text) || !ValidarDetalleCompletado(detalleOrdenSeleccionado))
+                // Validaciones
+                if (!ValidarOrdenCerrada(ordenCompra) ||
+                    !ValidarCantidad(txtCantidadPeliculas.Text) ||
+                    !ValidarDetalleCompletado(detalleOrdenSeleccionado))
                 {
                     return;
                 }
 
                 // Confirmación de entrega
-                var cantEntrega = int.Parse(txtCantidadPeliculas.Text); // Cantidad ya validada
+                var cantEntrega = int.Parse(txtCantidadPeliculas.Text);
                 var confirmResult = MessageBox.Show(
                     $"¿Estás seguro que quieres ingresar {cantEntrega} como cantidad entregada para este detalle de orden de compra?",
                     "Confirmar Entrega",
@@ -61,10 +63,12 @@ namespace Vista.Módulo_de_Compras
 
                 if (confirmResult == DialogResult.Yes)
                 {
+                    // Realizar entrega
                     var resultado = ControladoraDetallesOrdenesCompra.Instancia.EntregarDetalleOrdenCompra(detalleOrdenSeleccionado, cantEntrega);
 
-                    MessageBox.Show(resultado, "Resultado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    // Actualizar la grilla
                     ActualizarGrilla();
+                    MessageBox.Show(resultado, "Resultado", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             else
@@ -79,13 +83,21 @@ namespace Vista.Módulo_de_Compras
 
         private bool ValidarOrdenCerrada(OrdenCompra ordenCompra)
         {
-            if (ordenCompra.Estado == "Cerrada Con Faltante")
+            // Forzar la recarga desde la base de datos
+            var ordenActualizada = ControladoraGestionarOrdenesCompra.Instancia.RecargarOrdenCompra(ordenCompra.Codigo);
+
+            if (ordenActualizada.Estado == "Cerrada Con Faltante")
             {
-                MessageBox.Show("La orden de compra ha sido cerrada. No puedes realizar más entregas. Si necesitas restaurar películas, por favor, realiza una nueva orden de compra.", "Orden Cerrada", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    "La orden de compra ha sido cerrada. No puedes realizar más entregas. Si necesitas restaurar películas, por favor, realiza una nueva orden de compra.",
+                    "Orden Cerrada",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return false;
             }
             return true;
         }
+
 
         private bool ValidarCantidad(string cantidadTexto)
         {

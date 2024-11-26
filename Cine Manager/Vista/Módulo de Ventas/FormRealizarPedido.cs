@@ -102,7 +102,7 @@ namespace Vista.Módulo_de_Transacciones
                 {
                     Pelicula = peliculaSeleccionada,
                     Cantidad = int.Parse(txtCantidadPeliculas.Text),
-                    FechaDevolucion = DateTime.Now.AddMinutes(2),
+                    FechaDevolucion = DateTime.Now.AddMinutes(1),
                 };
 
                 string mensaje = pedidoActual.AgregarDetalle(detalleAlquiler, true);

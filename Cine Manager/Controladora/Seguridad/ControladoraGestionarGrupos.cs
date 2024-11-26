@@ -42,7 +42,6 @@ namespace Controladora.Seguridad
         {
             try
             {
-                // No es necesario hacer Include para 'Nombre' ya que es heredado de Componente.
                 return context.Grupos
                               .Include(g => g.EstadoGrupo) // Incluimos la relación con Estado
                               .ToList()
@@ -137,6 +136,7 @@ namespace Controladora.Seguridad
                     }
 
                     context.Grupos.Remove(grupoExistente);
+                    context.SaveChanges();
                     return "Grupo eliminado correctamente";
                 }
                 else

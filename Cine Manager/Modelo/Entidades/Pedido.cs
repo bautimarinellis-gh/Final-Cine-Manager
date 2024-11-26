@@ -157,12 +157,10 @@ namespace Modelo.Entidades
 
 
 
-
         public void AumentoPedido()
         {
             // Obtener todos los pedidos del contexto
             var pedidos = context.Pedidos.Include(p => p.DetallesPedido).ToList();
-
             // Iterar sobre los pedidos en paralelo
             Parallel.ForEach(pedidos, pedido =>
             {
@@ -170,29 +168,27 @@ namespace Modelo.Entidades
                 {
                     // Filtrar los detalles de alquiler del pedido actual
                     var detallesAlquiler = pedido.DetallesPedido.OfType<DetalleAlquiler>().ToList();
-
                     // Verificar si hay algún detalle de alquiler vencido y el recargo no ha sido aplicado
                     if (!pedido.recargo && detallesAlquiler.Any(alquiler => alquiler.FechaDevolucion < DateTime.Now && !alquiler.Devuelto))
                     {
                         // Calcula el aumento del 30%
                         decimal aumento = pedido.total * 0.3m;
-
                         // Actualiza el total del pedido con el aumento
                         pedido.total += aumento;
-
                         // Marca el recargo como aplicado
                         pedido.recargo = true;
-
                         // Guardar los cambios en la base de datos
                         context.SaveChanges();
                     }
                 }
             });
         }
-            
 
-                      
-                       
+
+
+
+
+
 
 
         public void LimpiarDetalles()

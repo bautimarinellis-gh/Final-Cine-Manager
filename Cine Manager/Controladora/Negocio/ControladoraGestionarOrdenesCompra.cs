@@ -41,7 +41,10 @@ namespace Controladora.Negocio
         {
             try
             {
-                return context.OrdenesCompra.Include(o => o.Proveedor).ToList().AsReadOnly();
+                return context.OrdenesCompra.AsNoTracking()
+                    .Include(o => o.Proveedor)
+                    .ToList()
+                    .AsReadOnly();
             }
             catch (Exception ex)
             {
@@ -56,7 +59,7 @@ namespace Controladora.Negocio
             {
                 if (string.IsNullOrEmpty(textoBusqueda))
                 {
-                    return RecuperarOrdenesCompra(); // Devuelve todas las peliculas si el txtbox está vacío
+                    return RecuperarOrdenesCompra();
                 }
 
                 return context.OrdenesCompra
@@ -159,6 +162,14 @@ namespace Controladora.Negocio
             {
                 return $"Error desconocido: {ex.Message}";
             }
+        }
+
+
+        public OrdenCompra RecargarOrdenCompra(string codigoOrden)
+        {
+            return context.OrdenesCompra
+                .AsNoTracking()
+                .FirstOrDefault(o => o.Codigo == codigoOrden);
         }
     }
 }

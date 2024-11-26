@@ -15,6 +15,9 @@ namespace Vista.Módulo_de_Compras
     {
         #region Atributos
         private Sesion _sesion;
+        private string filtroActual = "Todas";
+        private List<OrdenCompra> _todasLasOrdenes = new List<OrdenCompra>();
+
         #endregion
 
 
@@ -37,8 +40,15 @@ namespace Vista.Módulo_de_Compras
         #region Métodos Privados
         private void ActualizarGrilla()
         {
-            dgvOrdenesCompra.DataSource = null;
-            dgvOrdenesCompra.DataSource = ControladoraGestionarOrdenesCompra.Instancia.RecuperarOrdenesCompra();
+
+            // Obtener todas las órdenes de compra actualizadas desde la base de datos
+            var ordenesCompraActualizadas = ControladoraGestionarOrdenesCompra.Instancia.RecuperarOrdenesCompra();
+
+            // Actualizar el listado interno de todas las órdenes para aplicar el filtro actual
+            _todasLasOrdenes = ordenesCompraActualizadas.ToList();
+
+            // Aplicar el filtro actual
+            FiltrarGrilla();
         }
         #endregion
 
@@ -76,6 +86,8 @@ namespace Vista.Módulo_de_Compras
                 // Mostrar el formulario de detalles
                 var formDetallesOrdenCompra = new FormDetallesOrdenesCompra(ordenCompraSeleccionada);
                 formDetallesOrdenCompra.ShowDialog();
+
+                // Recargar los datos de la grilla desde la base de datos
                 ActualizarGrilla();
             }
             else
@@ -155,40 +167,41 @@ namespace Vista.Módulo_de_Compras
 
         private void cmbEstado_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var estadoSeleccionado = cmbEstado.SelectedItem.ToString();
-            var todasLasOrdenes = ControladoraGestionarOrdenesCompra.Instancia.RecuperarOrdenesCompra();
+            filtroActual = cmbEstado.SelectedItem.ToString();
+            FiltrarGrilla();
+        }
+
+
+        private void FiltrarGrilla()
+        {
             IEnumerable<OrdenCompra> ordenesFiltradas;
 
-            switch (estadoSeleccionado)
+            switch (filtroActual)
             {
-                case "Todas":
-                    ordenesFiltradas = todasLasOrdenes;
-                    break;
                 case "Pendientes":
-                    ordenesFiltradas = todasLasOrdenes.Where(o => o.Estado == "Pendiente");
+                    ordenesFiltradas = _todasLasOrdenes.Where(o => o.Estado == "Pendiente");
                     break;
                 case "Completadas":
-                    ordenesFiltradas = todasLasOrdenes.Where(o => o.Estado == "Completada");
+                    ordenesFiltradas = _todasLasOrdenes.Where(o => o.Estado == "Completada");
                     break;
                 case "Canceladas":
-                    ordenesFiltradas = todasLasOrdenes.Where(o => o.Estado == "Cancelada");
+                    ordenesFiltradas = _todasLasOrdenes.Where(o => o.Estado == "Cancelada");
                     break;
                 case "Parcialmente Completadas":
-                    ordenesFiltradas = todasLasOrdenes.Where(o => o.Estado == "Parcialmente Completada");
+                    ordenesFiltradas = _todasLasOrdenes.Where(o => o.Estado == "Parcialmente Completada");
                     break;
                 case "Cerradas Con Faltante":
-                    ordenesFiltradas = todasLasOrdenes.Where(o => o.Estado == "Cerrada Con Faltante");
+                    ordenesFiltradas = _todasLasOrdenes.Where(o => o.Estado == "Cerrada Con Faltante");
                     break;
                 default:
-                    ordenesFiltradas = todasLasOrdenes;
+                    ordenesFiltradas = _todasLasOrdenes;
                     break;
             }
 
-            // Asignar el resultado al DataSource
+            // Asignar las órdenes filtradas a la grilla
             dgvOrdenesCompra.DataSource = null;
             dgvOrdenesCompra.DataSource = ordenesFiltradas.ToList();
         }
-
 
 
         private void btnVolver_Click(object sender, EventArgs e)
