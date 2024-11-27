@@ -261,6 +261,7 @@
             treeViewAcciones.Nodes.AddRange(new TreeNode[] { treeNode5, treeNode8, treeNode11 });
             treeViewAcciones.Size = new Size(450, 182);
             treeViewAcciones.TabIndex = 1;
+            treeViewAcciones.AfterCheck += treeViewAcciones_AfterCheck;
             // 
             // FormAgregarGrupo
             // 

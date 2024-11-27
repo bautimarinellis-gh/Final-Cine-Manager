@@ -110,7 +110,7 @@ namespace Vista.Módulo_de_Seguridad
                 if (!EnviarClavePorEmail(txtEmail.Text, claveGenerada))
                 {
                     MessageBox.Show("No se pudo enviar la clave al email proporcionado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return; 
+                    return;
                 }
             }
 
@@ -317,6 +317,8 @@ namespace Vista.Módulo_de_Seguridad
             }
         }
 
+
+
         private void CargarDatosUsuario()
         {
             txtUsuario.Text = usuario.NombreUsuario;
@@ -350,6 +352,8 @@ namespace Vista.Módulo_de_Seguridad
             }
         }
 
+
+
         private void LimpiarCampos()
         {
             txtUsuario.Clear();
@@ -371,5 +375,37 @@ namespace Vista.Módulo_de_Seguridad
         }
 
         #endregion
+
+
+        private void treeAcciones_AfterCheck(object sender, TreeViewEventArgs e)
+        {
+            // Desactivar temporalmente el evento AfterCheck
+            treeAcciones.AfterCheck -= treeAcciones_AfterCheck;
+
+            try
+            {
+                if (e.Node.Nodes.Count > 0) // Nodo padre
+                {
+                    foreach (TreeNode subNodo in e.Node.Nodes)
+                    {
+                        subNodo.Checked = e.Node.Checked; // Marcar/desmarcar todos los subnodos
+                    }
+                }
+                else // Nodo hijo
+                {
+                    TreeNode nodoPadre = e.Node.Parent;
+                    if (nodoPadre != null)
+                    {
+                        // Si todos los subnodos están marcados, marca el nodo padre
+                        nodoPadre.Checked = nodoPadre.Nodes.Cast<TreeNode>().All(n => n.Checked);
+                    }
+                }
+            }
+            finally
+            {
+                // Volver a activar el evento AfterCheck
+                treeAcciones.AfterCheck += treeAcciones_AfterCheck;
+            }
+        }
     }
 }

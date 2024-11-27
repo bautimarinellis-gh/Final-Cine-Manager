@@ -37,7 +37,7 @@ namespace Vista.Módulo_de_Seguridad
 
             cmbEstado.SelectedIndex = 0;
 
-            modificar = false; 
+            modificar = false;
         }
 
         // Constructor Modificar
@@ -76,14 +76,18 @@ namespace Vista.Módulo_de_Seguridad
                 return;
             }
 
-            List<Componente> accionesSeleccionadas = ObtenerAccionesSeleccionadas().Distinct().ToList();
+            var accionesSeleccionadas = ObtenerAccionesSeleccionadas();
+            if (accionesSeleccionadas.Count == 0)
+            {
+                MessageBox.Show("Debe seleccionar al menos una acción.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
             grupo.Codigo = txtCodigo.Text;
             grupo.Nombre = txtNombre.Text;
             grupo.DescripcionGrupo = txtDescripcion.Text;
             grupo.EstadoGrupo = (EstadoGrupo)cmbEstado.SelectedItem;
 
-            // Asigna directamente las acciones seleccionadas
             grupo.Componentes = accionesSeleccionadas;
 
             string mensaje = modificar
@@ -108,7 +112,41 @@ namespace Vista.Módulo_de_Seguridad
             this.Close();
         }
 
+
+        private void treeViewAcciones_AfterCheck(object sender, TreeViewEventArgs e)
+        {
+            // Desactivar temporalmente el evento AfterCheck
+            treeViewAcciones.AfterCheck -= treeViewAcciones_AfterCheck;
+
+            try
+            {
+                if (e.Node.Nodes.Count > 0) // Nodo padre
+                {
+                    foreach (TreeNode subNodo in e.Node.Nodes)
+                    {
+                        subNodo.Checked = e.Node.Checked; // Marcar/desmarcar todos los subnodos
+                    }
+                }
+                else // Nodo hijo
+                {
+                    TreeNode nodoPadre = e.Node.Parent;
+                    if (nodoPadre != null)
+                    {
+                        // Si todos los subnodos están marcados, marca el nodo padre
+                        nodoPadre.Checked = nodoPadre.Nodes.Cast<TreeNode>().All(n => n.Checked);
+                    }
+                }
+            }
+            finally
+            {
+                // Volver a activar el evento AfterCheck
+                treeViewAcciones.AfterCheck += treeViewAcciones_AfterCheck;
+            }
+        }
+
         #endregion
+
+
 
 
         #region Métodos Privados
@@ -163,6 +201,7 @@ namespace Vista.Módulo_de_Seguridad
 
 
 
+
         private void CargarAccionesGrupo()
         {
             // Obtener los nombres de las acciones asignadas al usuario desde la base de datos
@@ -186,6 +225,7 @@ namespace Vista.Módulo_de_Seguridad
                 }
             }
         }
+
 
 
 
@@ -218,5 +258,9 @@ namespace Vista.Módulo_de_Seguridad
         }
 
         #endregion
+
+
+
+       
     }
 }

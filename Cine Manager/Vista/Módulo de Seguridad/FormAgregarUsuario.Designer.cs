@@ -280,6 +280,7 @@
             treeAcciones.Nodes.AddRange(new TreeNode[] { treeNode2 });
             treeAcciones.Size = new Size(450, 182);
             treeAcciones.TabIndex = 1;
+            treeAcciones.AfterCheck += treeAcciones_AfterCheck;
             // 
             // FormAgregarUsuario
             // 
