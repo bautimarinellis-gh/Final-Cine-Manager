@@ -12,7 +12,7 @@ namespace Controladora
     public class ControladoraPagarPedido
     {
         private static ControladoraPagarPedido instancia;
-        private Contexto context;
+        
 
 
         public static ControladoraPagarPedido Instancia
@@ -30,14 +30,14 @@ namespace Controladora
 
         public ControladoraPagarPedido()
         {
-            context = new Contexto();
+            
         }
 
 
 
         public Pedido Buscar(string codigo)
         {
-            var pedido = context.Pedidos.FirstOrDefault(p => p.Codigo.ToLower() == codigo.ToLower());
+            var pedido = Contexto.Instancia.Pedidos.FirstOrDefault(p => p.Codigo.ToLower() == codigo.ToLower());
             return pedido;
         }
 
@@ -47,17 +47,17 @@ namespace Controladora
             try
             {
 
-                var pedido = context.Pedidos.FirstOrDefault(p => p.PedidoId == pagoPedido.Pedido.PedidoId);
+                var pedido = Contexto.Instancia.Pedidos.FirstOrDefault(p => p.PedidoId == pagoPedido.Pedido.PedidoId);
 
-                var metodoPago = context.MetodosPago.FirstOrDefault(mp => mp.MetodoPagoId == pagoPedido.MetodoPago.MetodoPagoId);
+                var metodoPago = Contexto.Instancia.MetodosPago.FirstOrDefault(mp => mp.MetodoPagoId == pagoPedido.MetodoPago.MetodoPagoId);
 
 
                 // Asignar la entidad del pedido cargada al pago
                 pagoPedido.Pedido = pedido;
                 pagoPedido.MetodoPago = metodoPago;
 
-                context.PagosPedidos.Add(pagoPedido);
-                context.SaveChanges();
+                Contexto.Instancia.PagosPedidos.Add(pagoPedido);
+                Contexto.Instancia.SaveChanges();
 
                 return "Pago realizado correctamente";
             }
@@ -69,7 +69,6 @@ namespace Controladora
 
 
 
-        //Mover a controladora PAGAR PEDIDO
         public bool ModificarPedido(Pedido pedido)
         {
             try
@@ -80,8 +79,8 @@ namespace Controladora
                 {
                     pedidoExistente.Estado = pedido.Estado;
 
-                    context.Pedidos.Update(pedidoExistente);
-                    context.SaveChanges();
+                    Contexto.Instancia.Pedidos.Update(pedidoExistente);
+                    Contexto.Instancia.SaveChanges();
 
                     return true;
                 }

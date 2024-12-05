@@ -13,7 +13,6 @@ namespace Controladora
     public class ControladoraGestionarPedidos
     {
         private static ControladoraGestionarPedidos instancia;
-        private Contexto context;
 
 
 
@@ -33,7 +32,6 @@ namespace Controladora
 
         private ControladoraGestionarPedidos()
         {
-            context = new Contexto();
         }
 
 
@@ -41,7 +39,7 @@ namespace Controladora
         {
             try
             {
-                return context.Pedidos.AsNoTracking().Include(c => c.Cliente).ToList().AsReadOnly();
+                return Contexto.Instancia.Pedidos.AsNoTracking().Include(c => c.Cliente).ToList().AsReadOnly();
             }
             catch(Exception ex)
             {
@@ -63,7 +61,7 @@ namespace Controladora
                 else
                 {
                     // Filtrar clientes cuyo DNI coincida con la búsqueda
-                    return context.Pedidos
+                    return Contexto.Instancia.Pedidos
                         .Where(p => p.Cliente.DNI == dniBusqueda.Value)
                         .ToList()
                         .AsReadOnly();

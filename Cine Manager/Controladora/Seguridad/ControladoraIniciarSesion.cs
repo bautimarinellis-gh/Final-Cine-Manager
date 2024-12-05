@@ -13,8 +13,6 @@ namespace Controladora.Seguridad
     public class ControladoraIniciarSesion
     {
         private static ControladoraIniciarSesion instancia;
-        private Contexto context;
-
 
         public static ControladoraIniciarSesion Instancia
         {
@@ -31,31 +29,28 @@ namespace Controladora.Seguridad
 
         public ControladoraIniciarSesion()
         {
-            context = new Contexto();
         }
 
 
         public Usuario Buscar(string nombreUsuario)
         {
-            // Cargar el usuario y todas sus relaciones sin seguimiento para mejorar el rendimiento
-            var usuario = context.Usuarios
+            var usuario = Contexto.Instancia.Usuarios
                 .AsNoTracking() // Evita que Entity Framework rastree los cambios en las entidades cargadas
-                .Include(u => u.EstadoUsuario) // Cargar el estado del usuario
+                .Include(u => u.EstadoUsuario) 
                 .Include(u => u.Componentes)
-                    .ThenInclude(c => (c as Grupo).EstadoGrupo) // Incluir el estado del grupo en los componentes de tipo Grupo
+                    .ThenInclude(c => (c as Grupo).EstadoGrupo) 
                 .Include(u => u.Componentes)
-                    .ThenInclude(c => (c as Grupo).Componentes) // Incluir los componentes de los grupos
-                        .ThenInclude(gc => (gc as Accion).Formulario) // Incluir los formularios de las acciones dentro de los grupos
-                            .ThenInclude(f => f.Modulo) // Incluir los módulos asociados a los formularios
+                    .ThenInclude(c => (c as Grupo).Componentes) 
+                        .ThenInclude(gc => (gc as Accion).Formulario) 
+                            .ThenInclude(f => f.Modulo) 
                 .Include(u => u.Componentes)
-                    .ThenInclude(c => (c as Accion).Formulario) // Incluir los formularios de las acciones personalizadas
-                        .ThenInclude(f => f.Modulo) // Incluir los módulos de los formularios personalizados
-                .FirstOrDefault(u => u.NombreUsuario == nombreUsuario); // Obtener el primer usuario que coincide con el nombre
+                    .ThenInclude(c => (c as Accion).Formulario) 
+                        .ThenInclude(f => f.Modulo) 
+                .FirstOrDefault(u => u.NombreUsuario == nombreUsuario); 
 
 
             if (usuario != null)
             {
-                // Filtra los Componentes del usuario para obtener solo aquellos que son de tipo Grupo
                 var grupos = usuario.Componentes.OfType<Grupo>().ToList();
 
 
@@ -80,8 +75,8 @@ namespace Controladora.Seguridad
             try
             {
                 // Agregar la auditoría de sesión a la base de datos
-                context.AuditoriasSesiones.Add(auditoriaSesion);
-                context.SaveChanges();
+                Contexto.Instancia.AuditoriasSesiones.Add(auditoriaSesion);
+                Contexto.Instancia.SaveChanges();
             }
             catch (Exception ex)
             {

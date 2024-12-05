@@ -12,7 +12,6 @@ namespace Controladora
     public class ControladoraGestionarActores
     {
         private static ControladoraGestionarActores instancia;
-        private Contexto context;
 
 
         public static ControladoraGestionarActores Instancia
@@ -29,17 +28,16 @@ namespace Controladora
 
 
 
-        public ControladoraGestionarActores()
-        {
-            context = new Contexto();
-        }
+        public ControladoraGestionarActores() { }
+
+        
 
 
         public ReadOnlyCollection<Actor> RecuperarActores()
         {
             try
             {
-                return context.Actores.ToList().AsReadOnly();
+                return Contexto.Instancia.Actores.ToList().AsReadOnly();
             }
             catch (Exception ex)
             {
@@ -52,7 +50,7 @@ namespace Controladora
 
         public Actor Buscar(string codigo)
         {
-            var actor = context.Actores.FirstOrDefault(a => a.Codigo.ToLower() == codigo.ToLower());
+            var actor = Contexto.Instancia.Actores.FirstOrDefault(a => a.Codigo.ToLower() == codigo.ToLower());
             return actor;
         }
 
@@ -72,7 +70,7 @@ namespace Controladora
                 string[] palabrasBusqueda = textoBusqueda.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
                 // Forzamos la evaluación en memoria con AsEnumerable()
-                return context.Actores
+                return Contexto.Instancia.Actores
                               .AsEnumerable() //Método para forzar a Entity Framework a traer todos los registros de la base de datos y luego aplicar el filtro en memoria
                               .Where(a => palabrasBusqueda.Any(palabra =>
                                   a.Nombre.ToLower().Contains(palabra.ToLower()) ||
@@ -97,8 +95,8 @@ namespace Controladora
 
                 if (actorExistente == null)
                 {
-                    context.Actores.Add(actor);
-                    context.SaveChanges();
+                    Contexto.Instancia.Actores.Add(actor);
+                    Contexto.Instancia.SaveChanges();
 
                     return "Actor agregado correctamente";
                 }
@@ -124,8 +122,8 @@ namespace Controladora
 
                 if (actorExistente != null)
                 {
-                    context.Actores.Remove(actor);
-                    context.SaveChanges();
+                    Contexto.Instancia.Actores.Remove(actor);
+                    Contexto.Instancia.SaveChanges();
 
                     return "Actor eliminado correctamente";
                 }
@@ -148,7 +146,7 @@ namespace Controladora
             try
             {
                 // Buscar actor existente por ID, no por Código
-                var actorExistente = context.Actores.FirstOrDefault(a => a.ActorId == actor.ActorId);
+                var actorExistente = Contexto.Instancia.Actores.FirstOrDefault(a => a.ActorId == actor.ActorId);
 
                 if (actorExistente != null)
                 {
@@ -156,8 +154,8 @@ namespace Controladora
                     actorExistente.Nombre = actor.Nombre;
                     actorExistente.Apellido = actor.Apellido;
 
-                    context.Actores.Update(actorExistente);
-                    context.SaveChanges();
+                    Contexto.Instancia.Actores.Update(actorExistente);
+                    Contexto.Instancia.SaveChanges();
 
                     return "Actor modificado correctamente";
                 }

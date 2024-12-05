@@ -19,7 +19,6 @@ namespace Controladora
     public class ControladoraGestionarUsuarios
     {
         private static ControladoraGestionarUsuarios instancia;
-        private Contexto context;
 
 
         public static ControladoraGestionarUsuarios Instancia
@@ -38,7 +37,6 @@ namespace Controladora
 
         public ControladoraGestionarUsuarios()
         {
-            context = new Contexto();
         }
 
 
@@ -48,7 +46,7 @@ namespace Controladora
             try
             {
                 // Incluimos el Estado si es una entidad relacionada.
-                return context.Usuarios
+                return Contexto.Instancia.Usuarios
                               .Include(u => u.Componentes) // Aseguramos que los componentes se carguen
                               .Include(u => u.EstadoUsuario) // Incluimos la relación con Estado
                               .ToList()
@@ -64,7 +62,7 @@ namespace Controladora
 
         public Usuario Buscar(string nombreUsuario)
         {
-            var usuario = context.Usuarios.FirstOrDefault(u => u.NombreUsuario.ToLower() == nombreUsuario.ToLower());
+            var usuario = Contexto.Instancia.Usuarios.FirstOrDefault(u => u.NombreUsuario.ToLower() == nombreUsuario.ToLower());
             return usuario;
         }
 
@@ -80,7 +78,7 @@ namespace Controladora
                 if (usuarioExistente == null)
                 {
                     // Obtener el estado del usuario desde la base de datos
-                    var estadoUsuario = context.EstadosUsuario.FirstOrDefault(e => e.EstadoUsuarioId == usuario.EstadoUsuario.EstadoUsuarioId);
+                    var estadoUsuario = Contexto.Instancia.EstadosUsuario.FirstOrDefault(e => e.EstadoUsuarioId == usuario.EstadoUsuario.EstadoUsuarioId);
 
                     // Asignar el estado al usuario
                     usuario.EstadoUsuario = estadoUsuario;
@@ -89,8 +87,8 @@ namespace Controladora
                     var componentesIds = usuario.Componentes.Select(c => c.Id).ToList();
 
                     // Obtener todas las acciones y grupos correspondientes a los IDs
-                    var acciones = context.Acciones.Where(a => componentesIds.Contains(a.Id)).ToList();
-                    var grupos = context.Grupos.Where(g => componentesIds.Contains(g.Id)).ToList();
+                    var acciones = Contexto.Instancia.Acciones.Where(a => componentesIds.Contains(a.Id)).ToList();
+                    var grupos = Contexto.Instancia.Grupos.Where(g => componentesIds.Contains(g.Id)).ToList();
 
                     // Combinar las acciones y grupos en una sola lista de componentes
                     var componentes = acciones.Cast<Componente>().Concat(grupos.Cast<Componente>()).ToList();
@@ -99,8 +97,8 @@ namespace Controladora
                     usuario.Componentes = componentes;
 
                     // Guardar el usuario en la base de datos
-                    context.Usuarios.Add(usuario);
-                    context.SaveChanges();
+                    Contexto.Instancia.Usuarios.Add(usuario);
+                    Contexto.Instancia.SaveChanges();
 
                     return "Usuario agregado correctamente y se envió la contraseña por correo";
                 }
@@ -126,8 +124,8 @@ namespace Controladora
 
                 if (usuarioExistente != null)
                 {
-                    context.Usuarios.Remove(usuario);
-                    context.SaveChanges();
+                    Contexto.Instancia.Usuarios.Remove(usuario);
+                    Contexto.Instancia.SaveChanges();
 
                     return "Usuario eliminado correctamente";
                 }
@@ -166,8 +164,8 @@ namespace Controladora
                 usuarioExistente.Componentes = nuevosComponentes;
 
                 // Guardar los cambios en la base de datos
-                context.Usuarios.Update(usuarioExistente);
-                context.SaveChanges();
+                Contexto.Instancia.Usuarios.Update(usuarioExistente);
+                Contexto.Instancia.SaveChanges();
                 return "Usuario modificado correctamente";
             }
             catch (Exception ex)
@@ -191,8 +189,8 @@ namespace Controladora
 
             usuarioExistente.Clave = usuario.Clave;
 
-            context.Update(usuarioExistente);
-            context.SaveChanges();
+            Contexto.Instancia.Update(usuarioExistente);
+            Contexto.Instancia.SaveChanges();
             return "Usuario modificado correctamente";
         }
 
@@ -200,7 +198,7 @@ namespace Controladora
 
         private Usuario ObtenerUsuarioExistente(int usuarioId)
         {
-            return context.Usuarios
+            return Contexto.Instancia.Usuarios
                 .Include(u => u.Componentes)
                 .FirstOrDefault(u => u.UsuarioId == usuarioId);
         }
@@ -213,7 +211,7 @@ namespace Controladora
             usuarioExistente.Nombre = usuario.Nombre;
             usuarioExistente.Apellido = usuario.Apellido;
             usuarioExistente.Email = usuario.Email;
-            usuarioExistente.EstadoUsuario = context.EstadosUsuario
+            usuarioExistente.EstadoUsuario = Contexto.Instancia.EstadosUsuario
                 .FirstOrDefault(e => e.EstadoUsuarioId == usuario.EstadoUsuario.EstadoUsuarioId);
         }
 
@@ -224,8 +222,8 @@ namespace Controladora
             var accionesIds = usuario.Componentes.OfType<Accion>().Select(a => a.Id).ToList();
             var gruposIds = usuario.Componentes.OfType<Grupo>().Select(g => g.Id).ToList();
 
-            var nuevasAcciones = context.Acciones.Where(a => accionesIds.Contains(a.Id)).ToList();
-            var nuevosGrupos = context.Grupos.Include(g => g.Componentes).Where(g => gruposIds.Contains(g.Id)).ToList();
+            var nuevasAcciones = Contexto.Instancia.Acciones.Where(a => accionesIds.Contains(a.Id)).ToList();
+            var nuevosGrupos = Contexto.Instancia.Grupos.Include(g => g.Componentes).Where(g => gruposIds.Contains(g.Id)).ToList();
 
             var nuevosComponentes = nuevasAcciones.Cast<Componente>()
                 .Concat(nuevosGrupos.Cast<Componente>())
@@ -243,7 +241,7 @@ namespace Controladora
             try
             {
                 // Obtener todos los estados desde la base de datos
-                return context.EstadosUsuario.ToList().AsReadOnly();
+                return Contexto.Instancia.EstadosUsuario.ToList().AsReadOnly();
             }
             catch (Exception ex)
             {

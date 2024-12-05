@@ -12,7 +12,6 @@ namespace Controladora.Negocio
 {
     public class ControladoraReportes
     {
-        private Contexto context;
         private static ControladoraReportes instancia;
 
 
@@ -32,14 +31,13 @@ namespace Controladora.Negocio
 
         public ControladoraReportes()
         {
-            context = new Contexto();
         }
 
 
 
         public ReadOnlyCollection<(Pelicula, int)> RecuperarPeliculasMasVendidas()
         {
-            var peliculasVendidas = context.DetallesPedidos
+            var peliculasVendidas = Contexto.Instancia.DetallesPedidos
                 .OfType<DetalleVenta>()
                 .Include(dv => dv.Pelicula) 
                 .Where(dv => dv.Pedido != null && dv.Pedido.Estado)
@@ -61,7 +59,7 @@ namespace Controladora.Negocio
         public ReadOnlyCollection<(string RazonSocial, string Codigo, int CantidadOrdenesPendientes)> RecuperarProveedoresConOrdenesPendientes()
         {
             // Recuperar los proveedores y contar las órdenes de compra con estado pendiente o parcialmente completadas
-            var proveedoresConPendientes = context.Proveedores
+            var proveedoresConPendientes = Contexto.Instancia.Proveedores
                 .Select(proveedor => new
                 {
                     Proveedor = proveedor,
@@ -87,7 +85,7 @@ namespace Controladora.Negocio
 
         public ReadOnlyCollection<Pelicula> RecuperarPeliculasConBajaDisponibilidad()
         {
-            var peliculasBajaDisponibilidad = context.Peliculas
+            var peliculasBajaDisponibilidad = Contexto.Instancia.Peliculas
                 .Where(p => p.Cantidad< 30) 
                 .ToList().AsReadOnly();
 

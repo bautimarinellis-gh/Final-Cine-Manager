@@ -102,7 +102,6 @@ namespace Modelo.Entidades
             }
 
             decimal subtotal = detalle.Pelicula.Precio * detalle.Cantidad; // Calcula el subtotal basado en el precio y la cantidad
-
             detallesPedido.Add(detalle);
 
             if (esAlquiler)
@@ -114,10 +113,9 @@ namespace Modelo.Entidades
                 Total += subtotal;
             }
 
-            detalle.Pelicula.Cantidad -= detalle.Cantidad;
-
             return "Película agregada al carrito.";
         }
+
 
 
 
@@ -141,8 +139,6 @@ namespace Modelo.Entidades
             }
 
             detallesPedido.Remove(detalleExistente);
-
-            detalle.Pelicula.Cantidad += detalleExistente.Cantidad;
 
             return "Película eliminada del carrito.";
         }

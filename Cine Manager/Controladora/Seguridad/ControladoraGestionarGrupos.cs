@@ -15,7 +15,6 @@ namespace Controladora.Seguridad
     public class ControladoraGestionarGrupos
     {
         private static ControladoraGestionarGrupos instancia;
-        private Contexto context;
 
 
         public static ControladoraGestionarGrupos Instancia
@@ -33,7 +32,6 @@ namespace Controladora.Seguridad
 
         public ControladoraGestionarGrupos()
         {
-            context = new Contexto();
         }
 
 
@@ -42,7 +40,7 @@ namespace Controladora.Seguridad
         {
             try
             {
-                return context.Grupos
+                return Contexto.Instancia.Grupos
                               .Include(g => g.EstadoGrupo) // Incluimos la relación con Estado
                               .ToList()
                               .AsReadOnly();
@@ -57,7 +55,7 @@ namespace Controladora.Seguridad
 
         public Grupo Buscar(string codigoGrupo)
         {
-            var grupo = context.Grupos.FirstOrDefault(g => g.Codigo.ToLower() == codigoGrupo.ToLower());
+            var grupo = Contexto.Instancia.Grupos.FirstOrDefault(g => g.Codigo.ToLower() == codigoGrupo.ToLower());
             return grupo;
         }
 
@@ -75,7 +73,7 @@ namespace Controladora.Seguridad
                     return "Ya existe un grupo con ese código";
                 }
 
-                var estadoGrupo = context.EstadosGrupo.FirstOrDefault(eg=> eg.EstadoGrupoId == grupo.EstadoGrupo.EstadoGrupoId);
+                var estadoGrupo = Contexto.Instancia.EstadosGrupo.FirstOrDefault(eg=> eg.EstadoGrupoId == grupo.EstadoGrupo.EstadoGrupoId);
 
 
                 // Asignar el estado del grupo
@@ -86,7 +84,7 @@ namespace Controladora.Seguridad
                 {
                     if (grupo.Componentes[i] is Accion accion)
                     {
-                        var accionExistente = context.Acciones
+                        var accionExistente = Contexto.Instancia.Acciones
                             .FirstOrDefault(a => a.Id == accion.Id);
 
                         if (accionExistente != null)
@@ -97,8 +95,8 @@ namespace Controladora.Seguridad
                 }
 
                 // Agregar el grupo a la base de datos
-                context.Grupos.Add(grupo);
-                context.SaveChanges();
+                Contexto.Instancia.Grupos.Add(grupo);
+                Contexto.Instancia.SaveChanges();
 
                 return "Grupo agregado correctamente";
             }
@@ -113,7 +111,7 @@ namespace Controladora.Seguridad
 
         public bool TieneUsuariosConGrupo(Grupo grupo)
         {
-            var usuarios = context.Usuarios.Include(u => u.Componentes).ToList();
+            var usuarios = Contexto.Instancia.Usuarios.Include(u => u.Componentes).ToList();
 
             return usuarios.Any(u => u.Componentes.Any(c => c is Grupo g && g.Codigo == grupo.Codigo));
         }
@@ -135,8 +133,8 @@ namespace Controladora.Seguridad
                         return "No se puede eliminar el grupo porque tiene usuarios asociados.";
                     }
 
-                    context.Grupos.Remove(grupoExistente);
-                    context.SaveChanges();
+                    Contexto.Instancia.Grupos.Remove(grupoExistente);
+                    Contexto.Instancia.SaveChanges();
                     return "Grupo eliminado correctamente";
                 }
                 else
@@ -156,7 +154,7 @@ namespace Controladora.Seguridad
         {
             try
             {
-                var grupoExistente = context.Grupos.Include(g => g.Componentes)
+                var grupoExistente = Contexto.Instancia.Grupos.Include(g => g.Componentes)
                                      .Include(g => g.Usuarios)
                                      .ThenInclude(u => u.Componentes)  // Incluir componentes de cada usuario
                                      .FirstOrDefault(g => g.Codigo == grupo.Codigo);
@@ -186,13 +184,13 @@ namespace Controladora.Seguridad
                     ActualizarComponentesUsuario(usuario, grupoExistente);
 
                     // Guardar cambios en el usuario
-                    context.Usuarios.Update(usuario);
-                    context.SaveChanges();
+                    Contexto.Instancia.Usuarios.Update(usuario);
+                    Contexto.Instancia.SaveChanges();
                 }
 
                 // Guardar los cambios en el grupo
-                context.Grupos.Update(grupoExistente);
-                context.SaveChanges();
+                Contexto.Instancia.Grupos.Update(grupoExistente);
+                Contexto.Instancia.SaveChanges();
 
                 return "Grupo modificado correctamente";
             }
@@ -229,7 +227,7 @@ namespace Controladora.Seguridad
         {
             grupoExistente.Nombre = grupoModificado.Nombre;
             grupoExistente.DescripcionGrupo = grupoModificado.DescripcionGrupo;
-            grupoExistente.EstadoGrupo = context.EstadosGrupo
+            grupoExistente.EstadoGrupo = Contexto.Instancia.EstadosGrupo
                 .FirstOrDefault(e => e.EstadoGrupoId == grupoModificado.EstadoGrupo.EstadoGrupoId);
         }
 
@@ -241,7 +239,7 @@ namespace Controladora.Seguridad
             var accionesIds = componentes.OfType<Accion>().Select(a => a.Id).ToList();
 
             // Cargar nuevas acciones desde la base de datos usando sus IDs
-            return context.Acciones.Where(a => accionesIds.Contains(a.Id)).ToList();
+            return Contexto.Instancia.Acciones.Where(a => accionesIds.Contains(a.Id)).ToList();
         }
 
 
@@ -251,7 +249,7 @@ namespace Controladora.Seguridad
             try
             {
                 // Obtener todos los estados desde la base de datos
-                return context.EstadosGrupo.ToList().AsReadOnly();
+                return Contexto.Instancia.EstadosGrupo.ToList().AsReadOnly();
             }
             catch (Exception ex)
             {
@@ -266,7 +264,7 @@ namespace Controladora.Seguridad
         {
             try
             {
-                var grupos = context.Grupos
+                var grupos = Contexto.Instancia.Grupos
                     .Where(g => g.Usuarios.Any(u => u.UsuarioId == usuarioId))
                     .ToList()
                     .AsReadOnly();
@@ -285,7 +283,7 @@ namespace Controladora.Seguridad
         public ReadOnlyCollection<Componente> ObtenerComponentesDelGrupo(int grupoId)
         {
             // Recuperar el grupo específico con sus componentes
-            var grupo = context.Grupos
+            var grupo = Contexto.Instancia.Grupos
                                .Include(g => g.Componentes) // Incluir los componentes relacionados
                                .FirstOrDefault(g => g.Id == grupoId);
 

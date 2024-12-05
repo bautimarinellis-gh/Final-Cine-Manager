@@ -14,7 +14,6 @@ namespace Controladora
     {
 
         private static ControladoraGestionarDirectores instancia;
-        private Contexto context;
 
 
         public static ControladoraGestionarDirectores Instancia
@@ -32,7 +31,6 @@ namespace Controladora
 
         public ControladoraGestionarDirectores()
         {
-            context = new Contexto();
         }
 
 
@@ -42,7 +40,7 @@ namespace Controladora
         {
             try
             {
-                return context.Directores.Where(d => d.Estado == true).ToList().AsReadOnly();
+                return Contexto.Instancia.Directores.Where(d => d.Estado == true).ToList().AsReadOnly();
             }
             catch (Exception ex)
             {
@@ -55,7 +53,7 @@ namespace Controladora
 
         public Director Buscar(string codigo)
         {
-            var director = context.Directores.FirstOrDefault(d => d.Codigo.ToLower() == codigo.ToLower() && d.Estado == true);
+            var director = Contexto.Instancia.Directores.FirstOrDefault(d => d.Codigo.ToLower() == codigo.ToLower() && d.Estado == true);
             return director;
         }
 
@@ -75,7 +73,7 @@ namespace Controladora
                 string[] palabrasBusqueda = textoBusqueda.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
                 // Forzamos la evaluación en memoria con AsEnumerable()
-                return context.Directores
+                return Contexto.Instancia.Directores
                               .AsEnumerable() //Método para forzar a entity a traer todos los registros de la BD y despues aplicar filtro en memoria
                               .Where(a => palabrasBusqueda.Any(palabra =>
                                   a.Nombre.ToLower().Contains(palabra.ToLower()) ||
@@ -96,17 +94,17 @@ namespace Controladora
         {
             try
             {
-                var directorExistente = context.Directores.FirstOrDefault(d => d.Codigo.ToLower() == director.Codigo.ToLower());
+                var directorExistente = Contexto.Instancia.Directores.FirstOrDefault(d => d.Codigo.ToLower() == director.Codigo.ToLower());
 
                 if (directorExistente == null)
                 {
                     director.Estado = true;
-                    context.Directores.Add(director);
-                    context.SaveChanges();
+                    Contexto.Instancia.Directores.Add(director);
+                    Contexto.Instancia.SaveChanges();
 
                     // Auditoría de la creación del nuevo director
-                    var nuevoDirector = context.Directores.FirstOrDefault(d => d.DirectorId == director.DirectorId);
-                    var usuarioAud = context.Usuarios.FirstOrDefault(u => u.UsuarioId == usuario.UsuarioId);
+                    var nuevoDirector = Contexto.Instancia.Directores.FirstOrDefault(d => d.DirectorId == director.DirectorId);
+                    var usuarioAud = Contexto.Instancia.Usuarios.FirstOrDefault(u => u.UsuarioId == usuario.UsuarioId);
 
                     var auditoria = new Auditoria
                     {
@@ -119,8 +117,8 @@ namespace Controladora
                         TipoMovimiento_Aud = "Alta"
                     };
 
-                    context.Auditorias.Add(auditoria);
-                    context.SaveChanges();
+                    Contexto.Instancia.Auditorias.Add(auditoria);
+                    Contexto.Instancia.SaveChanges();
 
                     return "Director agregado correctamente";
                 }
@@ -152,7 +150,7 @@ namespace Controladora
                 if (directorExistente != null)
                 {
                     // Registramos la auditoría primero
-                    var usuarioAud = context.Usuarios.FirstOrDefault(u => u.UsuarioId == usuario.UsuarioId);
+                    var usuarioAud = Contexto.Instancia.Usuarios.FirstOrDefault(u => u.UsuarioId == usuario.UsuarioId);
 
                     var auditoria = new Auditoria
                     {
@@ -166,13 +164,13 @@ namespace Controladora
                         TipoMovimiento_Aud = "Eliminación",
                     };
 
-                    context.Auditorias.Add(auditoria);
-                    context.SaveChanges();
+                    Contexto.Instancia.Auditorias.Add(auditoria);
+                    Contexto.Instancia.SaveChanges();
 
                     // Baja lógica, establecemos el estado a 0
                     directorExistente.Estado = false;
-                    context.Directores.Update(directorExistente);
-                    context.SaveChanges();
+                    Contexto.Instancia.Directores.Update(directorExistente);
+                    Contexto.Instancia.SaveChanges();
 
                     return "Director eliminado correctamente";
                 }
@@ -196,7 +194,7 @@ namespace Controladora
         {
             try
             {
-                var directorExistente = context.Directores.FirstOrDefault(d => d.DirectorId == director.DirectorId);
+                var directorExistente = Contexto.Instancia.Directores.FirstOrDefault(d => d.DirectorId == director.DirectorId);
 
                 if (directorExistente != null)
                 {
@@ -209,8 +207,8 @@ namespace Controladora
                     directorExistente.Nombre = director.Nombre;
                     directorExistente.Apellido = director.Apellido;
 
-                    context.Directores.Update(directorExistente);
-                    context.SaveChanges();
+                    Contexto.Instancia.Directores.Update(directorExistente);
+                    Contexto.Instancia.SaveChanges();
 
                     var auditoria = new Auditoria
                     {
@@ -224,8 +222,8 @@ namespace Controladora
                         TipoMovimiento_Aud = "Modificación",
                     };
 
-                    context.Auditorias.Add(auditoria);
-                    context.SaveChanges();
+                    Contexto.Instancia.Auditorias.Add(auditoria);
+                    Contexto.Instancia.SaveChanges();
 
                     return "Director modificado correctamente";
                 }
@@ -251,11 +249,11 @@ namespace Controladora
             directorExistente.Nombre = director.Nombre;
             directorExistente.Apellido = director.Apellido;
 
-            context.Directores.Update(directorExistente);
-            context.SaveChanges();
+            Contexto.Instancia.Directores.Update(directorExistente);
+            Contexto.Instancia.SaveChanges();
 
             // Auditoría de la reactivación
-            var usuarioAud = context.Usuarios.FirstOrDefault(u => u.UsuarioId == usuario.UsuarioId);
+            var usuarioAud = Contexto.Instancia.Usuarios.FirstOrDefault(u => u.UsuarioId == usuario.UsuarioId);
 
             var auditoria = new Auditoria
             {
@@ -268,8 +266,8 @@ namespace Controladora
                 TipoMovimiento_Aud = "Alta"
             };
 
-            context.Auditorias.Add(auditoria);
-            context.SaveChanges();
+            Contexto.Instancia.Auditorias.Add(auditoria);
+            Contexto.Instancia.SaveChanges();
 
             return "Director agregado correctamente";
         }

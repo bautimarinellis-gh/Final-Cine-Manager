@@ -11,8 +11,6 @@ namespace Controladora.Seguridad
     public class ControladoraMisDatos
     {
         private static ControladoraMisDatos instancia;
-        private Contexto context;
-
 
         public static ControladoraMisDatos Instancia
         {
@@ -29,13 +27,12 @@ namespace Controladora.Seguridad
 
         public ControladoraMisDatos()
         {
-            context = new Contexto();
         }
 
 
         public string ObtenerEstadoUsuario(int usuarioId)
         {
-            var usuario = context.Usuarios
+            var usuario = Contexto.Instancia.Usuarios
                          .Include(u => u.EstadoUsuario)
                          .FirstOrDefault(u => u.UsuarioId == usuarioId);
 

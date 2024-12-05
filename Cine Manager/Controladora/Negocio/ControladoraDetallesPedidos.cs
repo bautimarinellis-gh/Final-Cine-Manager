@@ -13,7 +13,6 @@ namespace Controladora
     public class ControladoraDetallesPedidos
     {
         private static ControladoraDetallesPedidos instancia;
-        private Contexto context;
 
         public static ControladoraDetallesPedidos Instancia
         {
@@ -29,14 +28,13 @@ namespace Controladora
 
         public ControladoraDetallesPedidos()
         {
-            context = new Contexto();
         }
 
 
 
         public DetallePedido Buscar(int id)
         {
-            var detallePedido = context.DetallesPedidos.FirstOrDefault(dp=> dp.DetallePedidoId== id);
+            var detallePedido = Contexto.Instancia.DetallesPedidos.FirstOrDefault(dp=> dp.DetallePedidoId== id);
             return detallePedido;
         }
 
@@ -46,7 +44,7 @@ namespace Controladora
             try
             {
                 // Recuperar detalles de venta con inclusión de la entidad Pelicula
-                return context.DetallesVentas
+                return Contexto.Instancia.DetallesVentas
                               .Where(dv => dv.PedidoId == pedido.PedidoId)
                               .Include(dv => dv.Pelicula) // Incluimos Pelicula
                               .ToList()
@@ -63,7 +61,7 @@ namespace Controladora
             try
             {
                 // Recuperar detalles de alquiler con inclusión de la entidad Pelicula
-                return context.DetallesAlquileres
+                return Contexto.Instancia.DetallesAlquileres
                               .Where(da => da.PedidoId == pedido.PedidoId)
                               .Include(da => da.Pelicula) // Incluimos Pelicula
                               .ToList()
@@ -100,8 +98,8 @@ namespace Controladora
                 if (resultado != "Éxito")
                     return resultado;
 
-                context.DetallesPedidos.Update(detalleAlquilerExistenteCast);
-                context.SaveChanges();
+                Contexto.Instancia.DetallesPedidos.Update(detalleAlquilerExistenteCast);
+                Contexto.Instancia.SaveChanges();
 
                 return "Detalle Alquiler devuelto correctamente";
             }
@@ -114,7 +112,7 @@ namespace Controladora
 
         private DetallePedido ObtenerDetalleAlquilerExistente(int detallePedidoId)
         {
-            return context.DetallesPedidos
+            return Contexto.Instancia.DetallesPedidos
                 .Include(dp => dp.Pedido) // Incluir el pedido asociado
                 .Include(dp => dp.Pelicula) // Incluir las películas asociadas a los detalles
                 .FirstOrDefault(dp => dp.DetallePedidoId == detallePedidoId);
@@ -132,14 +130,20 @@ namespace Controladora
             {
                 var peliculaAlquilada = detalle.Pelicula;
                 if (peliculaAlquilada == null)
-                    return "PeliculaAlquilada es null";
+                    return "Película alquilada no encontrada";
 
-                peliculaAlquilada.Cantidad += detalle.Cantidad; // Restaurar la cantidad de películas disponibles
+                // Restaurar la cantidad de películas disponibles
+                peliculaAlquilada.Cantidad += detalle.Cantidad;
 
-                var actualizado = ControladoraGestionarPeliculas.Instancia.ActualizarStockPeliculas(peliculaAlquilada);
+                // Asegurarse de que el stock se actualiza en la base de datos
+                bool actualizado = ControladoraGestionarPeliculas.Instancia.ActualizarStockPeliculas(peliculaAlquilada);
                 if (!actualizado)
-                    return $"No se pudo actualizar el stock para Pelicula ID: {peliculaAlquilada.Codigo}";
+                    return $"No se pudo actualizar el stock para Película ID: {peliculaAlquilada.Codigo}";
+
+                // Confirmar que el stock se actualizó correctamente en la base de datos
+                Contexto.Instancia.SaveChanges();
             }
+
             return "Éxito";
         }
     }

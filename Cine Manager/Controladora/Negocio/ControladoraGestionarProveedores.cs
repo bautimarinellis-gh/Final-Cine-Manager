@@ -12,7 +12,6 @@ namespace Controladora
     public class ControladoraGestionarProveedores
     {
         private static ControladoraGestionarProveedores instancia;
-        private Contexto context;
 
 
 
@@ -32,7 +31,6 @@ namespace Controladora
 
         public ControladoraGestionarProveedores()
         {
-            context = new Contexto();
         }
 
 
@@ -42,7 +40,7 @@ namespace Controladora
         {
             try
             {
-                return context.Proveedores.ToList().AsReadOnly();
+                return Contexto.Instancia.Proveedores.ToList().AsReadOnly();
             }
             catch (Exception ex)
             {
@@ -55,7 +53,7 @@ namespace Controladora
 
         public Proveedor Buscar(string codigo)
         {
-            var proveedor = context.Proveedores.FirstOrDefault(p => p.Codigo.ToLower() == codigo.ToLower());
+            var proveedor = Contexto.Instancia.Proveedores.FirstOrDefault(p => p.Codigo.ToLower() == codigo.ToLower());
             return proveedor;
         }
 
@@ -71,7 +69,7 @@ namespace Controladora
                     return RecuperarProveedores(); // Devuelve todos los proveedores si el cuit está vacío
                 }
 
-                return context.Proveedores
+                return Contexto.Instancia.Proveedores
                     .Where(p => p.Codigo.ToLower().Contains(textoBusqueda.ToLower()))
                     .ToList()
                     .AsReadOnly();
@@ -93,8 +91,8 @@ namespace Controladora
 
                 if (proveedorExistente == null)
                 {
-                    context.Proveedores.Add(proveedor);
-                    context.SaveChanges();
+                    Contexto.Instancia.Proveedores.Add(proveedor);
+                    Contexto.Instancia.SaveChanges();
 
                     return "Proveedor agregado correctamente";
                 }
@@ -120,8 +118,8 @@ namespace Controladora
 
                 if (proveedorExistente != null)
                 {
-                    context.Proveedores.Remove(proveedor);
-                    context.SaveChanges();
+                    Contexto.Instancia.Proveedores.Remove(proveedor);
+                    Contexto.Instancia.SaveChanges();
 
                     return "Proveedor eliminado correctamente";
                 }
@@ -144,7 +142,7 @@ namespace Controladora
             try
             {
                 //Buscar proveedor existente por ID, no por codigo
-                var proveedorExistente = context.Proveedores.FirstOrDefault(p => p.ProveedorId== proveedor.ProveedorId);
+                var proveedorExistente = Contexto.Instancia.Proveedores.FirstOrDefault(p => p.ProveedorId== proveedor.ProveedorId);
 
                 if (proveedorExistente != null)
                 {
@@ -153,8 +151,8 @@ namespace Controladora
                     proveedorExistente.RazonSocial = proveedor.RazonSocial;
                     
 
-                    context.Proveedores.Update(proveedorExistente);
-                    context.SaveChanges();
+                    Contexto.Instancia.Proveedores.Update(proveedorExistente);
+                    Contexto.Instancia.SaveChanges();
 
                     return "Proveedor modificado correctamente";
                 }
@@ -172,7 +170,7 @@ namespace Controladora
 
         public bool ExisteProveedorConCUIT(long cuit)
         {
-            return context.Proveedores.Any(p => p.Cuit == cuit);
+            return Contexto.Instancia.Proveedores.Any(p => p.Cuit == cuit);
         }
     }
 }

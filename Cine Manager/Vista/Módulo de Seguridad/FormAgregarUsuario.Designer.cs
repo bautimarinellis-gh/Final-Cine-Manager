@@ -66,29 +66,32 @@
             tabUsuario.Controls.Add(tabDatos);
             tabUsuario.Controls.Add(tabGrupos);
             tabUsuario.Controls.Add(tabAcciones);
-            tabUsuario.Location = new Point(12, 12);
+            tabUsuario.Location = new Point(14, 16);
+            tabUsuario.Margin = new Padding(3, 4, 3, 4);
             tabUsuario.Name = "tabUsuario";
             tabUsuario.SelectedIndex = 0;
-            tabUsuario.Size = new Size(549, 330);
+            tabUsuario.Size = new Size(627, 440);
             tabUsuario.TabIndex = 0;
             // 
             // tabDatos
             // 
             tabDatos.Controls.Add(btnCancelar);
             tabDatos.Controls.Add(groupBox1);
-            tabDatos.Location = new Point(4, 24);
+            tabDatos.Location = new Point(4, 29);
+            tabDatos.Margin = new Padding(3, 4, 3, 4);
             tabDatos.Name = "tabDatos";
-            tabDatos.Padding = new Padding(3);
-            tabDatos.Size = new Size(541, 302);
+            tabDatos.Padding = new Padding(3, 4, 3, 4);
+            tabDatos.Size = new Size(619, 407);
             tabDatos.TabIndex = 0;
             tabDatos.Text = "Datos";
             tabDatos.UseVisualStyleBackColor = true;
             // 
             // btnCancelar
             // 
-            btnCancelar.Location = new Point(428, 249);
+            btnCancelar.Location = new Point(489, 332);
+            btnCancelar.Margin = new Padding(3, 4, 3, 4);
             btnCancelar.Name = "btnCancelar";
-            btnCancelar.Size = new Size(75, 23);
+            btnCancelar.Size = new Size(86, 31);
             btnCancelar.TabIndex = 6;
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = true;
@@ -105,82 +108,89 @@
             groupBox1.Controls.Add(label3);
             groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(label1);
-            groupBox1.Location = new Point(15, 6);
+            groupBox1.Location = new Point(17, 8);
+            groupBox1.Margin = new Padding(3, 4, 3, 4);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(488, 229);
+            groupBox1.Padding = new Padding(3, 4, 3, 4);
+            groupBox1.Size = new Size(558, 305);
             groupBox1.TabIndex = 3;
             groupBox1.TabStop = false;
             // 
             // txtApellido
             // 
-            txtApellido.Location = new Point(316, 80);
+            txtApellido.Location = new Point(377, 107);
+            txtApellido.Margin = new Padding(3, 4, 3, 4);
             txtApellido.Name = "txtApellido";
-            txtApellido.Size = new Size(138, 23);
+            txtApellido.Size = new Size(157, 27);
             txtApellido.TabIndex = 3;
             // 
             // cmbEstado
             // 
             cmbEstado.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbEstado.FormattingEnabled = true;
-            cmbEstado.Location = new Point(145, 178);
+            cmbEstado.Location = new Point(179, 241);
+            cmbEstado.Margin = new Padding(3, 4, 3, 4);
             cmbEstado.Name = "cmbEstado";
-            cmbEstado.Size = new Size(138, 23);
+            cmbEstado.Size = new Size(157, 28);
             cmbEstado.TabIndex = 5;
             // 
             // txtEmail
             // 
-            txtEmail.Location = new Point(145, 133);
+            txtEmail.Location = new Point(179, 181);
+            txtEmail.Margin = new Padding(3, 4, 3, 4);
             txtEmail.Name = "txtEmail";
-            txtEmail.Size = new Size(138, 23);
+            txtEmail.Size = new Size(157, 27);
             txtEmail.TabIndex = 4;
             // 
             // txtNombre
             // 
-            txtNombre.Location = new Point(145, 80);
+            txtNombre.Location = new Point(179, 111);
+            txtNombre.Margin = new Padding(3, 4, 3, 4);
             txtNombre.Name = "txtNombre";
-            txtNombre.Size = new Size(138, 23);
+            txtNombre.Size = new Size(157, 27);
             txtNombre.TabIndex = 2;
             // 
             // txtUsuario
             // 
-            txtUsuario.Location = new Point(145, 30);
+            txtUsuario.Location = new Point(179, 44);
+            txtUsuario.Margin = new Padding(3, 4, 3, 4);
             txtUsuario.Name = "txtUsuario";
-            txtUsuario.Size = new Size(138, 23);
+            txtUsuario.Size = new Size(157, 27);
             txtUsuario.TabIndex = 1;
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(31, 181);
+            label4.Location = new Point(35, 241);
             label4.Name = "label4";
-            label4.Size = new Size(42, 15);
+            label4.Size = new Size(54, 20);
             label4.TabIndex = 3;
             label4.Text = "Estado";
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(32, 83);
+            label3.Location = new Point(37, 111);
             label3.Name = "label3";
-            label3.Size = new Size(107, 15);
+            label3.Size = new Size(136, 20);
             label3.TabIndex = 2;
             label3.Text = "Nombre y Apellido";
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(32, 136);
+            label2.Location = new Point(37, 181);
             label2.Name = "label2";
-            label2.Size = new Size(41, 15);
+            label2.Size = new Size(52, 20);
             label2.TabIndex = 1;
             label2.Text = "E-mail";
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(32, 33);
+            label1.Location = new Point(37, 44);
             label1.Name = "label1";
-            label1.Size = new Size(47, 15);
+            label1.Size = new Size(59, 20);
             label1.TabIndex = 0;
             label1.Text = "Usuario";
             // 
@@ -188,19 +198,21 @@
             // 
             tabGrupos.Controls.Add(button1);
             tabGrupos.Controls.Add(groupBox2);
-            tabGrupos.Location = new Point(4, 24);
+            tabGrupos.Location = new Point(4, 29);
+            tabGrupos.Margin = new Padding(3, 4, 3, 4);
             tabGrupos.Name = "tabGrupos";
-            tabGrupos.Padding = new Padding(3);
-            tabGrupos.Size = new Size(541, 302);
+            tabGrupos.Padding = new Padding(3, 4, 3, 4);
+            tabGrupos.Size = new Size(619, 407);
             tabGrupos.TabIndex = 1;
             tabGrupos.Text = "Grupos";
             tabGrupos.UseVisualStyleBackColor = true;
             // 
             // button1
             // 
-            button1.Location = new Point(439, 261);
+            button1.Location = new Point(502, 348);
+            button1.Margin = new Padding(3, 4, 3, 4);
             button1.Name = "button1";
-            button1.Size = new Size(75, 23);
+            button1.Size = new Size(86, 31);
             button1.TabIndex = 8;
             button1.Text = "Cancelar";
             button1.UseVisualStyleBackColor = true;
@@ -209,9 +221,11 @@
             // groupBox2
             // 
             groupBox2.Controls.Add(clbGrupos);
-            groupBox2.Location = new Point(26, 18);
+            groupBox2.Location = new Point(30, 24);
+            groupBox2.Margin = new Padding(3, 4, 3, 4);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(488, 229);
+            groupBox2.Padding = new Padding(3, 4, 3, 4);
+            groupBox2.Size = new Size(558, 305);
             groupBox2.TabIndex = 6;
             groupBox2.TabStop = false;
             // 
@@ -219,9 +233,10 @@
             // 
             clbGrupos.CheckOnClick = true;
             clbGrupos.FormattingEnabled = true;
-            clbGrupos.Location = new Point(16, 22);
+            clbGrupos.Location = new Point(18, 29);
+            clbGrupos.Margin = new Padding(3, 4, 3, 4);
             clbGrupos.Name = "clbGrupos";
-            clbGrupos.Size = new Size(455, 184);
+            clbGrupos.Size = new Size(519, 224);
             clbGrupos.TabIndex = 5;
             // 
             // tabAcciones
@@ -229,19 +244,21 @@
             tabAcciones.Controls.Add(button3);
             tabAcciones.Controls.Add(btnGuardar);
             tabAcciones.Controls.Add(groupBox3);
-            tabAcciones.Location = new Point(4, 24);
+            tabAcciones.Location = new Point(4, 29);
+            tabAcciones.Margin = new Padding(3, 4, 3, 4);
             tabAcciones.Name = "tabAcciones";
-            tabAcciones.Padding = new Padding(3);
-            tabAcciones.Size = new Size(541, 302);
+            tabAcciones.Padding = new Padding(3, 4, 3, 4);
+            tabAcciones.Size = new Size(619, 407);
             tabAcciones.TabIndex = 2;
             tabAcciones.Text = "Acciones";
             tabAcciones.UseVisualStyleBackColor = true;
             // 
             // button3
             // 
-            button3.Location = new Point(439, 261);
+            button3.Location = new Point(502, 348);
+            button3.Margin = new Padding(3, 4, 3, 4);
             button3.Name = "button3";
-            button3.Size = new Size(75, 23);
+            button3.Size = new Size(86, 31);
             button3.TabIndex = 8;
             button3.Text = "Cancelar";
             button3.UseVisualStyleBackColor = true;
@@ -249,9 +266,10 @@
             // 
             // btnGuardar
             // 
-            btnGuardar.Location = new Point(328, 261);
+            btnGuardar.Location = new Point(375, 348);
+            btnGuardar.Margin = new Padding(3, 4, 3, 4);
             btnGuardar.Name = "btnGuardar";
-            btnGuardar.Size = new Size(75, 23);
+            btnGuardar.Size = new Size(86, 31);
             btnGuardar.TabIndex = 7;
             btnGuardar.Text = "Guardar";
             btnGuardar.UseVisualStyleBackColor = true;
@@ -260,16 +278,19 @@
             // groupBox3
             // 
             groupBox3.Controls.Add(treeAcciones);
-            groupBox3.Location = new Point(26, 18);
+            groupBox3.Location = new Point(30, 24);
+            groupBox3.Margin = new Padding(3, 4, 3, 4);
             groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(488, 229);
+            groupBox3.Padding = new Padding(3, 4, 3, 4);
+            groupBox3.Size = new Size(558, 305);
             groupBox3.TabIndex = 6;
             groupBox3.TabStop = false;
             // 
             // treeAcciones
             // 
             treeAcciones.CheckBoxes = true;
-            treeAcciones.Location = new Point(19, 23);
+            treeAcciones.Location = new Point(22, 31);
+            treeAcciones.Margin = new Padding(3, 4, 3, 4);
             treeAcciones.Name = "treeAcciones";
             treeNode1.Name = "nInventario";
             treeNode1.Tag = "Gestionar Inventario";
@@ -278,16 +299,17 @@
             treeNode2.Tag = "Gestionar Inventario";
             treeNode2.Text = "Gestionar Inventario";
             treeAcciones.Nodes.AddRange(new TreeNode[] { treeNode2 });
-            treeAcciones.Size = new Size(450, 182);
+            treeAcciones.Size = new Size(514, 241);
             treeAcciones.TabIndex = 1;
             treeAcciones.AfterCheck += treeAcciones_AfterCheck;
             // 
             // FormAgregarUsuario
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(656, 354);
+            ClientSize = new Size(750, 472);
             Controls.Add(tabUsuario);
+            Margin = new Padding(3, 4, 3, 4);
             Name = "FormAgregarUsuario";
             Text = "Usuario";
             tabUsuario.ResumeLayout(false);

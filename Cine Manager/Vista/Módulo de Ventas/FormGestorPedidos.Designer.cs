@@ -30,6 +30,8 @@
         {
             components = new System.ComponentModel.Container();
             groupBox1 = new GroupBox();
+            cmbMetodoPago = new ComboBox();
+            label2 = new Label();
             label1 = new Label();
             btnBuscar = new Button();
             txtBuscar = new TextBox();
@@ -46,8 +48,6 @@
             pedidoBindingSource1 = new BindingSource(components);
             pedidoBindingSource = new BindingSource(components);
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            cmbMetodoPago = new ComboBox();
-            label2 = new Label();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvPedidos).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pedidoBindingSource1).BeginInit();
@@ -65,26 +65,48 @@
             groupBox1.Controls.Add(btnPagar);
             groupBox1.Controls.Add(btnInformacion);
             groupBox1.Controls.Add(dgvPedidos);
-            groupBox1.Location = new Point(12, 12);
+            groupBox1.Location = new Point(14, 16);
+            groupBox1.Margin = new Padding(3, 4, 3, 4);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(658, 424);
+            groupBox1.Padding = new Padding(3, 4, 3, 4);
+            groupBox1.Size = new Size(752, 565);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
+            // 
+            // cmbMetodoPago
+            // 
+            cmbMetodoPago.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbMetodoPago.FormattingEnabled = true;
+            cmbMetodoPago.Location = new Point(14, 528);
+            cmbMetodoPago.Margin = new Padding(3, 4, 3, 4);
+            cmbMetodoPago.Name = "cmbMetodoPago";
+            cmbMetodoPago.Size = new Size(155, 28);
+            cmbMetodoPago.TabIndex = 20;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(14, 492);
+            label2.Name = "label2";
+            label2.Size = new Size(120, 20);
+            label2.TabIndex = 19;
+            label2.Text = "Metodo de Pago";
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(288, 69);
+            label1.Location = new Point(329, 92);
             label1.Name = "label1";
-            label1.Size = new Size(95, 15);
+            label1.Size = new Size(121, 20);
             label1.TabIndex = 18;
             label1.Text = "Grilla de Pedidos";
             // 
             // btnBuscar
             // 
-            btnBuscar.Location = new Point(178, 21);
+            btnBuscar.Location = new Point(203, 28);
+            btnBuscar.Margin = new Padding(3, 4, 3, 4);
             btnBuscar.Name = "btnBuscar";
-            btnBuscar.Size = new Size(93, 23);
+            btnBuscar.Size = new Size(106, 31);
             btnBuscar.TabIndex = 17;
             btnBuscar.Text = "Buscar";
             btnBuscar.UseVisualStyleBackColor = true;
@@ -92,17 +114,19 @@
             // 
             // txtBuscar
             // 
-            txtBuscar.Location = new Point(17, 22);
+            txtBuscar.Location = new Point(19, 29);
+            txtBuscar.Margin = new Padding(3, 4, 3, 4);
             txtBuscar.Name = "txtBuscar";
             txtBuscar.PlaceholderText = "Ingrese DNI del cliente";
-            txtBuscar.Size = new Size(128, 23);
+            txtBuscar.Size = new Size(146, 27);
             txtBuscar.TabIndex = 16;
             // 
             // btnVolver
             // 
-            btnVolver.Location = new Point(561, 395);
+            btnVolver.Location = new Point(641, 527);
+            btnVolver.Margin = new Padding(3, 4, 3, 4);
             btnVolver.Name = "btnVolver";
-            btnVolver.Size = new Size(75, 23);
+            btnVolver.Size = new Size(86, 31);
             btnVolver.TabIndex = 3;
             btnVolver.Text = "Volver";
             btnVolver.UseVisualStyleBackColor = true;
@@ -110,9 +134,10 @@
             // 
             // btnPagar
             // 
-            btnPagar.Location = new Point(178, 395);
+            btnPagar.Location = new Point(203, 527);
+            btnPagar.Margin = new Padding(3, 4, 3, 4);
             btnPagar.Name = "btnPagar";
-            btnPagar.Size = new Size(93, 23);
+            btnPagar.Size = new Size(106, 31);
             btnPagar.TabIndex = 2;
             btnPagar.Text = "Pagar Pedido";
             btnPagar.UseVisualStyleBackColor = true;
@@ -120,9 +145,10 @@
             // 
             // btnInformacion
             // 
-            btnInformacion.Location = new Point(306, 395);
+            btnInformacion.Location = new Point(350, 527);
+            btnInformacion.Margin = new Padding(3, 4, 3, 4);
             btnInformacion.Name = "btnInformacion";
-            btnInformacion.Size = new Size(103, 23);
+            btnInformacion.Size = new Size(131, 31);
             btnInformacion.TabIndex = 1;
             btnInformacion.Text = "Ver Información";
             btnInformacion.UseVisualStyleBackColor = true;
@@ -134,54 +160,68 @@
             dgvPedidos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvPedidos.Columns.AddRange(new DataGridViewColumn[] { codigoDataGridViewTextBoxColumn, totalDataGridViewTextBoxColumn, clienteDataGridViewTextBoxColumn, fechaDataGridViewTextBoxColumn, estadoDataGridViewCheckBoxColumn, recargoDataGridViewCheckBoxColumn });
             dgvPedidos.DataSource = pedidoBindingSource1;
-            dgvPedidos.Location = new Point(17, 102);
+            dgvPedidos.Location = new Point(19, 136);
+            dgvPedidos.Margin = new Padding(3, 4, 3, 4);
             dgvPedidos.Name = "dgvPedidos";
             dgvPedidos.ReadOnly = true;
+            dgvPedidos.RowHeadersWidth = 51;
             dgvPedidos.RowTemplate.Height = 25;
-            dgvPedidos.Size = new Size(619, 245);
+            dgvPedidos.Size = new Size(707, 327);
             dgvPedidos.TabIndex = 0;
             // 
             // codigoDataGridViewTextBoxColumn
             // 
             codigoDataGridViewTextBoxColumn.DataPropertyName = "Codigo";
             codigoDataGridViewTextBoxColumn.HeaderText = "Codigo";
+            codigoDataGridViewTextBoxColumn.MinimumWidth = 6;
             codigoDataGridViewTextBoxColumn.Name = "codigoDataGridViewTextBoxColumn";
             codigoDataGridViewTextBoxColumn.ReadOnly = true;
+            codigoDataGridViewTextBoxColumn.Width = 125;
             // 
             // totalDataGridViewTextBoxColumn
             // 
             totalDataGridViewTextBoxColumn.DataPropertyName = "Total";
             totalDataGridViewTextBoxColumn.HeaderText = "Total";
+            totalDataGridViewTextBoxColumn.MinimumWidth = 6;
             totalDataGridViewTextBoxColumn.Name = "totalDataGridViewTextBoxColumn";
             totalDataGridViewTextBoxColumn.ReadOnly = true;
+            totalDataGridViewTextBoxColumn.Width = 125;
             // 
             // clienteDataGridViewTextBoxColumn
             // 
             clienteDataGridViewTextBoxColumn.DataPropertyName = "Cliente";
             clienteDataGridViewTextBoxColumn.HeaderText = "DNI Cliente";
+            clienteDataGridViewTextBoxColumn.MinimumWidth = 6;
             clienteDataGridViewTextBoxColumn.Name = "clienteDataGridViewTextBoxColumn";
             clienteDataGridViewTextBoxColumn.ReadOnly = true;
+            clienteDataGridViewTextBoxColumn.Width = 125;
             // 
             // fechaDataGridViewTextBoxColumn
             // 
             fechaDataGridViewTextBoxColumn.DataPropertyName = "Fecha";
             fechaDataGridViewTextBoxColumn.HeaderText = "Fecha";
+            fechaDataGridViewTextBoxColumn.MinimumWidth = 6;
             fechaDataGridViewTextBoxColumn.Name = "fechaDataGridViewTextBoxColumn";
             fechaDataGridViewTextBoxColumn.ReadOnly = true;
+            fechaDataGridViewTextBoxColumn.Width = 125;
             // 
             // estadoDataGridViewCheckBoxColumn
             // 
             estadoDataGridViewCheckBoxColumn.DataPropertyName = "Estado";
             estadoDataGridViewCheckBoxColumn.HeaderText = "Estado";
+            estadoDataGridViewCheckBoxColumn.MinimumWidth = 6;
             estadoDataGridViewCheckBoxColumn.Name = "estadoDataGridViewCheckBoxColumn";
             estadoDataGridViewCheckBoxColumn.ReadOnly = true;
+            estadoDataGridViewCheckBoxColumn.Width = 125;
             // 
             // recargoDataGridViewCheckBoxColumn
             // 
             recargoDataGridViewCheckBoxColumn.DataPropertyName = "Recargo";
             recargoDataGridViewCheckBoxColumn.HeaderText = "Recargo";
+            recargoDataGridViewCheckBoxColumn.MinimumWidth = 6;
             recargoDataGridViewCheckBoxColumn.Name = "recargoDataGridViewCheckBoxColumn";
             recargoDataGridViewCheckBoxColumn.ReadOnly = true;
+            recargoDataGridViewCheckBoxColumn.Width = 125;
             // 
             // pedidoBindingSource1
             // 
@@ -191,30 +231,13 @@
             // 
             pedidoBindingSource.DataSource = typeof(Modelo.Entidades.Pedido);
             // 
-            // cmbMetodoPago
-            // 
-            cmbMetodoPago.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbMetodoPago.FormattingEnabled = true;
-            cmbMetodoPago.Location = new Point(12, 396);
-            cmbMetodoPago.Name = "cmbMetodoPago";
-            cmbMetodoPago.Size = new Size(136, 23);
-            cmbMetodoPago.TabIndex = 20;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(12, 369);
-            label2.Name = "label2";
-            label2.Size = new Size(95, 15);
-            label2.TabIndex = 19;
-            label2.Text = "Metodo de Pago";
-            // 
             // FormGestorPedidos
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(682, 448);
+            ClientSize = new Size(779, 597);
             Controls.Add(groupBox1);
+            Margin = new Padding(3, 4, 3, 4);
             Name = "FormGestorPedidos";
             Text = "FormGestorPedidos";
             groupBox1.ResumeLayout(false);

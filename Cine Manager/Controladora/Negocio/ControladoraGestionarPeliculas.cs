@@ -14,7 +14,6 @@ namespace Controladora
     public class ControladoraGestionarPeliculas
     {
         private static ControladoraGestionarPeliculas instancia;
-        private Contexto context;
 
 
         public static ControladoraGestionarPeliculas Instancia
@@ -32,7 +31,6 @@ namespace Controladora
 
         public ControladoraGestionarPeliculas()
         {
-            context = new Contexto();
         }
 
 
@@ -41,13 +39,19 @@ namespace Controladora
         {
             try
             {
-                return context.Peliculas.Include(d => d.Director).Include(g => g.GeneroCinematografico).ToList().AsReadOnly();
+                return Contexto.Instancia.Peliculas
+                    .Include(d => d.Director)
+                    .Include(g => g.GeneroCinematografico)
+                    .ToList()
+                    .AsReadOnly(); 
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"Error al recuperar películas: {ex.Message}");
                 throw;
             }
         }
+
 
 
 
@@ -61,7 +65,7 @@ namespace Controladora
                     return RecuperarPeliculas(); // Devuelve todas las peliculas si el txtbox está vacío
                 }
 
-                return context.Peliculas
+                return Contexto.Instancia.Peliculas
                     .Where(p => p.Nombre.ToLower().Contains(textoBusqueda.ToLower()))
                     .ToList()
                     .AsReadOnly();
@@ -77,7 +81,7 @@ namespace Controladora
 
         public Pelicula Buscar(string codigo)
         {
-            var pelicula = context.Peliculas.FirstOrDefault(p => p.Codigo.ToLower() == codigo.ToLower());
+            var pelicula = Contexto.Instancia.Peliculas.FirstOrDefault(p => p.Codigo.ToLower() == codigo.ToLower());
             return pelicula;
         }
 
@@ -91,22 +95,11 @@ namespace Controladora
 
                 if (peliculaExistente == null)
                 {
-                    // Cargar el Director y Género Cinematográfico desde la base de datos
-                    var director = context.Directores.FirstOrDefault(d => d.DirectorId == pelicula.Director.DirectorId);
-                    var generoCinematografico = context.GenerosCinematograficos.FirstOrDefault(g => g.GeneroCinematograficoId == pelicula.GeneroCinematografico.GeneroCinematograficoId);
-
-
-                    var actoresIds = pelicula.Reparto.Select(a => a.ActorId).ToList();
-
-                    // Asignar las entidades cargadas a la película
-                    pelicula.Director = director;
-                    pelicula.GeneroCinematografico = generoCinematografico;
-                    pelicula.Reparto = context.Actores.Where(p => actoresIds.Contains(p.ActorId)).ToList();
-
                     
 
-                    context.Peliculas.Add(pelicula);
-                    context.SaveChanges();
+
+                    Contexto.Instancia.Peliculas.Add(pelicula);
+                    Contexto.Instancia.SaveChanges();
 
                     return "Pelicula agregada correctamente";
                 }
@@ -137,8 +130,8 @@ namespace Controladora
 
                 if (peliculaExistente != null)
                 {
-                    context.Peliculas.Remove(pelicula);
-                    context.SaveChanges();
+                    Contexto.Instancia.Peliculas.Remove(pelicula);
+                    Contexto.Instancia.SaveChanges();
 
                     return "Pelicula eliminada correctamente";
                 }
@@ -164,25 +157,18 @@ namespace Controladora
 
                 if(peliculaExistente != null)
                 {
-                    // Cargar el Director y Género Cinematográfico desde la base de datos
-                    var director = context.Directores.FirstOrDefault(d => d.DirectorId == pelicula.Director.DirectorId);
-                    var generoCinematografico = context.GenerosCinematograficos.FirstOrDefault(g => g.GeneroCinematograficoId == pelicula.GeneroCinematografico.GeneroCinematograficoId);
-
                    
-
                     var actoresIds = pelicula.Reparto.Select(a => a.ActorId).ToList();
 
-                    // Asignar las entidades cargadas a la película
                     peliculaExistente.Nombre = pelicula.Nombre;
-                    /*peliculaExistente.Cantidad = pelicula.Cantidad;*/
                     peliculaExistente.Precio = pelicula.Precio;
-                    peliculaExistente.Director = director;
-                    peliculaExistente.GeneroCinematografico = generoCinematografico;
-                    peliculaExistente.Reparto = context.Actores.Where(p => actoresIds.Contains(p.ActorId)).ToList();
+                    peliculaExistente.Director = pelicula.Director;
+                    peliculaExistente.GeneroCinematografico = pelicula.GeneroCinematografico;
+                    peliculaExistente.Reparto = pelicula.Reparto;
 
 
-                    context.Peliculas.Update(pelicula);
-                    context.SaveChanges();
+                    Contexto.Instancia.Peliculas.Update(pelicula);
+                    Contexto.Instancia.SaveChanges();
 
                     return "Pelicula modificada correctamente";
                 }
@@ -204,21 +190,16 @@ namespace Controladora
         {
             try
             {
-                var peliculaExistente = Buscar(pelicula.Codigo);
-
-                if (peliculaExistente != null)
-                {
-                    peliculaExistente.Cantidad = pelicula.Cantidad;  
-
-                    context.Peliculas.Update(peliculaExistente);
-                    context.SaveChanges();
-
-                    return true;
-                }
-                else
-                {
+                var peliculaExistente = Contexto.Instancia.Peliculas.FirstOrDefault(p => p.PeliculaId == pelicula.PeliculaId);
+                if (peliculaExistente == null)
                     return false;
-                }
+
+                peliculaExistente.Cantidad = pelicula.Cantidad;
+                Contexto.Instancia.Peliculas.Update(peliculaExistente);
+                Contexto.Instancia.SaveChanges();
+
+
+                return true;
             }
             catch (Exception ex)
             {
@@ -232,8 +213,7 @@ namespace Controladora
         public Pelicula CargarPeliculaConRelaciones(string codigo)
         {
             // Obtener la película con sus relaciones, como Reparto
-            var pelicula = context.Peliculas.Include(p => p.Reparto).FirstOrDefault(p => p.Codigo == codigo);
-
+            var pelicula = Contexto.Instancia.Peliculas.Include(p => p.Reparto).FirstOrDefault(p => p.Codigo == codigo);
             return pelicula;
         }
 

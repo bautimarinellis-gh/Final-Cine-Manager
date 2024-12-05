@@ -12,7 +12,6 @@ namespace Controladora
     public class ControladoraGestionarGenerosCinematograficos
     {
         private static ControladoraGestionarGenerosCinematograficos instancia;
-        private Contexto context;
 
 
         public static ControladoraGestionarGenerosCinematograficos Instancia
@@ -30,7 +29,6 @@ namespace Controladora
 
         public ControladoraGestionarGenerosCinematograficos()
         {
-            context = new Contexto();
         }
 
 
@@ -39,7 +37,7 @@ namespace Controladora
         {
             try
             {
-                return context.GenerosCinematograficos.ToList().AsReadOnly();
+                return Contexto.Instancia.GenerosCinematograficos.ToList().AsReadOnly();
             }
             catch (Exception ex)
             {
@@ -50,7 +48,7 @@ namespace Controladora
 
         public GeneroCinematografico Buscar(string nombre)
         {
-            var generoCinematografico = context.GenerosCinematograficos.FirstOrDefault(g => g.Nombre.ToLower() == nombre.ToLower());
+            var generoCinematografico = Contexto.Instancia.GenerosCinematograficos.FirstOrDefault(g => g.Nombre.ToLower() == nombre.ToLower());
             return generoCinematografico;
         }
 
@@ -68,7 +66,7 @@ namespace Controladora
                 }
 
                 // Si hay un nombre, filtra por él
-                return context.GenerosCinematograficos
+                return Contexto.Instancia.GenerosCinematograficos
                     .Where(g => g.Nombre.ToLower().Contains(textoBusqueda.ToLower()))
                     .ToList()
                     .AsReadOnly();
@@ -90,8 +88,8 @@ namespace Controladora
 
                 if (generoCinematograficoExistente == null)
                 {
-                    context.GenerosCinematograficos.Add(generoCinematografico);
-                    context.SaveChanges();
+                    Contexto.Instancia.GenerosCinematograficos.Add(generoCinematografico);
+                    Contexto.Instancia.SaveChanges();
 
                     return "Genero Cinematografico agregado correctamente";
                 }
@@ -117,8 +115,8 @@ namespace Controladora
 
                 if (generoCinematograficoExistente != null)
                 {
-                    context.GenerosCinematograficos.Remove(generoCinematografico);
-                    context.SaveChanges();
+                    Contexto.Instancia.GenerosCinematograficos.Remove(generoCinematografico);
+                    Contexto.Instancia.SaveChanges();
 
                     return "Genero Cinematografico eliminado correctamente";
                 }
@@ -140,14 +138,14 @@ namespace Controladora
         {
             try
             {
-                var generoCinematograficoExistente = context.GenerosCinematograficos.FirstOrDefault(g => g.GeneroCinematograficoId== generoCinematografico.GeneroCinematograficoId);
+                var generoCinematograficoExistente = Contexto.Instancia.GenerosCinematograficos.FirstOrDefault(g => g.GeneroCinematograficoId== generoCinematografico.GeneroCinematograficoId);
 
                 if (generoCinematograficoExistente != null)
                 {
                     generoCinematograficoExistente.Nombre = generoCinematografico.Nombre;
 
-                    context.GenerosCinematograficos.Update(generoCinematograficoExistente);
-                    context.SaveChanges();
+                    Contexto.Instancia.GenerosCinematograficos.Update(generoCinematograficoExistente);
+                    Contexto.Instancia.SaveChanges();
 
                     return "Genero Cinematografico modifiado correctamente";
                 }

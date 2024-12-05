@@ -31,13 +31,14 @@ namespace Modelo.Entidades.EstadosOrdenesCompra
 
         public void Cerrar(OrdenCompra orden)
         {
-            if (!orden.TodosLosDetallesEntregados())
+            if (orden.TodosLosDetallesEntregados())  // Si todos los detalles están entregados
             {
-                orden.CambiarEstado(new EstadoCerradaConFaltante());
+                throw new InvalidOperationException("No se puede cerrar una orden parcialmente completada cuando todos los detalles están entregados.");
             }
             else
             {
-                throw new InvalidOperationException("No se puede cerrar una orden parcialmente completada cuando todos los detalles están entregados.");
+                // Si hay detalles faltantes
+                orden.CambiarEstado(new EstadoCerradaConFaltante());  // Cambiar a Cerrada con faltante
             }
         }
     }

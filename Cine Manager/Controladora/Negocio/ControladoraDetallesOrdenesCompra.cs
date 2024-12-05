@@ -13,7 +13,6 @@ namespace Controladora.Negocio
 {
     public class ControladoraDetallesOrdenesCompra
     {
-        private Contexto context;
         private static ControladoraDetallesOrdenesCompra instancia;
 
 
@@ -33,7 +32,6 @@ namespace Controladora.Negocio
 
         public ControladoraDetallesOrdenesCompra()
         {
-            context = new Contexto();
         }
 
 
@@ -42,17 +40,16 @@ namespace Controladora.Negocio
         {
             try
             {
-                // Recuperar detalles de venta con inclusión de la entidad Pelicula
-                return context.DetallesOrdenesCompra
-                              .Where(doc => doc.OrdenCompraId == ordenCompra.OrdenCompraId)
-                              .Include(doc => doc.Pelicula).
-                              Include(doc => doc.OrdenCompra)
-                              .ToList()
-                              .AsReadOnly();
+                return Contexto.Instancia.DetallesOrdenesCompra
+                       .Where(doc => doc.OrdenCompraId == ordenCompra.OrdenCompraId)
+                       .Include(doc => doc.Pelicula)
+                       .Include(doc => doc.OrdenCompra)
+                       .ToList()
+                       .AsReadOnly();
             }
             catch (Exception ex)
             {
-                throw;
+                throw new Exception($"Error al recuperar los detalles: {ex.Message}");
             }
         }
 
@@ -62,8 +59,8 @@ namespace Controladora.Negocio
         {
             try
             {
-                var detalleOrdenCompraExistente = context.DetallesOrdenesCompra
-                    .Include(d => d.OrdenCompra) 
+                var detalleOrdenCompraExistente = Contexto.Instancia.DetallesOrdenesCompra
+                    .Include(d => d.OrdenCompra)
                     .FirstOrDefault(d => d.DetalleOrdenCompraId == detalleOrdenCompra.DetalleOrdenCompraId);
 
                 if (detalleOrdenCompraExistente == null)
@@ -82,9 +79,10 @@ namespace Controladora.Negocio
 
                 if (detalleOrdenCompraExistente.CantidadEntregada >= detalleOrdenCompraExistente.CantidadOrdenada)
                 {
-                    detalleOrdenCompraExistente.Estado = true; 
+                    detalleOrdenCompraExistente.Estado = true;
                 }
 
+                // Procesar y restockear la película
                 var mensaje = ProcesarDetalleOrdenCompra(detalleOrdenCompraExistente, cantidadEntregada);
 
                 if (!mensaje)
@@ -108,9 +106,9 @@ namespace Controladora.Negocio
                     ordenCompra.CambiarEstado(new EstadoParcialmenteCompletada());
                 }
 
-                context.DetallesOrdenesCompra.Update(detalleOrdenCompraExistente);
-                context.OrdenesCompra.Update(ordenCompra);
-                context.SaveChanges();
+                Contexto.Instancia.DetallesOrdenesCompra.Update(detalleOrdenCompraExistente);
+                Contexto.Instancia.OrdenesCompra.Update(ordenCompra);
+                Contexto.Instancia.SaveChanges();
 
                 return "La cantidad entregada ha sido registrada correctamente y el stock actualizado.";
             }
@@ -119,11 +117,6 @@ namespace Controladora.Negocio
                 return $"Error desconocido: {ex.Message}";
             }
         }
-
-
-
-        
-
 
 
         public bool ProcesarDetalleOrdenCompra(DetalleOrdenCompra detalleOrdenCompra, int cantidadEntregada)
@@ -137,10 +130,10 @@ namespace Controladora.Negocio
                     return false;
                 }
 
-                // Actualizar el stock sumando solo la cantidad entregada en esta operación
+                // Restockeamos la película sumando la cantidad entregada
                 peliculaExistente.Cantidad += cantidadEntregada;
 
-                // Actualizar en la base de datos el stock de la película
+                // Actualizamos en la base de datos el stock de la película
                 var stockActualizado = ControladoraGestionarPeliculas.Instancia.ActualizarStockPeliculas(peliculaExistente);
 
                 return stockActualizado;
@@ -150,5 +143,10 @@ namespace Controladora.Negocio
                 return false;  // Retornar el mensaje de error correspondiente
             }
         }
+
+    
+
+
     }
 }
+

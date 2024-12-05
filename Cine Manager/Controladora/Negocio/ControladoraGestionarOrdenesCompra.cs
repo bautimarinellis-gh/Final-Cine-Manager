@@ -13,7 +13,6 @@ namespace Controladora.Negocio
 {
     public class ControladoraGestionarOrdenesCompra
     {
-        private Contexto context;
         private static ControladoraGestionarOrdenesCompra instancia;
 
 
@@ -32,7 +31,6 @@ namespace Controladora.Negocio
 
         public ControladoraGestionarOrdenesCompra()
         {
-            context = new Contexto();
         }
 
 
@@ -41,7 +39,7 @@ namespace Controladora.Negocio
         {
             try
             {
-                return context.OrdenesCompra.AsNoTracking()
+                return Contexto.Instancia.OrdenesCompra.AsNoTracking()
                     .Include(o => o.Proveedor)
                     .ToList()
                     .AsReadOnly();
@@ -62,7 +60,7 @@ namespace Controladora.Negocio
                     return RecuperarOrdenesCompra();
                 }
 
-                return context.OrdenesCompra
+                return Contexto.Instancia.OrdenesCompra
                     .Where(o => o.Codigo.ToLower().Contains(textoBusqueda.ToLower()))
                     .ToList()
                     .AsReadOnly();
@@ -74,28 +72,42 @@ namespace Controladora.Negocio
         }
 
 
+        private OrdenCompra ObtenerOrdenCompra(string codigoOrden, bool noTracking = false)
+        {
+            var query = Contexto.Instancia.OrdenesCompra.AsQueryable();
+
+            if (noTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
+            query = query.Include(o => o.DetallesOrdenesCompra)
+                         .ThenInclude(d => d.Pelicula);
+
+            return query.FirstOrDefault(o => o.Codigo == codigoOrden);
+        }
+
+
+
 
         public OrdenCompra Buscar(string codigoOrden)
         {
-            try
-            {
-                var orden = context.OrdenesCompra
-                                   .Include(o => o.DetallesOrdenesCompra)
-                                   .ThenInclude(d => d.Pelicula)
-                                   .FirstOrDefault(o => o.Codigo == codigoOrden);
+            var orden = Contexto.Instancia.OrdenesCompra
+                    .AsNoTracking()
+                    .Include(o => o.DetallesOrdenesCompra)
+                    .ThenInclude(d => d.Pelicula)
+                    .FirstOrDefault(o => o.Codigo == codigoOrden);
 
-                if (orden != null)
-                {
-                    orden.EstadoActual = orden.AsignarEstado(orden.Estado); // Mapea el string al estado correspondiente
-                }
-
-                return orden;
-            }
-            catch (Exception ex)
+            if (orden != null)
             {
-                throw new Exception($"Error al buscar la orden de compra: {ex.Message}");
+                orden.EstadoActual = orden.AsignarEstado(orden.Estado);
             }
+
+            return orden;
         }
+
+
+
 
 
 
@@ -103,30 +115,34 @@ namespace Controladora.Negocio
         {
             try
             {
-
-                var ordenExistente = Buscar(ordenCompra.Codigo);
+                var ordenExistente = Contexto.Instancia.OrdenesCompra
+                        .Include(o => o.DetallesOrdenesCompra)
+                        .FirstOrDefault(o => o.Codigo == ordenCompra.Codigo);
 
                 if (ordenExistente == null)
                 {
                     return "Orden de compra inexistente";
                 }
 
-
-                // Cambiar el estado de la orden
+                // Validar y cerrar orden
+                ordenExistente.EstadoActual = ordenExistente.AsignarEstado(ordenExistente.Estado);
                 ordenExistente.Cerrar();
-                ordenExistente.CambiarEstado(new EstadoCerradaConFaltante());
 
-                // Actualizar la orden en el contexto
-                context.OrdenesCompra.Update(ordenExistente);
-                context.SaveChanges();
-
+                Contexto.Instancia.SaveChanges();
                 return "La orden de compra ha sido cerrada correctamente.";
+            }
+            catch (InvalidOperationException ex)
+            {
+                return ex.Message; // Mensaje específico de la lógica de negocio
             }
             catch (Exception ex)
             {
-                return $"Error al cerrar la orden de compra: {ex.Message}";
+                return $"Error inesperado al cerrar la orden: {ex.Message}";
             }
         }
+
+
+
 
 
 
@@ -134,42 +150,35 @@ namespace Controladora.Negocio
         {
             try
             {
-                var ordenExistente = Buscar(ordenCompra.Codigo);
+                var ordenExistente = Contexto.Instancia.OrdenesCompra
+                       .Include(o => o.DetallesOrdenesCompra)
+                       .FirstOrDefault(o => o.Codigo == ordenCompra.Codigo);
 
                 if (ordenExistente == null)
                 {
                     return "Orden de compra inexistente";
                 }
 
-                // Validar si algún detalle de la orden ya ha sido entregado
-                if (ordenExistente.DetallesOrdenesCompra.Any(detalle => detalle.CantidadEntregada > 0))
-                {
-                    return "No se puede cancelar la orden de compra porque uno o más detalles ya han sido entregados.";
-                }
-
-                // Delegar la operación al estado actual
+                ordenExistente.EstadoActual = ordenExistente.AsignarEstado(ordenExistente.Estado);
                 ordenExistente.Cancelar();
 
-                // Cambiar el estado a Cancelada
-                ordenExistente.CambiarEstado(new EstadoCancelada());
-
-                context.OrdenesCompra.Update(ordenExistente);
-                context.SaveChanges();
-
+                Contexto.Instancia.SaveChanges();
                 return "La orden de compra ha sido cancelada.";
+            }
+            catch (InvalidOperationException ex)
+            {
+                return ex.Message;
             }
             catch (Exception ex)
             {
-                return $"Error desconocido: {ex.Message}";
+                return $"Error inesperado al cancelar la orden: {ex.Message}";
             }
         }
 
 
         public OrdenCompra RecargarOrdenCompra(string codigoOrden)
         {
-            return context.OrdenesCompra
-                .AsNoTracking()
-                .FirstOrDefault(o => o.Codigo == codigoOrden);
+            return ObtenerOrdenCompra(codigoOrden, true);
         }
     }
 }

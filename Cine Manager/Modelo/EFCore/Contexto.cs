@@ -12,6 +12,24 @@ namespace Modelo.EFCore
 {
     public class Contexto: DbContext
     {
+        private static Contexto instancia;
+        public static Contexto Instancia
+        {
+            get
+            {
+                if (instancia == null)
+                {
+                    instancia = new Contexto();
+                }
+                return instancia;
+            }
+        }
+
+        public Contexto()
+        {
+        }
+
+
         public DbSet<Director> Directores { get; set; }
         public DbSet<GeneroCinematografico> GenerosCinematograficos{ get; set; }
         public DbSet<Actor> Actores{ get; set; }

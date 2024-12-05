@@ -12,7 +12,6 @@ namespace Controladora.Negocio
 {
     public class ControladoraGestionarMetodosPago
     {
-        private Contexto context;
         private static ControladoraGestionarMetodosPago instancia;
 
 
@@ -32,7 +31,6 @@ namespace Controladora.Negocio
 
         public ControladoraGestionarMetodosPago()
         {
-            context = new Contexto();
         }
 
 
@@ -41,7 +39,7 @@ namespace Controladora.Negocio
         {
             try
             {
-                return context.MetodosPago.ToList().AsReadOnly();
+                return Contexto.Instancia.MetodosPago.ToList().AsReadOnly();
             }
             catch (Exception ex)
             {
@@ -53,7 +51,7 @@ namespace Controladora.Negocio
 
         public MetodoPago Buscar(string nombre)
         {
-            var metodoPago = context.MetodosPago.FirstOrDefault(m => m.Nombre.ToLower() == nombre.ToLower());
+            var metodoPago = Contexto.Instancia.MetodosPago.FirstOrDefault(m => m.Nombre.ToLower() == nombre.ToLower());
             return metodoPago;
         }
 
@@ -68,7 +66,7 @@ namespace Controladora.Negocio
                     return RecuperarMetodosPago();
                 }
 
-                return context.MetodosPago
+                return Contexto.Instancia.MetodosPago
                     .Where(m => m.Nombre.ToLower().Contains(textoBusqueda.ToLower()))
                     .ToList()
                     .AsReadOnly();
@@ -89,8 +87,8 @@ namespace Controladora.Negocio
 
                 if (metodoPagoExistente == null)
                 {
-                    context.MetodosPago.Add(metodoPago);
-                    context.SaveChanges();
+                    Contexto.Instancia.MetodosPago.Add(metodoPago);
+                    Contexto.Instancia.SaveChanges();
                     return "Método de pago agregado correctamente";
                 }
                 else
@@ -114,8 +112,8 @@ namespace Controladora.Negocio
 
                 if (metodoPagoExistente != null)
                 {
-                    context.MetodosPago.Remove(metodoPago);
-                    context.SaveChanges();
+                    Contexto.Instancia.MetodosPago.Remove(metodoPago);
+                    Contexto.Instancia.SaveChanges();
                     return "Método de pago eliminado correctamente";
                 }
                 else
@@ -135,14 +133,14 @@ namespace Controladora.Negocio
         {
             try
             {
-                var metodoPagoExistente = context.MetodosPago.FirstOrDefault(m => m.MetodoPagoId == metodoPago.MetodoPagoId);
+                var metodoPagoExistente = Contexto.Instancia.MetodosPago.FirstOrDefault(m => m.MetodoPagoId == metodoPago.MetodoPagoId);
 
                 if (metodoPagoExistente != null)
                 {
                     metodoPagoExistente.Nombre = metodoPago.Nombre;
 
-                    context.MetodosPago.Update(metodoPagoExistente);
-                    context.SaveChanges();
+                    Contexto.Instancia.MetodosPago.Update(metodoPagoExistente);
+                    Contexto.Instancia.SaveChanges();
 
                     return "Método de pago modificado correctamente";
                 }

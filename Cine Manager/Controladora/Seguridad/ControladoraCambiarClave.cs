@@ -12,7 +12,6 @@ namespace Controladora.Seguridad
     public class ControladoraCambiarClave
     {
         private static ControladoraCambiarClave instancia;
-        private Contexto context;
 
         
         public static ControladoraCambiarClave Instancia
@@ -30,14 +29,13 @@ namespace Controladora.Seguridad
 
         public ControladoraCambiarClave()
         {
-            context = new Contexto();
         }
 
 
 
         public Usuario Buscar(string nombreUsuario)
         {
-            var usuario = context.Usuarios.Include(u => u.EstadoUsuario)
+            var usuario = Contexto.Instancia.Usuarios.Include(u => u.EstadoUsuario)
                 .Include(u => u.Componentes)
                 .ThenInclude(c => (c as Accion).Formulario)
                 .ThenInclude(f => f.Modulo).FirstOrDefault(u => u.NombreUsuario == nombreUsuario);
@@ -48,7 +46,7 @@ namespace Controladora.Seguridad
                 foreach (var grupo in grupos)
                 {
                     // Cargar el estado del grupo
-                    context.Entry(grupo).Reference(g => g.EstadoGrupo).Load();
+                    Contexto.Instancia.Entry(grupo).Reference(g => g.EstadoGrupo).Load();
                 }
             }
 
@@ -62,12 +60,12 @@ namespace Controladora.Seguridad
         {
             try
             {
-                var usuario = context.Usuarios.FirstOrDefault(u => u.UsuarioId == usuarioId);
+                var usuario = Contexto.Instancia.Usuarios.FirstOrDefault(u => u.UsuarioId == usuarioId);
                 if (usuario != null)
                 {
                     usuario.Clave = nuevaClaveEncriptada;
-                    context.Usuarios.Update(usuario);
-                    context.SaveChanges();
+                    Contexto.Instancia.Usuarios.Update(usuario);
+                    Contexto.Instancia.SaveChanges();
                     return "La clave ha sido cambiada exitosamente.";
                 }
                 else

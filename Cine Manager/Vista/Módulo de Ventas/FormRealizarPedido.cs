@@ -35,6 +35,8 @@ namespace Vista.Módulo_de_Transacciones
             dgvPeliculasDisponibles.DataSource = null;
             dgvPeliculasDisponibles.DataSource = ControladoraGestionarPeliculas.Instancia.RecuperarPeliculas();
 
+            
+
             dgvDetallesPedido.DataSource = null;
             dgvDetallesPedido.DataSource = pedidoActual.RecuperarDetalles();
         }

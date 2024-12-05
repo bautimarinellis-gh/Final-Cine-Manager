@@ -14,7 +14,6 @@ namespace Controladora
     public class ControladoraAcciones
     {
         private static ControladoraAcciones instancia;
-        private Contexto context;
 
 
         public static ControladoraAcciones Instancia
@@ -32,7 +31,6 @@ namespace Controladora
 
         public ControladoraAcciones()
         {
-            context = new Contexto();
         }
 
 
@@ -41,7 +39,7 @@ namespace Controladora
         {
             try
             {
-                return context.Acciones.ToList().AsReadOnly();
+                return Contexto.Instancia.Acciones.ToList().AsReadOnly();
             }
             catch(Exception ex)
             {
@@ -52,14 +50,14 @@ namespace Controladora
 
         public Accion ObtenerAccionPorNombre(string nombreAccion)
         {
-            return context.Acciones.FirstOrDefault(a => a.Nombre== nombreAccion);
+            return Contexto.Instancia.Acciones.FirstOrDefault(a => a.Nombre== nombreAccion);
         }
 
 
         public List<Accion> ObtenerAccionesPorGrupos(List<Grupo> gruposSeleccionados)
         {
             // Obtener las acciones asociadas a los grupos seleccionados
-            var acciones = context.Grupos
+            var acciones = Contexto.Instancia.Grupos
                 .Where(g => gruposSeleccionados.Select(grupo => grupo.Id).Contains(g.Id))
                 .SelectMany(g => g.Componentes)
                 .OfType<Accion>() // Filtrar solo acciones
@@ -76,7 +74,7 @@ namespace Controladora
             try
             {
                 // Obtener las acciones relacionadas con el módulo especificado
-                var acciones = context.Acciones.Include(a => a.Formulario)
+                var acciones = Contexto.Instancia.Acciones.Include(a => a.Formulario)
                                       .ThenInclude(f => f.Modulo)  // Incluimos la relación con Modulo
                                       .Where(a => a.Formulario.Modulo.NombreModulo == nombreModulo)
                                       .ToList();
@@ -110,7 +108,7 @@ namespace Controladora
         public List<Accion> ObtenerAccionesGrupo(Grupo grupo)
         {
             // Obtener el grupo desde la base de datos con sus componentes
-            var grupoExistente = context.Grupos
+            var grupoExistente = Contexto.Instancia.Grupos
                 .Include(g => g.Componentes) // Incluir componentes asociados
                 .FirstOrDefault(g => g.Id == grupo.Id);
 

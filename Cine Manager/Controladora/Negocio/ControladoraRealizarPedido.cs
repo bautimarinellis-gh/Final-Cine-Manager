@@ -1,4 +1,5 @@
-﻿using Modelo.EFCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Modelo.EFCore;
 using Modelo.Entidades;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,6 @@ namespace Controladora
     public class ControladoraRealizarPedido
     {
         private static ControladoraRealizarPedido instancia;
-        private Contexto context;
 
 
         public static ControladoraRealizarPedido Instancia
@@ -31,7 +31,6 @@ namespace Controladora
 
         public ControladoraRealizarPedido()
         {
-            context = new Contexto();
         }
 
 
@@ -41,7 +40,11 @@ namespace Controladora
         {
             try
             {
-                return context.Peliculas.ToList().AsReadOnly();
+                return Contexto.Instancia.Peliculas
+                    .Include(d => d.Director)
+                    .Include(g => g.GeneroCinematografico)
+                    .ToList()
+                    .AsReadOnly();
             }
             catch (Exception ex)
             {
@@ -61,7 +64,7 @@ namespace Controladora
                     return RecuperarPeliculas(); // Devuelve todas las peliculas si el txtbox está vacío
                 }
 
-                return context.Peliculas
+                return Contexto.Instancia.Peliculas
                     .Where(p => p.Nombre.ToLower().Contains(textoBusqueda.ToLower()))
                     .ToList()
                     .AsReadOnly();
@@ -77,7 +80,7 @@ namespace Controladora
 
         public Pedido Buscar(string codigo)
         {
-            var pedido = context.Pedidos.FirstOrDefault(p => p.Codigo.ToLower() == codigo.ToLower());
+            var pedido = Contexto.Instancia.Pedidos.FirstOrDefault(p => p.Codigo.ToLower() == codigo.ToLower());
             return pedido;
         }
 
@@ -93,25 +96,27 @@ namespace Controladora
                 if (pedidoExistente == null)
                 {
                     // Asignar el cliente existente al pedido
-                    var cliente = context.Clientes.FirstOrDefault(c => c.ClienteId == pedido.Cliente.ClienteId);
+                    var cliente = Contexto.Instancia.Clientes.FirstOrDefault(c => c.ClienteId == pedido.Cliente.ClienteId);
                     pedido.Cliente = cliente;
 
                     // Adjuntar detalles del pedido asegurando que las películas están adjuntas correctamente
                     foreach (var detalle in pedido.DetallesPedido)
                     {
-                        // Adjuntar la película existente al detalle del pedido
-                        var pelicula = context.Peliculas.FirstOrDefault(p => p.PeliculaId == detalle.Pelicula.PeliculaId);
+                        // Obtener la película sin AsNoTracking
+                        var pelicula = Contexto.Instancia.Peliculas
+                            .FirstOrDefault(p => p.PeliculaId == detalle.Pelicula.PeliculaId);
+
                         if (pelicula != null)
                         {
-                            detalle.Pelicula = pelicula;
-
-                            // Actualizar la cantidad de películas
+                            // Actualizar la cantidad de la película
                             pelicula.Cantidad -= detalle.Cantidad;
+
                         }
                     }
 
-                    context.Pedidos.Add(pedido);
-                    context.SaveChanges();
+                    // Agregar el pedido
+                    Contexto.Instancia.Pedidos.Add(pedido);
+                    Contexto.Instancia.SaveChanges();  // Guardar todos los cambios
 
                     return "Pedido realizado correctamente";
                 }
@@ -128,9 +133,12 @@ namespace Controladora
 
 
 
+
+
+
         public bool ClienteTieneAlquileresSinDevolver(Cliente cliente)
         {
-            return context.Pedidos
+            return Contexto.Instancia.Pedidos
                 .Where(p => p.Cliente == cliente && p.DetallesPedido.OfType<DetalleAlquiler>().Any(da => !da.Devuelto))
                 .Any();
         }

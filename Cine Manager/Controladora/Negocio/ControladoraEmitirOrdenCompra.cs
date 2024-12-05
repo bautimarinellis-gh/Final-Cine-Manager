@@ -13,7 +13,6 @@ namespace Controladora.Nueva_Iteración
 {
     public class ControladoraEmitirOrdenCompra
     {
-        private Contexto context;
         private static ControladoraEmitirOrdenCompra instancia;
 
 
@@ -32,7 +31,6 @@ namespace Controladora.Nueva_Iteración
 
         public ControladoraEmitirOrdenCompra()
         {
-            context = new Contexto();
         }
 
 
@@ -42,7 +40,7 @@ namespace Controladora.Nueva_Iteración
         {
             try
             {
-                return context.Peliculas.ToList().AsReadOnly();
+                return Contexto.Instancia.Peliculas.ToList().AsReadOnly();
             }
             catch (Exception ex)
             {
@@ -62,7 +60,7 @@ namespace Controladora.Nueva_Iteración
                     return RecuperarPeliculas(); // Devuelve todas las peliculas si el txtbox está vacío
                 }
 
-                return context.Peliculas
+                return Contexto.Instancia.Peliculas
                     .Where(p => p.Nombre.ToLower().Contains(textoBusqueda.ToLower()))
                     .ToList()
                     .AsReadOnly();
@@ -76,7 +74,7 @@ namespace Controladora.Nueva_Iteración
 
         public OrdenCompra Buscar(string codigo)
         {
-            var orden = context.OrdenesCompra.FirstOrDefault(o => o.Codigo.ToLower() == codigo.ToLower());
+            var orden = Contexto.Instancia.OrdenesCompra.FirstOrDefault(o => o.Codigo.ToLower() == codigo.ToLower());
             return orden;
         }
 
@@ -91,7 +89,7 @@ namespace Controladora.Nueva_Iteración
                 if (ordenExistente == null)
                 {
                     // Asignar el proveedor existente a la orden
-                    var proveedor = context.Proveedores
+                    var proveedor = Contexto.Instancia.Proveedores
                                            .Include(p => p.Peliculas) // Incluir las películas asociadas
                                            .FirstOrDefault(p => p.ProveedorId == orden.Proveedor.ProveedorId);
                     if (proveedor == null)
@@ -104,7 +102,7 @@ namespace Controladora.Nueva_Iteración
                     foreach (var detalle in orden.DetallesOrdenesCompra)
                     {
                         // Adjuntar la película existente al detalle de la orden de compra
-                        var pelicula = context.Peliculas
+                        var pelicula = Contexto.Instancia.Peliculas
                                              .Include(p => p.Proveedores) // Incluir los proveedores asociados
                                              .FirstOrDefault(p => p.PeliculaId == detalle.Pelicula.PeliculaId);
                         if (pelicula != null)
@@ -120,8 +118,8 @@ namespace Controladora.Nueva_Iteración
                     }
 
                     // Agregar la nueva orden de compra a la base de datos
-                    context.OrdenesCompra.Add(orden);
-                    context.SaveChanges();
+                    Contexto.Instancia.OrdenesCompra.Add(orden);
+                    Contexto.Instancia.SaveChanges();
 
                     return "Orden de compra emitida correctamente";
                 }
@@ -134,45 +132,6 @@ namespace Controladora.Nueva_Iteración
             {
                 return ex.InnerException?.Message ?? ex.Message;
             }
-
-
-
-
-            /*try
-            {
-                var ordenExistente = Buscar(orden.Codigo);
-
-                if (ordenExistente == null)
-                {
-                    // Asignar el proveedor existente a la orden
-                    var proveedor = context.Proveedores.FirstOrDefault(p => p.ProveedorId == orden.Proveedor.ProveedorId);
-                    orden.Proveedor = proveedor;
-
-                    // Adjuntar detalles de la orden de compra sin modificar el stock
-                    foreach (var detalle in orden.DetallesOrdenesCompra)
-                    {
-                        // Adjuntar la película existente al detalle de la orden de compra
-                        var pelicula = context.Peliculas.FirstOrDefault(p => p.PeliculaId == detalle.Pelicula.PeliculaId);
-                        if (pelicula != null)
-                        {
-                            detalle.Pelicula = pelicula;
-                        }
-                    }
-
-                    context.OrdenesCompra.Add(orden);
-                    context.SaveChanges();
-
-                    return "Orden de compra emitida correctamente";
-                }
-                else
-                {
-                    return "Ya existe una orden con este código";
-                }
-            }
-            catch (Exception ex)
-            {
-                return ex.InnerException?.Message ?? ex.Message;
-            }*/
         }
     }
 }

@@ -248,6 +248,11 @@ namespace Vista.Módulo_de_Seguridad
                 MessageBox.Show("Debe ingresar el nombre del grupo", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
+            if (string.IsNullOrEmpty(this.txtCodigo.Text))
+            {
+                MessageBox.Show("Debe ingresar el codigo del grupo", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
             if (string.IsNullOrEmpty(this.txtDescripcion.Text))
             {
                 MessageBox.Show("Debe ingresar una descripción", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);

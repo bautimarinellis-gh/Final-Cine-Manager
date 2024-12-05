@@ -38,8 +38,8 @@ namespace Vista.Módulo_de_Administración
             // Consulta actualizada a la base de datos
             var pedidos = ControladoraGestionarPedidos.Instancia.RecuperarPedidos();
 
-            dgvPedidos.DataSource = null; 
-            dgvPedidos.DataSource = pedidos; 
+            dgvPedidos.DataSource = null;
+            dgvPedidos.DataSource = pedidos;
         }
 
         private void LlenarComboBox()

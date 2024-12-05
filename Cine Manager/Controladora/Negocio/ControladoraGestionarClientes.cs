@@ -13,7 +13,6 @@ namespace Controladora
     public class ControladoraGestionarClientes
     {
         private static ControladoraGestionarClientes instancia;
-        private Contexto context;
 
 
         public static ControladoraGestionarClientes Instancia
@@ -32,7 +31,6 @@ namespace Controladora
 
         public ControladoraGestionarClientes()
         {
-            context = new Contexto();
         }
 
 
@@ -40,7 +38,7 @@ namespace Controladora
         {
             try
             {
-                return context.Clientes.ToList().AsReadOnly();
+                return Contexto.Instancia.Clientes.ToList().AsReadOnly();
             }
             catch(Exception ex)
             {
@@ -62,7 +60,7 @@ namespace Controladora
                 else
                 {
                     // Filtrar clientes cuyo DNI coincida con la búsqueda
-                    return context.Clientes
+                    return Contexto.Instancia.Clientes
                         .Where(p => p.DNI == dniBusqueda.Value)
                         .ToList()
                         .AsReadOnly();
@@ -79,7 +77,7 @@ namespace Controladora
 
         public Cliente Buscar(int dni)
         {
-            var cliente = context.Clientes.FirstOrDefault(c => c.DNI == dni);
+            var cliente = Contexto.Instancia.Clientes.FirstOrDefault(c => c.DNI == dni);
             return cliente;
         }
 
@@ -93,8 +91,8 @@ namespace Controladora
 
                 if (clienteExistente == null)
                 {
-                    context.Clientes.Add(cliente);
-                    context.SaveChanges();
+                    Contexto.Instancia.Clientes.Add(cliente);
+                    Contexto.Instancia.SaveChanges();
 
                     return "Cliente agregado correctamente";
                 }
@@ -119,8 +117,8 @@ namespace Controladora
 
                 if (clienteExistente != null)
                 {
-                    context.Clientes.Remove(cliente);
-                    context.SaveChanges();
+                    Contexto.Instancia.Clientes.Remove(cliente);
+                    Contexto.Instancia.SaveChanges();
 
                     return "Cliente eliminado correctamente";
                 }
@@ -142,7 +140,7 @@ namespace Controladora
             try
             {
                 // Buscar cliente existente por ID, no por DNI
-                var clienteExistente = context.Clientes.FirstOrDefault(c => c.ClienteId== cliente.ClienteId);
+                var clienteExistente = Contexto.Instancia.Clientes.FirstOrDefault(c => c.ClienteId== cliente.ClienteId);
 
                 if (clienteExistente != null)
                 {
@@ -151,8 +149,8 @@ namespace Controladora
                     clienteExistente.DNI= cliente.DNI;
 
 
-                    context.Clientes.Update(clienteExistente);
-                    context.SaveChanges();
+                    Contexto.Instancia.Clientes.Update(clienteExistente);
+                    Contexto.Instancia.SaveChanges();
 
                     return "Cliente modificado correctamente";
                 }

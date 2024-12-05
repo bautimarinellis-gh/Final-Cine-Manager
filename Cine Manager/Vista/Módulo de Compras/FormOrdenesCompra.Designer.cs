@@ -65,26 +65,29 @@
             groupBox1.Controls.Add(btnVolver);
             groupBox1.Controls.Add(btnRealizarOrden);
             groupBox1.Controls.Add(dgvOrdenesCompra);
-            groupBox1.Location = new Point(12, 12);
+            groupBox1.Location = new Point(14, 16);
+            groupBox1.Margin = new Padding(3, 4, 3, 4);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(782, 403);
+            groupBox1.Padding = new Padding(3, 4, 3, 4);
+            groupBox1.Size = new Size(894, 537);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(281, 70);
+            label1.Location = new Point(321, 93);
             label1.Name = "label1";
-            label1.Size = new Size(159, 15);
+            label1.Size = new Size(202, 20);
             label1.TabIndex = 11;
             label1.Text = "Grilla de Ordenes de Compra";
             // 
             // btnCerrar
             // 
-            btnCerrar.Location = new Point(320, 372);
+            btnCerrar.Location = new Point(366, 496);
+            btnCerrar.Margin = new Padding(3, 4, 3, 4);
             btnCerrar.Name = "btnCerrar";
-            btnCerrar.Size = new Size(160, 23);
+            btnCerrar.Size = new Size(183, 31);
             btnCerrar.TabIndex = 10;
             btnCerrar.Text = "Cerrar orden de compra";
             btnCerrar.UseVisualStyleBackColor = true;
@@ -92,9 +95,10 @@
             // 
             // btnInformacion
             // 
-            btnInformacion.Location = new Point(194, 372);
+            btnInformacion.Location = new Point(222, 496);
+            btnInformacion.Margin = new Padding(3, 4, 3, 4);
             btnInformacion.Name = "btnInformacion";
-            btnInformacion.Size = new Size(107, 23);
+            btnInformacion.Size = new Size(122, 31);
             btnInformacion.TabIndex = 9;
             btnInformacion.Text = "Ver Información";
             btnInformacion.UseVisualStyleBackColor = true;
@@ -102,9 +106,10 @@
             // 
             // btnCancelar
             // 
-            btnCancelar.Location = new Point(504, 372);
+            btnCancelar.Location = new Point(576, 496);
+            btnCancelar.Margin = new Padding(3, 4, 3, 4);
             btnCancelar.Name = "btnCancelar";
-            btnCancelar.Size = new Size(160, 23);
+            btnCancelar.Size = new Size(195, 31);
             btnCancelar.TabIndex = 8;
             btnCancelar.Text = "Cancelar orden de compra";
             btnCancelar.UseVisualStyleBackColor = true;
@@ -113,9 +118,9 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(320, 25);
+            label2.Location = new Point(366, 33);
             label2.Name = "label2";
-            label2.Size = new Size(99, 15);
+            label2.Size = new Size(127, 20);
             label2.TabIndex = 7;
             label2.Text = "Filtrar por estado ";
             // 
@@ -124,16 +129,18 @@
             cmbEstado.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbEstado.FormattingEnabled = true;
             cmbEstado.Items.AddRange(new object[] { "Todas", "Pendientes", "Parcialmente Completadas", "Completadas", "Cerradas Con Faltante", "Canceladas" });
-            cmbEstado.Location = new Point(445, 22);
+            cmbEstado.Location = new Point(509, 29);
+            cmbEstado.Margin = new Padding(3, 4, 3, 4);
             cmbEstado.Name = "cmbEstado";
-            cmbEstado.Size = new Size(140, 23);
+            cmbEstado.Size = new Size(189, 28);
             cmbEstado.TabIndex = 6;
             // 
             // btnBuscar
             // 
-            btnBuscar.Location = new Point(194, 21);
+            btnBuscar.Location = new Point(245, 28);
+            btnBuscar.Margin = new Padding(3, 4, 3, 4);
             btnBuscar.Name = "btnBuscar";
-            btnBuscar.Size = new Size(75, 23);
+            btnBuscar.Size = new Size(86, 31);
             btnBuscar.TabIndex = 5;
             btnBuscar.Text = "Buscar";
             btnBuscar.UseVisualStyleBackColor = true;
@@ -141,17 +148,19 @@
             // 
             // txtBuscar
             // 
-            txtBuscar.Location = new Point(18, 22);
+            txtBuscar.Location = new Point(21, 29);
+            txtBuscar.Margin = new Padding(3, 4, 3, 4);
             txtBuscar.Name = "txtBuscar";
             txtBuscar.PlaceholderText = "Ingrese el codigo de la orden";
-            txtBuscar.Size = new Size(159, 23);
+            txtBuscar.Size = new Size(208, 27);
             txtBuscar.TabIndex = 4;
             // 
             // btnVolver
             // 
-            btnVolver.Location = new Point(688, 372);
+            btnVolver.Location = new Point(786, 496);
+            btnVolver.Margin = new Padding(3, 4, 3, 4);
             btnVolver.Name = "btnVolver";
-            btnVolver.Size = new Size(75, 23);
+            btnVolver.Size = new Size(86, 31);
             btnVolver.TabIndex = 2;
             btnVolver.Text = "Volver";
             btnVolver.UseVisualStyleBackColor = true;
@@ -159,9 +168,10 @@
             // 
             // btnRealizarOrden
             // 
-            btnRealizarOrden.Location = new Point(18, 372);
+            btnRealizarOrden.Location = new Point(21, 496);
+            btnRealizarOrden.Margin = new Padding(3, 4, 3, 4);
             btnRealizarOrden.Name = "btnRealizarOrden";
-            btnRealizarOrden.Size = new Size(159, 23);
+            btnRealizarOrden.Size = new Size(195, 31);
             btnRealizarOrden.TabIndex = 1;
             btnRealizarOrden.Text = "Realizar orden de compra";
             btnRealizarOrden.UseVisualStyleBackColor = true;
@@ -173,42 +183,59 @@
             dgvOrdenesCompra.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvOrdenesCompra.Columns.AddRange(new DataGridViewColumn[] { codigoDataGridViewTextBoxColumn, proveedorDataGridViewTextBoxColumn, fechaOrdenDataGridViewTextBoxColumn, EstadoActual, totalDataGridViewTextBoxColumn });
             dgvOrdenesCompra.DataSource = ordenCompraBindingSource;
-            dgvOrdenesCompra.Location = new Point(18, 88);
+            dgvOrdenesCompra.Location = new Point(21, 117);
+            dgvOrdenesCompra.Margin = new Padding(3, 4, 3, 4);
             dgvOrdenesCompra.Name = "dgvOrdenesCompra";
+            dgvOrdenesCompra.ReadOnly = true;
+            dgvOrdenesCompra.RowHeadersWidth = 51;
             dgvOrdenesCompra.RowTemplate.Height = 25;
-            dgvOrdenesCompra.Size = new Size(745, 258);
+            dgvOrdenesCompra.Size = new Size(851, 344);
             dgvOrdenesCompra.TabIndex = 0;
             // 
             // codigoDataGridViewTextBoxColumn
             // 
             codigoDataGridViewTextBoxColumn.DataPropertyName = "Codigo";
             codigoDataGridViewTextBoxColumn.HeaderText = "Codigo";
+            codigoDataGridViewTextBoxColumn.MinimumWidth = 6;
             codigoDataGridViewTextBoxColumn.Name = "codigoDataGridViewTextBoxColumn";
+            codigoDataGridViewTextBoxColumn.ReadOnly = true;
+            codigoDataGridViewTextBoxColumn.Width = 125;
             // 
             // proveedorDataGridViewTextBoxColumn
             // 
             proveedorDataGridViewTextBoxColumn.DataPropertyName = "CodigoProveedor";
             proveedorDataGridViewTextBoxColumn.HeaderText = "Proveedor";
+            proveedorDataGridViewTextBoxColumn.MinimumWidth = 6;
             proveedorDataGridViewTextBoxColumn.Name = "proveedorDataGridViewTextBoxColumn";
             proveedorDataGridViewTextBoxColumn.ReadOnly = true;
+            proveedorDataGridViewTextBoxColumn.Width = 125;
             // 
             // fechaOrdenDataGridViewTextBoxColumn
             // 
             fechaOrdenDataGridViewTextBoxColumn.DataPropertyName = "FechaOrden";
             fechaOrdenDataGridViewTextBoxColumn.HeaderText = "Fecha ";
+            fechaOrdenDataGridViewTextBoxColumn.MinimumWidth = 6;
             fechaOrdenDataGridViewTextBoxColumn.Name = "fechaOrdenDataGridViewTextBoxColumn";
+            fechaOrdenDataGridViewTextBoxColumn.ReadOnly = true;
+            fechaOrdenDataGridViewTextBoxColumn.Width = 125;
             // 
             // EstadoActual
             // 
             EstadoActual.DataPropertyName = "Estado";
             EstadoActual.HeaderText = "Estado";
+            EstadoActual.MinimumWidth = 6;
             EstadoActual.Name = "EstadoActual";
+            EstadoActual.ReadOnly = true;
+            EstadoActual.Width = 125;
             // 
             // totalDataGridViewTextBoxColumn
             // 
             totalDataGridViewTextBoxColumn.DataPropertyName = "Total";
             totalDataGridViewTextBoxColumn.HeaderText = "Total";
+            totalDataGridViewTextBoxColumn.MinimumWidth = 6;
             totalDataGridViewTextBoxColumn.Name = "totalDataGridViewTextBoxColumn";
+            totalDataGridViewTextBoxColumn.ReadOnly = true;
+            totalDataGridViewTextBoxColumn.Width = 125;
             // 
             // ordenCompraBindingSource
             // 
@@ -216,10 +243,11 @@
             // 
             // FormOrdenesCompra
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(806, 427);
+            ClientSize = new Size(921, 569);
             Controls.Add(groupBox1);
+            Margin = new Padding(3, 4, 3, 4);
             Name = "FormOrdenesCompra";
             Text = "FormOrdenesCompra";
             groupBox1.ResumeLayout(false);

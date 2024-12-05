@@ -116,9 +116,8 @@ namespace Modelo.Entidades
         // Métodos auxiliares para verificar el estado de los detalles
         public bool TodosLosDetallesEntregados()
         {
-            return detallesOrdenesCompra.All(detalle => detalle.Estado == true); // Asume que "Estado" es un booleano
+            return DetallesOrdenesCompra.All(d => d.Estado == true);
         }
-
 
 
         public bool HayItemsEnDetalle()
