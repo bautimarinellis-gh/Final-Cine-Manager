@@ -95,7 +95,7 @@ namespace Controladora
                 }
                 else
                 {
-                    return "El genero literario ya existe";
+                    return "El genero cinematografico ya existe";
                 }
             }
             catch (Exception ex)
@@ -122,7 +122,7 @@ namespace Controladora
                 }
                 else
                 {
-                    return "El genero literario no existe";
+                    return "El genero cinematografico no existe";
                 }
             }
             catch (Exception ex)
@@ -151,7 +151,7 @@ namespace Controladora
                 }
                 else
                 {
-                    return "El genero literario no existe";
+                    return "El genero cinematografico no existe";
                 }
             }
             catch (Exception ex)

@@ -53,7 +53,7 @@ namespace Modelo.Entidades
 
         public override string ToString()
         {
-            return $"{Nombre}";
+            return $"{Apellido}";
         }
     }
 }

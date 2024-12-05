@@ -90,15 +90,19 @@ namespace Controladora
 
 
 
+
+
         public string AgregarDirector(Director director, Usuario usuario)
         {
             try
             {
+                // Buscamos un director con el mismo código
                 var directorExistente = Contexto.Instancia.Directores.FirstOrDefault(d => d.Codigo.ToLower() == director.Codigo.ToLower());
 
                 if (directorExistente == null)
                 {
-                    director.Estado = true;
+                    // Si no existe, agregamos el director
+                    director.Estado = true; // Estado activo
                     Contexto.Instancia.Directores.Add(director);
                     Contexto.Instancia.SaveChanges();
 
@@ -122,14 +126,18 @@ namespace Controladora
 
                     return "Director agregado correctamente";
                 }
-                else if (directorExistente.Estado == false)
-                {
-                    // Si el director existe pero fue eliminado, lo reactivamos
-                    return ReactivarDirector(directorExistente, director, usuario);
-                }
                 else
                 {
-                    return "El director ya existe y está activo";
+                    // Si ya existe, verificamos si el estado es activo o inactivo
+                    if (directorExistente.Estado == true)
+                    {
+                        return "El director ya existe y está activo"; // No permitimos agregarlo si ya está activo
+                    }
+                    else
+                    {
+                        // Si el director existe pero está dado de baja (estado = false), lo reactivamos
+                        return ReactivarDirector(directorExistente, director, usuario);
+                    }
                 }
             }
             catch (Exception ex)
