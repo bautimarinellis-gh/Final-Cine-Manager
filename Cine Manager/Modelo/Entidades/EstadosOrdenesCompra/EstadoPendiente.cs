@@ -37,7 +37,7 @@ namespace Modelo.Entidades.EstadosOrdenesCompra
             }
             else
             {
-                throw new InvalidOperationException("No se puede cerrar una orden pendiente sin al menos algún detalle entregado.");
+                throw new InvalidOperationException("No se puede cerrar una orden pendiente sin al menos algún item entregado.");
             }
         }
     }
