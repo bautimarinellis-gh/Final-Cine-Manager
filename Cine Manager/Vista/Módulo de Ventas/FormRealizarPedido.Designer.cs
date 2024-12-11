@@ -91,9 +91,9 @@
             // 
             btnBuscarCliente.Location = new Point(159, 49);
             btnBuscarCliente.Name = "btnBuscarCliente";
-            btnBuscarCliente.Size = new Size(75, 23);
+            btnBuscarCliente.Size = new Size(94, 23);
             btnBuscarCliente.TabIndex = 18;
-            btnBuscarCliente.Text = "Buscar";
+            btnBuscarCliente.Text = "Buscar cliente";
             btnBuscarCliente.UseVisualStyleBackColor = true;
             btnBuscarCliente.Click += btnBuscarCliente_Click;
             // 
@@ -227,7 +227,7 @@
             // 
             // txtCantidadPeliculas
             // 
-            txtCantidadPeliculas.Location = new Point(259, 50);
+            txtCantidadPeliculas.Location = new Point(271, 49);
             txtCantidadPeliculas.Name = "txtCantidadPeliculas";
             txtCantidadPeliculas.Size = new Size(104, 23);
             txtCantidadPeliculas.TabIndex = 3;
@@ -235,7 +235,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(259, 19);
+            label2.Location = new Point(271, 19);
             label2.Name = "label2";
             label2.Size = new Size(104, 15);
             label2.TabIndex = 1;

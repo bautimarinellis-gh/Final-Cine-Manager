@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Vista.Módulo_de_Ventas;
 
 namespace Vista.Módulo_de_Compras
 {
@@ -19,6 +20,7 @@ namespace Vista.Módulo_de_Compras
     {
         private Sesion _sesion;
         private OrdenCompra ordenActual;
+        private Proveedor proveedorActual;
 
 
 
@@ -30,7 +32,6 @@ namespace Vista.Módulo_de_Compras
             dgvPeliculas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvDetalles.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             ActualizarGrilla();
-            LlenarComboBox();
         }
 
 
@@ -47,19 +48,11 @@ namespace Vista.Módulo_de_Compras
 
 
 
-        private void LlenarComboBox()
-        {
-            cmbProveedores.DataSource = ControladoraGestionarProveedores.Instancia.RecuperarProveedores();
-            cmbProveedores.DisplayMember = "Codigo";
-        }
-
-
-
         private bool ValidarDatos()
         {
-            if (cmbProveedores.SelectedIndex == -1)
+            if (string.IsNullOrWhiteSpace(txtCodigoProveedor.Text))
             {
-                MessageBox.Show("Debe seleccionar un proveedor antes de agregar un detalle a la orden de compra.", "Error de Validación", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Debe seleccionar un proveedor antes de realizar el pedido.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
 
@@ -175,12 +168,11 @@ namespace Vista.Módulo_de_Compras
 
             if (eleccion == DialogResult.Yes)
             {
-                var proveedorSeleccionado = (Proveedor)cmbProveedores.SelectedItem;
 
                 var nuevaOrdenCompra = new OrdenCompra
                 {
                     Codigo = CodigoOrdenUnico(),
-                    Proveedor = proveedorSeleccionado,
+                    Proveedor = proveedorActual,
                     FechaOrden = DateTime.Now,
                     Total = ordenActual.Total,
                     EstadoActual = new EstadoPendiente(),
@@ -202,6 +194,29 @@ namespace Vista.Módulo_de_Compras
 
 
 
+        private void btnBuscarProveedor_Click(object sender, EventArgs e)
+        {
+            // Crear instancia del formulario de asignación de cliente
+            var formAsignarProveedor = new FormAsignarProveedor();
+
+            // Mostrar el formulario como modal
+            if (formAsignarProveedor.ShowDialog() == DialogResult.OK)
+            {
+                // Recuperar el cliente seleccionado desde el formulario
+                var proveedorSeleccionado = formAsignarProveedor.Tag as Proveedor;
+
+                if (proveedorSeleccionado != null)
+                {
+                    // Mostrar el DNI del cliente en el TextBox
+                    txtCodigoProveedor.Text = proveedorSeleccionado.Codigo.ToString();
+                    // Guardar el cliente en una variable si es necesario para usarlo posteriormente
+                    this.proveedorActual = proveedorSeleccionado;
+                }
+            }
+        }
+
+
+
         private void btnBuscar_Click(object sender, EventArgs e)
         {
             string textoBusqueda = txtBuscar.Text.Trim();
@@ -215,5 +230,7 @@ namespace Vista.Módulo_de_Compras
             this.Close();
         }
         #endregion
+
+       
     }
 }
