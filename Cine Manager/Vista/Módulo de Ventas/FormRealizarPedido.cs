@@ -4,12 +4,14 @@ using Modelo.Entidades;
 using System;
 using System.Linq;
 using System.Windows.Forms;
+using Vista.Módulo_de_Ventas;
 
 namespace Vista.Módulo_de_Transacciones
 {
     public partial class FormRealizarPedido : Form
     {
         private Pedido pedidoActual;
+        private Cliente clienteActual;
 
 
         public FormRealizarPedido()
@@ -22,7 +24,7 @@ namespace Vista.Módulo_de_Transacciones
             pedidoActual = new Pedido();
 
             ActualizarGrilla();
-            LlenarComboBox();
+
         }
 
 
@@ -35,18 +37,14 @@ namespace Vista.Módulo_de_Transacciones
             dgvPeliculasDisponibles.DataSource = null;
             dgvPeliculasDisponibles.DataSource = ControladoraGestionarPeliculas.Instancia.RecuperarPeliculas();
 
-            
+
 
             dgvDetallesPedido.DataSource = null;
             dgvDetallesPedido.DataSource = pedidoActual.RecuperarDetalles();
         }
 
 
-        private void LlenarComboBox()
-        {
-            cmbDNI.DataSource = ControladoraGestionarClientes.Instancia.RecuperarClientes();
-            cmbDNI.DisplayMember = "DNI";
-        }
+
 
         #endregion
 
@@ -120,6 +118,8 @@ namespace Vista.Módulo_de_Transacciones
             }
         }
 
+
+
         private void btnQuitar_Click(object sender, EventArgs e)
         {
             if (dgvDetallesPedido.SelectedRows.Count > 0)
@@ -150,6 +150,8 @@ namespace Vista.Módulo_de_Transacciones
             }
         }
 
+
+
         private void btnFinalizarPedido_Click(object sender, EventArgs e)
         {
             if (!ValidarDatosCompra())
@@ -157,25 +159,33 @@ namespace Vista.Módulo_de_Transacciones
                 return; // Salir del método si los datos no son válidos
             }
 
+            // Validar que se haya seleccionado un cliente
+            if (clienteActual == null)
+            {
+                MessageBox.Show("Debe seleccionar un cliente antes de finalizar el pedido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             DialogResult eleccion = MessageBox.Show("¿Confirmar el pedido?", "Confirmación de pedido", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (eleccion == DialogResult.Yes)
             {
-                var clienteSeleccionado = (Cliente)cmbDNI.SelectedItem;
-
+                // Crear el nuevo pedido
                 var nuevoPedido = new Pedido
                 {
                     Total = pedidoActual.Total,
-                    Cliente = clienteSeleccionado,
+                    Cliente = clienteActual, // Usamos la variable clienteActual
                     Fecha = DateTime.Now,
                     Codigo = CodigoPedidoUnico(),
                     Estado = false,
                     DetallesPedido = pedidoActual.DetallesPedido.ToList(),
                 };
 
+                // Agregar el pedido a la base de datos
                 string mensajePedido = ControladoraRealizarPedido.Instancia.AgregarPedido(nuevoPedido);
                 MessageBox.Show(mensajePedido);
 
+                // Limpiar los detalles del pedido y actualizar la UI
                 pedidoActual.LimpiarDetalles();
                 ActualizarGrilla();
                 txtTotal.Text = pedidoActual.Total.ToString();
@@ -183,6 +193,28 @@ namespace Vista.Módulo_de_Transacciones
             else
             {
                 MessageBox.Show("Pedido cancelado.");
+            }
+        }
+
+
+        private void btnBuscarCliente_Click(object sender, EventArgs e)
+        {
+            // Crear instancia del formulario de asignación de cliente
+            var formAsignarCliente = new FormAsignarCliente();
+
+            // Mostrar el formulario como modal
+            if (formAsignarCliente.ShowDialog() == DialogResult.OK)
+            {
+                // Recuperar el cliente seleccionado desde el formulario
+                var clienteSeleccionado = formAsignarCliente.Tag as Cliente;
+
+                if (clienteSeleccionado != null)
+                {
+                    // Mostrar el DNI del cliente en el TextBox
+                    txtDNICliente.Text = clienteSeleccionado.DNI.ToString();
+                    // Guardar el cliente en una variable si es necesario para usarlo posteriormente
+                    this.clienteActual = clienteSeleccionado;
+                }
             }
         }
 
@@ -201,33 +233,36 @@ namespace Vista.Módulo_de_Transacciones
             return true;
         }
 
+
         private bool ValidarDatosCompra()
         {
+            // Verificar que haya al menos un detalle en el pedido
             if (dgvDetallesPedido.Rows.Count == 0)
             {
                 MessageBox.Show("No hay películas para confirmar la compra.");
                 return false;
             }
 
-            var cliente = (Cliente)cmbDNI.SelectedItem;
-            if (cliente == null)
+            // Validar que el TextBox tenga un cliente asociado
+            if (string.IsNullOrWhiteSpace(txtDNICliente.Text))
             {
-                MessageBox.Show("Debe seleccionar un cliente.");
+                MessageBox.Show("Debe seleccionar un cliente antes de realizar el pedido.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
 
-            if (ControladoraRealizarPedido.Instancia.ClienteTieneAlquileresSinDevolver(cliente))
+            // Validar que la variable clienteActual no sea nula
+            if (clienteActual == null)
             {
-                MessageBox.Show("El cliente tiene alquileres sin devolver. No se puede realizar un nuevo pedido.");
+                MessageBox.Show("Debe seleccionar un cliente válido antes de realizar el pedido.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
 
-            /*var metodoPagoSeleccionado = (MetodoPago)cmbMetodoPago.SelectedItem;
-            if (metodoPagoSeleccionado == null)
+            // Verificar si el cliente tiene alquileres sin devolver
+            if (ControladoraRealizarPedido.Instancia.ClienteTieneAlquileresSinDevolver(clienteActual))
             {
-                MessageBox.Show("Debe seleccionar un método de pago.");
+                MessageBox.Show("El cliente tiene alquileres sin devolver. No se puede realizar un nuevo pedido.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
-            }*/
+            }
 
             return true;
         }
@@ -266,5 +301,7 @@ namespace Vista.Módulo_de_Transacciones
         }
 
         #endregion
+
+
     }
 }
